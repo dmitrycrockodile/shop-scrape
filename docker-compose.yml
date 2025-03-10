@@ -1,0 +1,51 @@
+version: '3'
+
+services: 
+  nginx:
+    image: nginx:latest
+    volumes: 
+      - ./:/var/www/
+      - ./storage:/var/www/storage
+      - ./_docker/nginx/conf.d/:/etc/nginx/conf.d/
+    ports:
+      - 8876:80
+    container_name: shop_scrape_nginx
+    depends_on: 
+     - app
+
+  app: 
+    build:
+      context: .
+      dockerfile: _docker/app/Dockerfile
+    volumes: 
+      - ./:/var/www/
+    environment:  
+      DB_CONNECTION: ${DB_CONNECTION}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on: 
+      db:
+        condition: service_healthy
+    container_name: shop_scrape_app
+    command: ["/var/www/entrypoint.sh"]
+
+  db:
+    image: mysql:8.0
+    restart: always
+    volumes: 
+      - ./tmp/db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 8101:3306
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    container_name: shop_scrape_db
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USERNAME}", "--password=${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
