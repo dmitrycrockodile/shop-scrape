@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('scraped_data', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->foreignId('retailer_id')->constrained('retailers')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products', 'id')->onDelete('cascade');
+            $table->foreignId('retailer_id')->constrained('retailers', 'id')->onDelete('cascade');
             $table->string('title', 255);
             $table->text('description');
             $table->decimal('price', 10, 2);
-            $table->integer('stock_count');
-            $table->json('images');
-            $table->integer('rating');
+            $table->unsignedInteger('stock_count');
             $table->decimal('avg_rating', 2, 1);
             $table->timestamps();
         });

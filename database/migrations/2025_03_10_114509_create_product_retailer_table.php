@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('product_retailers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->foreignId('retailer_id')->constrained('retailers')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products', 'id')->onDelete('cascade');
+            $table->foreignId('retailer_id')->constrained('retailers', 'id')->onDelete('cascade');
             $table->unique(['product_id', 'retailer_id']);
             $table->timestamps();
         });
