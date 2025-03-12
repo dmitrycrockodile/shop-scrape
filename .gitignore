@@ -24,3 +24,5 @@ yarn-error.log
 docker-compose.override.yml
 docker-compose.yml
 .DS_Store
+tmp/db/
+tmp/db/*  
