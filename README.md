@@ -93,8 +93,8 @@ To populate the database with test users run:
 php artisan db:seed
 ```
 
-The average scraped_data table size is ~ 545,000 rows. 
-The average waiting time is ~ 5:40 min.
+The average scraped_data table size is ~ 550,000 rows. 
+The average waiting time is ~ 5:45 min (100,000+ rows in a minute).
 
 ## API Base URL
 All API requests should be made to:
