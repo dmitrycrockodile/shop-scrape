@@ -56,7 +56,6 @@ class DatabaseSeeder extends Seeder
                         'updated_at'  => now()->subDays($i),
                     ];
                     $scrapedDataBatch[] = $scrapedData;
-                
                 }
 
                 ScrapedData::insert($scrapedDataBatch);

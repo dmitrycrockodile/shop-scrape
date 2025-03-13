@@ -5,10 +5,9 @@ Welcome to the Shop Scrape API! This is a RESTful API designed to scrape, manage
 Key features include:
 
 * Product Data Scraping – Automatically gather product details from multiple retailers.
-* Ratings & Reviews Management – Store and analyze user ratings with calculated average scores.
+* Ratings Management – Store and analyze user ratings with calculated average scores.
 * Historical Price Tracking – Keep a record of price fluctuations for better insights.
 * Secure Authorization – Enforces strict access control to ensure data integrity.
-* Error Handling & Optimization – Includes robust error management for smooth operation.
 
 ## Prerequisites
 
