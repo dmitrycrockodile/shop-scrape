@@ -26,7 +26,8 @@ class ScrapedDataFactory extends Factory
             'price' => $this->faker->randomFloat(2, 1, 10000),
             'stock_count' => $this->faker->numberBetween(0, 500),
             'avg_rating' => $this->faker->randomFloat(1, 1, 5),
-            'created_at' => now()->subDays(rand(0, 365))
+            'created_at' => now()->subDays(rand(0, 365)),
+            'updated_at' => now()->subDays(rand(0, 365))
         ];
     }
 }

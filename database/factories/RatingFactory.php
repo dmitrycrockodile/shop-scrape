@@ -23,7 +23,9 @@ class RatingFactory extends Factory
             'two_stars' => $this->faker->numberBetween(0, 100),  
             'three_stars' => $this->faker->numberBetween(0, 100), 
             'four_stars' => $this->faker->numberBetween(0, 100), 
-            'five_stars' => $this->faker->numberBetween(0, 100)
+            'five_stars' => $this->faker->numberBetween(0, 100),
+            'created_at' => now()->subDays(rand(0, 365)),
+            'updated_at' => now()->subDays(rand(0, 365))
         ];
     }
 }

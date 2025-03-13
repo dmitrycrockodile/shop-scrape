@@ -22,6 +22,8 @@ class ProductFactory extends Factory
             'description' => $this->faker->paragraph(),
             'manufacturer_part_number' => $this->faker->unique()->bothify('???-#####'),
             'pack_size' => $this->faker->randomElement(['each', 'case', 'box', 'pack']),
+            'created_at' => now()->subDays(rand(0, 365)),
+            'updated_at' => now()->subDays(rand(0, 365))
         ];
     }
 }

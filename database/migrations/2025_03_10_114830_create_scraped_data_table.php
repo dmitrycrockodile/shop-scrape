@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('stock_count');
-            $table->decimal('avg_rating', 2, 1);
+            $table->decimal('avg_rating', 2, 1)->default(0);
             $table->timestamps();
         });
     }

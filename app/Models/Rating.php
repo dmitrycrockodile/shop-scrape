@@ -18,7 +18,9 @@ class Rating extends Model
         'two_stars', 
         'three_stars',
         'four_stars',
-        'five_stars'
+        'five_stars',
+        'created_at',
+        'updated_at'
     ];
 
     public function scrapedData(): BelongsTo {

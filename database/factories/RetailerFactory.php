@@ -20,7 +20,9 @@ class RetailerFactory extends Factory
             'title' => $this->faker->words(3, true),
             'url' => $this->faker->url(),
             'currency' => $this->faker->currencyCode(),
-            'logo' => $this->faker->imageUrl(400, 400, 'business')
+            'logo' => $this->faker->imageUrl(400, 400, 'business'),
+            'created_at' => now()->subDays(rand(0, 365)),
+            'updated_at' => now()->subDays(rand(0, 365))
         ];
     }
 }

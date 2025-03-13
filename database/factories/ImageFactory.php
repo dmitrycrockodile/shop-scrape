@@ -19,7 +19,9 @@ class ImageFactory extends Factory
         return [
             'imageable_id' => null,
             'imageable_type' => null,
-            'file_url' => $this->faker->imageUrl(400, 400, 'product')
+            'file_url' => $this->faker->imageUrl(400, 400, 'product'),
+            'created_at' => now()->subDays(rand(0, 365)),
+            'updated_at' => now()->subDays(rand(0, 365))
         ];
     }
 }

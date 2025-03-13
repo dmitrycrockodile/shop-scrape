@@ -17,7 +17,9 @@ class Product extends Model
         'title',
         'description',
         'manufacturer_part_number',
-        'pack_size'
+        'pack_size',
+        'created_at',
+        'updated_at'
     ];
 
     public function images(): MorphMany {
