@@ -29,7 +29,10 @@ class DatabaseSeeder extends Seeder
             $assignedRetailers = $retailers->random(rand(1, 2));
             foreach ($assignedRetailers as $assignedRetailer) {
             
-                $product->retailers()->attach($assignedRetailer);
+                $product->retailers()->attach($assignedRetailer, [
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
+                ]);
             }
         }
 
