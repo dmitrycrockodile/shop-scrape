@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Product;
 use App\Models\Retailer;
 use App\Models\Rating;
+use App\Models\ScrapedDataImage;
 
 class ScrapedData extends Model
 {
@@ -37,5 +38,9 @@ class ScrapedData extends Model
 
     public function ratings(): HasMany {
         return $this->hasMany(Rating::class, 'scraped_data_id', 'id');
+    }
+
+    public function images(): HasMany {
+        return $this->hasMany(ScrapedDataImage::class, 'scraped_data_id', 'id');
     }
 }

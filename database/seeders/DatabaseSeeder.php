@@ -2,12 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Image;
 use Illuminate\Database\Seeder;
 use App\Models\Retailer;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\Rating;
 use App\Models\ScrapedData;
+use App\Models\ScrapedDataImage;
 use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
@@ -18,12 +19,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $retailers = Retailer::factory(10)->create();
-        $products = Product::factory(1000)->create();
+        $products = Product::factory(100)->create();
 
         foreach ($products as $product) {
-            Image::factory(2)->create([
-                'imageable_id'   => $product->id,
-                'imageable_type' => Product::class,
+            ProductImage::factory(2)->create([
+                'product_id' => $product->id
             ]);
 
             $assignedRetailers = $retailers->random(rand(1, 2));
@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
                 $ratingBatch = [];
                 $imageBatch = [];
 
-                for ($i = 0; $i < 365; $i++) {  
+                for ($i = 0; $i < 3; $i++) {  
                     $scrapedData = [
                         'product_id'  => $product->id,
                         'retailer_id' => $retailer->id,
@@ -78,8 +78,7 @@ class DatabaseSeeder extends Seeder
 
                     for ($j = 0; $j < 2; $j++) {
                         $imageBatch[] = [
-                            'imageable_id'   => $scrapedDataId,
-                            'imageable_type' => ScrapedData::class,
+                            'scraped_data_id' => $scrapedDataId,
                             'file_url' => fake()->imageUrl(400, 400, 'product'),
                             'created_at' => now(),
                             'updated_at' => now(),
@@ -88,7 +87,7 @@ class DatabaseSeeder extends Seeder
                 }
 
                 Rating::insert($ratingBatch);
-                Image::insert($imageBatch);
+                ScrapedDataImage::insert($imageBatch);
             }
         }
 

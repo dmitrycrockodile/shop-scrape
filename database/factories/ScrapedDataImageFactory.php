@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\ScrapedData;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Image>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ScrapedDataImage>
  */
-class ImageFactory extends Factory
+class ScrapedDataImageFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +18,7 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'imageable_id' => null,
-            'imageable_type' => null,
+            'scraped_data_id' => ScrapedData::factory(),
             'file_url' => $this->faker->imageUrl(400, 400, 'product'),
             'created_at' => now()->subDays(rand(0, 365)),
             'updated_at' => now()->subDays(rand(0, 365))

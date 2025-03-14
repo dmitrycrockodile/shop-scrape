@@ -22,8 +22,8 @@ class Product extends Model
         'updated_at'
     ];
 
-    public function images(): MorphMany {
-        return $this->morphMany(Image::class, 'imageable');
+    public function images(): HasMany {
+        return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
 
     public function scrapedData(): HasMany {
