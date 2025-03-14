@@ -15,6 +15,7 @@ class ProductRetailer extends Model
     protected $fillable = [
         'product_id',
         'retailer_id',
+        'product_url',
         'created_at',
         'updated_at'
     ];

@@ -21,6 +21,7 @@ class ProductRetailerFactory extends Factory
         return [
             'product_id' => Product::factory(),
             'retailer_id' => Retailer::factory(),
+            'product_url' => $this->faker->url(),
             'created_at' => now()->subDays(rand(0, 365)),
             'updated_at' => now()->subDays(rand(0, 365))
         ];

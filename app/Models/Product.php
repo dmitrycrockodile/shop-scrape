@@ -31,6 +31,7 @@ class Product extends Model
     }
 
     public function retailers(): BelongsToMany {
-        return $this->belongsToMany(Retailer::class, 'product_retailers', 'product_id', 'retailer_id');
+        return $this->belongsToMany(Retailer::class, 'product_retailers', 'product_id', 'retailer_id')
+            ->withPivot('product_url');
     }
 }

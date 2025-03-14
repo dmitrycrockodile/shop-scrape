@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
                 ProductRetailer::create([
                     'product_id'  => $product->id,
                     'retailer_id' => $assignedRetailer->id,
+                    'product_url' => fake()->url(),
                     'created_at'  => now(),
                     'updated_at'  => now(),
                 ]);
