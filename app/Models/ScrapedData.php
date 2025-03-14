@@ -22,7 +22,8 @@ class ScrapedData extends Model
         'stock_count', 
         'avg_rating',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'scraping_session_id'
     ];
 
     public function productRetailer(): BelongsTo {

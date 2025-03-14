@@ -10,6 +10,7 @@ use App\Models\Rating;
 use App\Models\ScrapedData;
 use App\Models\ScrapedDataImage;
 use App\Models\ProductRetailer;
+use App\Models\ScrapingSession;
 use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
@@ -46,9 +47,16 @@ class DatabaseSeeder extends Seeder
             $ratingBatch = [];
             $imageBatch = [];
 
+            $scrapingSession = ScrapingSession::firstOrCreate([
+                'retailer_id' => $productRetailer->retailer->id,
+                'created_at'  => now(),
+                'updated_at'  => now(),
+            ]);
+
             for ($i = 0; $i < 3; $i++) {  
                 $scrapedData = [
                     'product_retailer_id' => $productRetailer->id,
+                    'scraping_session_id' => $scrapingSession->id,
                     'title' => $productRetailer->product->title,
                     'description' => $productRetailer->product->description,
                     'price' => fake()->randomFloat(2, 1, 10000),
