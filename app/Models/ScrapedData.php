@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Product;
-use App\Models\Retailer;
 use App\Models\Rating;
 use App\Models\ScrapedDataImage;
 
@@ -17,8 +15,7 @@ class ScrapedData extends Model
 
     protected $table = 'scraped_data';
     protected $fillable = [
-        'product_id', 
-        'retailer_id', 
+        'product_retailer_id', 
         'title', 
         'description', 
         'price', 
@@ -28,12 +25,16 @@ class ScrapedData extends Model
         'updated_at'
     ];
 
+    public function productRetailer(): BelongsTo {
+        return $this->belongsTo(ProductRetailer::class, 'product_retailer_id', 'id');
+    }
+
     public function product(): BelongsTo {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
+        return $this->productRetailer->product;
     }
 
     public function retailer(): BelongsTo {
-        return $this->belongsTo(Retailer::class, 'retailer_id', 'id');
+        return $this->productRetailer->retailer;
     }
 
     public function ratings(): HasMany {

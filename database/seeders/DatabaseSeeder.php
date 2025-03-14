@@ -9,6 +9,7 @@ use App\Models\ProductImage;
 use App\Models\Rating;
 use App\Models\ScrapedData;
 use App\Models\ScrapedDataImage;
+use App\Models\ProductRetailer;
 use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
@@ -28,67 +29,64 @@ class DatabaseSeeder extends Seeder
 
             $assignedRetailers = $retailers->random(rand(1, 2));
             foreach ($assignedRetailers as $assignedRetailer) {
-            
-                $product->retailers()->attach($assignedRetailer, [
+                ProductRetailer::create([
+                    'product_id'  => $product->id,
+                    'retailer_id' => $assignedRetailer->id,
                     'created_at'  => now(),
                     'updated_at'  => now(),
                 ]);
             }
         }
 
-        $products = Product::with('retailers')->get();
+        $productRetailers = ProductRetailer::all();
 
-        foreach ($products as $product) {
-            foreach ($product->retailers as $retailer) {
-                $scrapedDataBatch = [];
-                $ratingBatch = [];
-                $imageBatch = [];
+        foreach ($productRetailers as $productRetailer) {
+            $scrapedDataBatch = [];
+            $ratingBatch = [];
+            $imageBatch = [];
 
-                for ($i = 0; $i < 3; $i++) {  
-                    $scrapedData = [
-                        'product_id'  => $product->id,
-                        'retailer_id' => $retailer->id,
-                        'title' => $product->title,
-                        'description' => $product->description,
-                        'price' => fake()->randomFloat(2, 1, 10000),
-                        'stock_count' => fake()->numberBetween(0, 500),
-                        'created_at'  => now()->subDays($i),
-                        'updated_at'  => now()->subDays($i),
-                    ];
-                    $scrapedDataBatch[] = $scrapedData;
-                }
+            for ($i = 0; $i < 3; $i++) {  
+                $scrapedData = [
+                    'product_retailer_id' => $productRetailer->id,
+                    'title' => $productRetailer->product->title,
+                    'description' => $productRetailer->product->description,
+                    'price' => fake()->randomFloat(2, 1, 10000),
+                    'stock_count' => fake()->numberBetween(0, 500),
+                    'created_at'  => now()->subDays($i),
+                    'updated_at'  => now()->subDays($i),
+                ];
+                $scrapedDataBatch[] = $scrapedData;
+            }
 
-                ScrapedData::insert($scrapedDataBatch);
+            ScrapedData::insert($scrapedDataBatch);
 
-                $scrapedDataIds = ScrapedData::where('product_id', $product->id)
-                    ->where('retailer_id', $retailer->id)
-                    ->pluck('id');
+            $scrapedDataIds = ScrapedData::where('product_retailer_id', $productRetailer->id)
+                ->pluck('id');
 
-                foreach ($scrapedDataIds as $scrapedDataId) {
-                    $ratingBatch[] = [
+            foreach ($scrapedDataIds as $scrapedDataId) {
+                $ratingBatch[] = [
+                    'scraped_data_id' => $scrapedDataId,
+                    'one_star'   => rand(0, 100),
+                    'two_stars'  => rand(0, 100),
+                    'three_stars'=> rand(0, 100),
+                    'four_stars' => rand(0, 100),
+                    'five_stars' => rand(0, 100),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+
+                for ($j = 0; $j < 2; $j++) {
+                    $imageBatch[] = [
                         'scraped_data_id' => $scrapedDataId,
-                        'one_star'   => rand(0, 100),
-                        'two_stars'  => rand(0, 100),
-                        'three_stars'=> rand(0, 100),
-                        'four_stars' => rand(0, 100),
-                        'five_stars' => rand(0, 100),
+                        'file_url' => fake()->imageUrl(400, 400, 'product'),
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
-
-                    for ($j = 0; $j < 2; $j++) {
-                        $imageBatch[] = [
-                            'scraped_data_id' => $scrapedDataId,
-                            'file_url' => fake()->imageUrl(400, 400, 'product'),
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ];
-                    }
                 }
-
-                Rating::insert($ratingBatch);
-                ScrapedDataImage::insert($imageBatch);
             }
+
+            Rating::insert($ratingBatch);
+            ScrapedDataImage::insert($imageBatch);
         }
 
         $this->updateProductRatings();

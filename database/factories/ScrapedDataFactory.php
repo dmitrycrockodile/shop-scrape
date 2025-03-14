@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\ProductRetailer;
 use App\Models\Retailer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,8 +20,7 @@ class ScrapedDataFactory extends Factory
     public function definition(): array
     {
         return [
-            'product_id' => Product::factory(),
-            'retailer_id' => Retailer::factory(),
+            'product_retailer_id' => ProductRetailer::factory(),
             'title' => $this->faker->words(3, true),
             'description' => $this->faker->paragraph(),
             'price' => $this->faker->randomFloat(2, 1, 10000),
