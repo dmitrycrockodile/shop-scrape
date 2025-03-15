@@ -9,6 +9,9 @@ use App\Models\ProductRetailer;
 
 class ProductRetailerRelationshipSeeder extends Seeder
 {
+    private const MIN_RETAILERS_PER_PRODUCT = 1;
+    private const MAX_RETAILERS_PER_PRODUCT = 2;
+
     /**
      * Run the database seeds.
      */
@@ -18,7 +21,7 @@ class ProductRetailerRelationshipSeeder extends Seeder
         $products = Product::all();
 
         foreach ($products as $product) {
-            $assignedRetailers = $retailers->random(rand(1, 2));
+            $assignedRetailers = $retailers->random(rand(self::MIN_RETAILERS_PER_PRODUCT, self::MAX_RETAILERS_PER_PRODUCT));
             foreach ($assignedRetailers as $assignedRetailer) {
                 ProductRetailer::create([
                     'product_id'  => $product->id,

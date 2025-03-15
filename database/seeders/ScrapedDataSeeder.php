@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\DB;
 
 class ScrapedDataSeeder extends Seeder
 {
+    private const DATA_SCRAPE_DAYS = 3;
+    private const SCRAPED_IMAGES_COUNT = 2;
+
     /**
      * Run the database seeds.
      */
@@ -30,7 +33,7 @@ class ScrapedDataSeeder extends Seeder
                 'updated_at'  => now(),
             ]);
 
-            for ($i = 0; $i < 3; $i++) {  
+            for ($i = 0; $i < self::DATA_SCRAPE_DAYS; $i++) {  
                 $scrapedData = [
                     'product_retailer_id' => $productRetailer->id,
                     'scraping_session_id' => $scrapingSession->id,
@@ -61,7 +64,7 @@ class ScrapedDataSeeder extends Seeder
                     'updated_at' => now(),
                 ];
 
-                for ($j = 0; $j < 2; $j++) {
+                for ($j = 0; $j < self::SCRAPED_IMAGES_COUNT; $j++) {
                     $imageBatch[] = [
                         'scraped_data_id' => $scrapedDataId,
                         'file_url' => fake()->imageUrl(400, 400, 'product'),
