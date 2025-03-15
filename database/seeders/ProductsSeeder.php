@@ -8,7 +8,7 @@ use App\Models\ProductImage;
 
 class ProductsSeeder extends Seeder
 {
-    private const PRODUCTS_COUNT = 100;
+    private const PRODUCTS_COUNT = 1000;
     private const PRODUCT_IMAGES_COUNT = 2;
 
     /**

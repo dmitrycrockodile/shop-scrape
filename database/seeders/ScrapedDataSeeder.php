@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\DB;
 
 class ScrapedDataSeeder extends Seeder
 {
-    private const DATA_SCRAPE_DAYS = 3;
+    private const DATA_SCRAPE_DAYS = 365;
     private const SCRAPED_IMAGES_COUNT = 2;
+    private const BATCH_SIZE = 1000;
 
     /**
      * Run the database seeds.
@@ -28,7 +29,8 @@ class ScrapedDataSeeder extends Seeder
             $imageBatch = [];
 
             $scrapingSession = ScrapingSession::firstOrCreate([
-                'retailer_id' => $productRetailer->retailer->id,
+                'retailer_id' => $productRetailer->retailer->id
+            ], [
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ]);
@@ -45,9 +47,17 @@ class ScrapedDataSeeder extends Seeder
                     'updated_at'  => now()->subDays($i),
                 ];
                 $scrapedDataBatch[] = $scrapedData;
+
+                if (count($scrapedDataBatch) >= self::BATCH_SIZE) {
+                    ScrapedData::insert($scrapedDataBatch);
+                    $scrapedDataBatch = [];
+                }
             }
 
-            ScrapedData::insert($scrapedDataBatch);
+            if (count($scrapedDataBatch) > 0) {
+                ScrapedData::insert($scrapedDataBatch);
+            }
+
 
             $scrapedDataIds = ScrapedData::where('product_retailer_id', $productRetailer->id)
                 ->pluck('id');
@@ -72,10 +82,24 @@ class ScrapedDataSeeder extends Seeder
                         'updated_at' => now(),
                     ];
                 }
+
+                if (count($ratingBatch) >= self::BATCH_SIZE) {
+                    Rating::insert($ratingBatch);
+                    $ratingBatch = [];
+                }
+
+                if (count($imageBatch) >= self::BATCH_SIZE) {
+                    ScrapedDataImage::insert($imageBatch);
+                    $imageBatch = [];
+                }
             }
 
-            Rating::insert($ratingBatch);
-            ScrapedDataImage::insert($imageBatch);
+            if (count($ratingBatch) > 0) {
+                Rating::insert($ratingBatch);
+            }
+            if (count($imageBatch) > 0) {
+                ScrapedDataImage::insert($imageBatch);
+            }
         }
 
         $this->updateProductRatings();   
