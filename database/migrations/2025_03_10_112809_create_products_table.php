@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 255);
             $table->text('description');
-            $table->string('manufacturer_part_number', 255)->unique();
+            $table->string('manufacturer_part_number', 255)->index();
             $table->string('pack_size');
             $table->timestamps();
         });
