@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\Currency;
+use App\Models\PackSize;
 use Illuminate\Database\Seeder;
 
-class CurrenciesSeeder extends Seeder
+class PackSizesSeeder extends Seeder
 {
-    private const CURRENCIES_COUNT = 9;
+    private const PACK_SIZES_COUNT = 4;
 
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Currency::factory(self::CURRENCIES_COUNT)->create();
+        PackSize::factory(self::PACK_SIZES_COUNT)->create();
     }
 }

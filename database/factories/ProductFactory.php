@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Image;
+use App\Models\PackSize;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,7 @@ class ProductFactory extends Factory
             'title' => $this->faker->words(3, true),
             'description' => $this->faker->paragraph(),
             'manufacturer_part_number' => $this->faker->unique()->bothify('???-#####'),
-            'pack_size' => $this->faker->randomElement(['each', 'case', 'box', 'pack']),
+            'pack_size_id' => PackSize::inRandomOrder()->first()->id,
             'created_at' => now()->subDays(rand(0, 365)),
             'updated_at' => now()->subDays(rand(0, 365))
         ];

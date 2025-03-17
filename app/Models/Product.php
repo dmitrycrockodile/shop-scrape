@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -16,7 +17,7 @@ class Product extends Model
         'title',
         'description',
         'manufacturer_part_number',
-        'pack_size',
+        'pack_size_id',
         'created_at',
         'updated_at'
     ];
@@ -32,5 +33,9 @@ class Product extends Model
     public function retailers(): BelongsToMany {
         return $this->belongsToMany(Retailer::class, 'product_retailers', 'product_id', 'retailer_id')
             ->withPivot('product_url');
+    }
+
+    public function packSize(): BelongsTo {
+        return $this->belongsTo(PackSize::class, 'pack_size_id', 'id');
     }
 }

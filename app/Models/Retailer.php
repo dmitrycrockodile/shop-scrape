@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Product;
 use App\Models\ScrapedData;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Retailer extends Model
 {
@@ -30,5 +31,9 @@ class Retailer extends Model
 
     public function scrapedData(): HasMany {
         return $this->hasMany(ScrapedData::class, 'retailer_id', 'id');
+    }
+
+    public function currency(): BelongsTo {
+        return $this->belongsTo(Currency::class, 'currency_id', 'id');
     }
 }

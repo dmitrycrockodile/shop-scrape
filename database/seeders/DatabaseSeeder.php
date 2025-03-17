@@ -8,6 +8,7 @@ use Database\Seeders\ProductsSeeder;
 use Database\Seeders\ProductRetailerRelationshipSeeder;
 use Database\Seeders\ScrapedDataSeeder;
 use Database\Seeders\CurrenciesSeeder;
+use Database\Seeders\PackSizesSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CurrenciesSeeder::class,
+            PackSizesSeeder::class,
             RetailersSeeder::class,
             ProductsSeeder::class,
             ProductRetailerRelationshipSeeder::class,
