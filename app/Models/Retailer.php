@@ -17,7 +17,7 @@ class Retailer extends Model
     protected $fillable = [
         'title', 
         'url', 
-        'currency', 
+        'currency_id', 
         'logo',
         'created_at',
         'updated_at'
