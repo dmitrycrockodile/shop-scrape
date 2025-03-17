@@ -56,6 +56,8 @@ class ScrapedDataSeeder extends Seeder
 
         $scrapedDataIds = ScrapedData::where('product_retailer_id', $productRetailer->id)->pluck('id');
         $this->seedRatingsAndImages($scrapedDataIds);
+
+        $scrapingSession->update(['status' => 'success']);
     }
 
     /**
