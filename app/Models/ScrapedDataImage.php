@@ -14,5 +14,10 @@ class ScrapedDataImage extends Model
         'scraped_data_id',
         'file_url',
         'file_name',
+        'position'
     ];
+
+    public function scrapedData() {
+        return $this->belongsTo(ScrapedData::class, 'scraped_data_id');
+    }
 }

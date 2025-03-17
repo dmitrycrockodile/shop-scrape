@@ -21,6 +21,7 @@ class ScrapedDataImageFactory extends Factory
             'scraped_data_id' => ScrapedData::factory(),
             'file_url' => $this->faker->imageUrl(400, 400, 'product'),
             'file_name' => $this->faker->sentence(5),
+            'position' => $this->faker->numberBetween(1, 2),
             'created_at' => now()->subDays(rand(0, 365)),
             'updated_at' => now()->subDays(rand(0, 365))
         ];
