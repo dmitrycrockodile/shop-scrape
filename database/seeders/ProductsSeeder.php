@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\PackSize;
 use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\ProductImage;
