@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class ScrapedDataSeeder extends Seeder
 {
-    private const DATA_SCRAPE_DAYS = 365;
+    private const DATA_SCRAPE_DAYS = 1;
     private const SCRAPED_IMAGES_COUNT = 2;
     private const BATCH_SIZE = 1000;
 
@@ -78,6 +78,7 @@ class ScrapedDataSeeder extends Seeder
                     $imageBatch[] = [
                         'scraped_data_id' => $scrapedDataId,
                         'file_url' => fake()->imageUrl(400, 400, 'product'),
+                        'file_name' => fake()->sentence(5),
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];

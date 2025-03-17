@@ -13,5 +13,6 @@ class ScrapedDataImage extends Model
     protected $fillable = [
         'scraped_data_id',
         'file_url',
+        'file_name',
     ];
 }
