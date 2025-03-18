@@ -38,11 +38,13 @@ class BaseController extends Controller {
    */
    protected function errorResponse( 
       string $errorMessage = 'An error occured.', 
+      string $error,
       int $statusCode = Response::HTTP_BAD_REQUEST 
    ): JsonResponse {
       return response()->json([
          'success' => false,
-         'message' => $errorMessage
+         'message' => $errorMessage,
+         'error' => $error
       ], $statusCode);
    }
 }

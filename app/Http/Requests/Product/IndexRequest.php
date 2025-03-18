@@ -22,33 +22,16 @@ class IndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'manufacturer_part_number' => 'required|string|max:255',
-            'pack_size_id' => 'required|integer|exists:pack_sizes,id',
-            'images' => 'required|array',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif'
+            'dataPerPage' => 'nullable|integer',
+            'page' => 'nullable|integer',
         ];
     }
 
     public function messages()
     {
         return [
-            'title.required' => 'Please write the title',
-            'title.string' => 'Title must be a string',
-            'title.max' => 'Title must be less than 255 characters',
-            'description.required' => 'Please write the description',
-            'description.string' => 'Description must be a string',
-            'manufacturer_part_number.required' => 'Please add the MPN (Manufacturer Part Number)',
-            'manufacturer_part_number.string' => 'MPN (Manufacturer Part Number) must be a string',
-            'manufacturer_part_number.max' => 'MPN (Manufacturer Part Number) must be less than 255 characters',
-            'pack_size_id.integer' => 'Pack size id must be an integer',
-            'pack_size_id.exists' => 'It seems like this pack size does not exist',
-            'images.required' => 'Please upload at least one image.',
-            'images.array' => 'Images must be sent as an array.',
-            'images.*.required' => 'Each uploaded file must be an image.',
-            'images.*.image' => 'Each file must be a valid image.',
-            'images.*.mimes' => 'Supported image formats: jpeg, png, jpg, gif.',
+            'dataPerPage.integer' => 'The data per page count must be an integer',
+            'page.integer' => 'The page number must be an integer'
         ];
    }
 }

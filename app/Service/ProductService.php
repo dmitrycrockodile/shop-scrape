@@ -144,7 +144,6 @@ class ProductService {
     * @return array
     */
    private function errorResponse(string $errorMessage, \Exception $exception, int $statusCode = 500): array {
-      // Log error with the exception's context
       Log::error($errorMessage, [
          'exception' => $exception->getMessage(),
          'trace' => $exception->getTraceAsString(),
@@ -153,6 +152,7 @@ class ProductService {
       return [
          'success' => false,
          'message' => $errorMessage,
+         'error' => $exception->getMessage(),
          'status' => $statusCode,
       ];
    }
