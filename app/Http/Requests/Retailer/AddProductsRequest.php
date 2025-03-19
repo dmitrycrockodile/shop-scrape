@@ -24,7 +24,7 @@ class AddProductsRequest extends FormRequest
       return [
          'products' => 'required|array',
          'products.*.id' => 'required|integer|exists:products,id',
-         'products.*.url' => 'required|string|url'
+         'products.*.url' => 'required|string|url|max:255'
       ];
    }
 
@@ -39,6 +39,7 @@ class AddProductsRequest extends FormRequest
          'products.*.url.required' => 'Please add the link to the product on your website',
          'products.*.url.string' => 'Url of the product must be a string',
          'products.*.url.url' => 'Url of the product must be valid',
+         'products.*.url.max' => 'Url of the product must be less than 255 characters',
       ];
    }
 }

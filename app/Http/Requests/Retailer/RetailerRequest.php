@@ -22,8 +22,8 @@ class RetailerRequest extends FormRequest
    public function rules(): array
    {
       return [
-         'title' => 'required|string|unique:retailers,title',
-         'url' => 'required|string|url',
+         'title' => 'required|string|unique:retailers,title|max:255',
+         'url' => 'required|string|url|max:255',
          'currency_id' => 'required|integer|exists:currencies,id',
          'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif'
       ];
@@ -35,9 +35,11 @@ class RetailerRequest extends FormRequest
          'title.required' => 'Please write the title',
          'title.string' => 'Title must be a string',
          'title.unique' => 'Retailer with this title already exist',
+         'title.max' => 'Title must be less than 255 characters',
          'url.required' => 'Please write the url to the retailer website',
          'url.string' => 'Url of the retailer website must be a string',
          'url.url' => 'Url of the retailer website must be valid',
+         'url.max' => 'Url must be less than 255 characters',
          'currency_id.required' => 'Please choose the currency',
          'currency_id.integer' => 'Currency id must be an integer',
          'currency_id.exists' => 'It seems like this currency does not exist',

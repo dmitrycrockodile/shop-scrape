@@ -14,6 +14,7 @@ class PackSize extends Model
     protected $fillable = [
         'name',
         'weight',
+        'weight_unit',
         'amount'
     ];
 

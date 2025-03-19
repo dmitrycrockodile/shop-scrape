@@ -2,12 +2,18 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RetailerController;
+use App\Http\Controllers\PackSizeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
    return $request->user();
 })->middleware('auth:sanctum');
+
+Route::get('/packsizes', [PackSizeController::class, 'index'])->name('packsizes.index');
+Route::post('/packsizes', [PackSizeController::class, 'store'])->name('packsizes.store');
+Route::put('/packsizes/{packSize}', [PackSizeController::class, 'update'])->name('packsizes.update');
+Route::delete('/packsizes/{packSize}', [PackSizeController::class, 'destroy'])->name('packsizes.destroy');
 
 Route::get('/products/{product}/retailers', [ProductController::class, 'getRetailers'])->name('products.retailers');
 Route::post('/products', [ProductController::class, 'index'])->name('products.index');
