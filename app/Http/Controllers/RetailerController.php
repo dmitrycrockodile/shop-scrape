@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Retailer\RetailerRequest;
+use App\Http\Requests\Retailer\AddProductsRequest;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Retailer\RetailerResource;
 use App\Models\Retailer;
@@ -60,6 +61,25 @@ class RetailerController extends BaseController {
    }
 
    /**
+    * Retrieves the products for the specified retailer.
+    * 
+    * @param 
+    * @param Retailer $retailer Instance of the retailer whose products we want to retrieve
+    * 
+    * @return JsonResponse A JSON response containing retailer products or error info.
+   */
+   public function addProducts(AddProductsRequest $request, Retailer $retailer): JsonResponse {
+      $data = $request->validated();
+      $products = $data['products'] ?? [];
+
+      $serviceResponse = $this->retailerService->syncOrAttachProducts($retailer, $products);
+
+      return $serviceResponse['success']
+         ? $this->successResponse($serviceResponse['retailer'], $serviceResponse['message'])
+         : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
+   }
+
+   /**
     * Stores the retailer.
     * 
     * @param StoreRequest $request A request with retailer data
@@ -70,7 +90,7 @@ class RetailerController extends BaseController {
       $data = $request->validated();
 
       $serviceResponse = $this->retailerService->store($data);
-      
+
       return $serviceResponse['success']
          ? $this->successResponse($serviceResponse['retailer'], $serviceResponse['message'], Response::HTTP_CREATED)
          : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);

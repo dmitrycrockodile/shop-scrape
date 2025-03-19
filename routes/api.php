@@ -16,7 +16,8 @@ Route::post('/products/{product}', [ProductController::class, 'update'])->name('
 Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 Route::get('/retailers', [RetailerController::class, 'index'])->name('retailers.index');
-Route::get('/retailers/{retailer}/products', [RetailerController::class, 'getProducts'])->name('retailers.products');
+Route::get('/retailers/{retailer}/products', [RetailerController::class, 'getProducts'])->name('retailers.products.get');
 Route::post('/retailers', [RetailerController::class, 'store'])->name('retailers.store');
+Route::post('/retailers/{retailer}/products', [RetailerController::class, 'addProducts'])->name('retailers.products.add');
 Route::put('/retailers/{retailer}', [RetailerController::class, 'update'])->name('retailers.update');
 Route::delete('/retailers/{retailer}', [RetailerController::class, 'destroy'])->name('retailers.destroy');
