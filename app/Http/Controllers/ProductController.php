@@ -6,12 +6,12 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\Product\IndexRequest;
 use App\Http\Requests\Product\ProductRequest;
 use App\Http\Resources\Product\ProductResource;
+use App\Http\Resources\Retailer\RetailerResource;
 use App\Models\Product;
 use App\Service\ProductService;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends BaseController {
    protected ProductService $productService;
@@ -30,7 +30,12 @@ class ProductController extends BaseController {
    public function index(IndexRequest $request): JsonResponse {
       try {
          $data = $request->validated();
-         $products = Product::paginate($data['dataPerPage'] ?? 100, ['*'], 'page', $data['page'] ?? 1);
+         $products = Product::with(['packSize', 'images'])->paginate(
+            $data['dataPerPage'] ?? 100, 
+            ['*'], 
+            'page', 
+            $data['page'] ?? 1
+         );
 
          return $this->successResponse(ProductResource::collection($products));
       } catch (\Exception $e) {
@@ -43,6 +48,27 @@ class ProductController extends BaseController {
    } 
 
    /**
+    * Retrieves the retailers for the specified product.
+    * 
+    * @param Product $product Instance of the product whose retailers we want to retrieve
+    * 
+    * @return JsonResponse A JSON response containing product retailers or error info.
+   */
+   public function getRetailers(Product $product): JsonResponse {
+      try {
+         $retailers = $product->retailers;
+
+         return $this->successResponse(RetailerResource::collection($retailers));
+      } catch (\Exception $e) {
+         Log::error('Failed to retrieve product\'s retailers: ' . $e->getMessage(), [
+            'trace' => $e->getTraceAsString()
+         ]);
+         
+         return $this->errorResponse('Failed to retrieve product\'s retailers, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+      }
+   }
+
+   /**
     * Stores the product.
     * 
     * @param ProductRequest $request A request with product data
@@ -53,11 +79,9 @@ class ProductController extends BaseController {
       $data = $request->validated();
       $serviceResponse = $this->productService->store($data);
       
-      if (!$serviceResponse['success']) {
-         return $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
-      }
-
-      return $this->successResponse($serviceResponse['product'], $serviceResponse['message'], Response::HTTP_CREATED);
+      return $serviceResponse['success']
+         ? $this->successResponse($serviceResponse['product'], $serviceResponse['message'], Response::HTTP_CREATED)
+         : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
    } 
 
    /**
@@ -72,11 +96,9 @@ class ProductController extends BaseController {
       $data = $request->validated();
       $serviceResponse = $this->productService->update($data, $product);
 
-      if (!$serviceResponse['success']) {
-         return $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
-      }
-
-      return $this->successResponse($serviceResponse['product'], $serviceResponse['message']);
+      return $serviceResponse['success']
+         ? $this->successResponse($serviceResponse['product'], $serviceResponse['message'])
+         : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
    } 
 
    /**
@@ -90,14 +112,12 @@ class ProductController extends BaseController {
       try {
          $product->delete();
          return $this->successResponse('Product successfully deleted.');
-      }catch (ModelNotFoundException $e) {
-         return $this->errorResponse('Failed to find the product.', Response::HTTP_NOT_FOUND);
       } catch (\Exception $e) {
-         Log::error('Failed to retrieve products: ' . $e->getMessage(), [
+         Log::error('Failed to delete the product: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
          
-         return $this->errorResponse('Failed to recieve products, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse('Failed to delete the product, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
       }
    }
 }

@@ -79,7 +79,7 @@ class ProductService {
       } catch (\Exception $e) {
          DB::rollBack();
 
-         Log::error('Failed to update cart item: ' . $e->getMessage(), [
+         Log::error('Failed to update the product: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString() 
          ]);
 
