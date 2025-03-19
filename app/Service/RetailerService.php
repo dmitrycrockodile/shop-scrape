@@ -66,8 +66,8 @@ class RetailerService {
          $productIds = array_column($products, 'id');
 
          $existingProducts = $retailer->products()
-            ->whereIn('product_id', $productIds)
-            ->pluck('product_id')
+            ->whereIn('products.id', $productIds)
+            ->pluck('products.id')
             ->toArray();
 
          [$attachData, $syncData] = $this->prepareProductData($products, $existingProducts);
