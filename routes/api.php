@@ -16,10 +16,10 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function() {
    Route::post('/logout', [LogoutController::class, 'logout']);
 
-   Route::get('/packsizes', [PackSizeController::class, 'index'])->name('packsizes.index');
-   Route::post('/packsizes', [PackSizeController::class, 'store'])->name('packsizes.store');
-   Route::put('/packsizes/{packSize}', [PackSizeController::class, 'update'])->name('packsizes.update');
-   Route::delete('/packsizes/{packSize}', [PackSizeController::class, 'destroy'])->name('packsizes.destroy');
+   Route::get('/pack-sizes', [PackSizeController::class, 'index'])->name('pack-sizes.index');
+   Route::post('/pack-sizes', [PackSizeController::class, 'store'])->name('pack-sizes.store');
+   Route::put('/pack-sizes/{packSize}', [PackSizeController::class, 'update'])->name('pack-sizes.update');
+   Route::delete('/pack-sizes/{packSize}', [PackSizeController::class, 'destroy'])->name('pack-sizes.destroy');
    
    Route::get('/products/{product}/retailers', [ProductController::class, 'getRetailers'])->name('products.retailers');
    Route::post('/products', [ProductController::class, 'index'])->name('products.index');
