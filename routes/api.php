@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function() {
    Route::post('/logout', [LogoutController::class, 'logout']);
 
-   Route::get('/pack-sizes', [PackSizeController::class, 'index'])->name('pack-sizes.index');
-   Route::post('/pack-sizes', [PackSizeController::class, 'store'])->name('pack-sizes.store');
+   Route::post('/pack-sizes', [PackSizeController::class, 'index'])->name('pack-sizes.index');
+   Route::post('/pack-sizes/store', [PackSizeController::class, 'store'])->name('pack-sizes.store');
 
    Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
    Route::post('/products/{product}', [ProductController::class, 'update'])->name('products.update');

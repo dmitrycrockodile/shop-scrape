@@ -9,18 +9,27 @@ use App\Models\PackSize;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\PackSize\IndexRequest;
 
 class PackSizeController extends BaseController {
    private const ENTITY = 'pack size';
 
    /**
     * Retrieves the pack sizes.
+    *
+    * @param IndexRequest A request with pagination data (if provided)
     * 
     * @return JsonResponse A JSON response containing retrieved pack sizes.
    */
-   public function index(): JsonResponse {
+   public function index(IndexRequest $request): JsonResponse {
       try {
-         $packSizes = PackSize::all();
+         $data = $request->validated();
+         $packSizes = PackSize::paginate(
+            $data['dataPerPage'] ?? 100, 
+            ['*'], 
+            'page', 
+            $data['page'] ?? 1
+         );;
 
          return $this->successResponse(
             PackSizeResource::collection($packSizes),
