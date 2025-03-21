@@ -29,6 +29,10 @@ class Retailer extends Model
             ->withPivot('product_url');
     }
 
+    public function users(): BelongsToMany {
+        return $this->belongsToMany(User::class, 'user_retailers', 'retailer_id', 'user_id');
+    }
+
     public function scrapedData(): HasMany {
         return $this->hasMany(ScrapedData::class, 'retailer_id', 'id');
     }

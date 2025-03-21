@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Enums\UserRole;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -22,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'location'
     ];
 
     /**
@@ -34,6 +37,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $attributes = [
+        'role' => UserRole::REGULAR_USER->value,
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -44,6 +51,19 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => UserRole::class
         ];
+    }
+
+    public function isSuperUser(): bool {
+        return $this->role === UserRole::SUPER_USER;
+    }
+
+    public function isRegularUser(): bool {
+        return $this->role === UserRole::REGULAR_USER;
+    }
+
+    public function retailers(): BelongsToMany {
+        return $this->belongsToMany(Retailer::class, 'user_retailers', 'user_id', 'retailer_id');
     }
 }

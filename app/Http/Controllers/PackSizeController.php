@@ -14,7 +14,7 @@ class PackSizeController extends BaseController {
    /**
     * Retrieves the pack sizes.
     * 
-    * @return JsonResponse A JSON response containing retrieved paginated products.
+    * @return JsonResponse A JSON response containing retrieved pack sizes.
    */
    public function index(): JsonResponse {
       try {
