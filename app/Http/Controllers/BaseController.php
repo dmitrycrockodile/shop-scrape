@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-class BaseController extends Controller {
+class BaseController {
    /**
     * Method for all controllers to handle successful JSON responses
     *

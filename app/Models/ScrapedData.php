@@ -45,4 +45,8 @@ class ScrapedData extends Model
     public function images(): HasMany {
         return $this->hasMany(ScrapedDataImage::class, 'scraped_data_id', 'id');
     }
+
+    public function scrapingSession(): BelongsTo {
+        return $this->belongsTo(ScrapingSession::class, 'scraping_session_id', 'id');
+    }
 }
