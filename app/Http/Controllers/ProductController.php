@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 class ProductController extends BaseController {
    protected ProductService $productService;
+   private const ENTITY = 'product';
 
    public function __construct(ProductService $productService) {
       $this->productService = $productService;
@@ -37,13 +38,22 @@ class ProductController extends BaseController {
             $data['page'] ?? 1
          );
 
-         return $this->successResponse(ProductResource::collection($products));
+         return $this->successResponse(
+            ProductResource::collection($products),
+            'messages.index.success',
+            ['attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to retrieve products: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
          
-         return $this->errorResponse('Failed to recieve products, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.index.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(), 
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    } 
 
@@ -58,13 +68,22 @@ class ProductController extends BaseController {
       try {
          $retailers = $product->retailers;
 
-         return $this->successResponse(RetailerResource::collection($retailers));
+         return $this->successResponse(
+            RetailerResource::collection($retailers),
+            'messages.index.success',
+            ['attribute' => 'product retailers']
+         );
       } catch (\Exception $e) {
          Log::error('Failed to retrieve product\'s retailers: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
          
-         return $this->errorResponse('Failed to retrieve product\'s retailers, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.index.error',
+            ['attribute' => 'product retailers'],
+            $e->getMessage(), 
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    }
 
@@ -80,8 +99,18 @@ class ProductController extends BaseController {
       $serviceResponse = $this->productService->store($data);
       
       return $serviceResponse['success']
-         ? $this->successResponse($serviceResponse['product'], $serviceResponse['message'], Response::HTTP_CREATED)
-         : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
+         ? $this->successResponse(
+            $serviceResponse['product'], 
+            'messages.store.success',
+            ['attribute' => self::ENTITY],
+            Response::HTTP_CREATED
+         )
+         : $this->errorResponse(
+            'messages.store.error',
+            ['attribute' => self::ENTITY],
+            $serviceResponse['error'], 
+            $serviceResponse['status']
+         );
    } 
 
    /**
@@ -97,8 +126,17 @@ class ProductController extends BaseController {
       $serviceResponse = $this->productService->update($data, $product);
 
       return $serviceResponse['success']
-         ? $this->successResponse($serviceResponse['product'], $serviceResponse['message'])
-         : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
+         ? $this->successResponse(
+            $serviceResponse['product'],
+            'messages.update.success',
+            ['attribute' => self::ENTITY]
+         )
+         : $this->errorResponse(
+            'messages.update.error',
+            ['attribute' => self::ENTITY],
+            $serviceResponse['error'],
+            $serviceResponse['status']
+         );
    } 
 
    /**
@@ -111,13 +149,22 @@ class ProductController extends BaseController {
    public function destroy(Product $product): JsonResponse {
       try {
          $product->delete();
-         return $this->successResponse('Product successfully deleted.');
+         return $this->successResponse(
+            null,
+            'messages.destroy.success',
+            ['attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to delete the product: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
          
-         return $this->errorResponse('Failed to delete the product, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.destroy.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    }
 }

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 class RetailerController extends BaseController {
    protected RetailerService $retailerService;
+   private const ENTITY = 'retailer';
 
    public function __construct(RetailerService $retailerService) {
       $this->retailerService = $retailerService;
@@ -29,13 +30,22 @@ class RetailerController extends BaseController {
       try {
          $retailers = Retailer::with('currency')->get();
 
-         return $this->successResponse(RetailerResource::collection($retailers));
+         return $this->successResponse(
+            RetailerResource::collection($retailers),
+            'messages.index.success',
+            ['attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to retrieve retailers: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
          
-         return $this->errorResponse('Failed to recieve retailers, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.index.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
       }
    } 
 
@@ -50,13 +60,22 @@ class RetailerController extends BaseController {
       try {
          $products = $retailer->products;
 
-         return $this->successResponse(ProductResource::collection($products));
+         return $this->successResponse(
+            ProductResource::collection($products),
+            'messages.index.success',
+            ['attribute' => 'retailer\'s products']
+         );
       } catch (\Exception $e) {
          Log::error('Failed to retrieve retailer\'s products: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
          
-         return $this->errorResponse('Failed to retrieve retailer\'s products, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.index.error',
+            ['attribute' => 'retailer\'s products'],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
       }
    }
 
@@ -75,8 +94,17 @@ class RetailerController extends BaseController {
       $serviceResponse = $this->retailerService->syncOrAttachProducts($retailer, $products);
 
       return $serviceResponse['success']
-         ? $this->successResponse($serviceResponse['retailer'], $serviceResponse['message'])
-         : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
+         ? $this->successResponse(
+            $serviceResponse['retailer'],
+            'messages.store.success',
+            ['attribute' => 'products']
+         )
+         : $this->errorResponse(
+            'messages.store.error',
+            ['attribute' => 'products'],
+            $serviceResponse['error'],
+            $serviceResponse['status']
+         );
    }
 
    /**
@@ -92,8 +120,18 @@ class RetailerController extends BaseController {
       $serviceResponse = $this->retailerService->store($data);
 
       return $serviceResponse['success']
-         ? $this->successResponse($serviceResponse['retailer'], $serviceResponse['message'], Response::HTTP_CREATED)
-         : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
+         ? $this->successResponse(
+            $serviceResponse['retailer'],
+            'messages.store.success',
+            ['attribute' => self::ENTITY],
+            Response::HTTP_CREATED
+         )
+         : $this->errorResponse(
+            'messages.store.error',
+            ['attribute' => self::ENTITY],
+            $serviceResponse['error'],
+            $serviceResponse['status']
+         );
    } 
 
    /**
@@ -109,8 +147,17 @@ class RetailerController extends BaseController {
       $serviceResponse = $this->retailerService->update($data, $retailer);
 
       return $serviceResponse['success']
-         ? $this->successResponse($serviceResponse['retailer'], $serviceResponse['message'])
-         : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
+         ? $this->successResponse(
+            $serviceResponse['retailer'],
+            'messages.update.success',
+            ['attribute' => self::ENTITY]
+         )
+         : $this->errorResponse(
+            'messages.update.error',
+            ['attribute' => self::ENTITY],
+            $serviceResponse['error'],
+            $serviceResponse['status']
+         );
    } 
 
    /**
@@ -123,13 +170,23 @@ class RetailerController extends BaseController {
    public function destroy(Retailer $retailer): JsonResponse {
       try {
          $retailer->delete();
-         return $this->successResponse('Retailer successfully deleted.');
+
+         return $this->successResponse(
+            null,
+            'messages.destroy.success',
+            ['attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to delete the retailer: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
          
-         return $this->errorResponse('Failed to delete the retailer, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.destroy.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    }
 }

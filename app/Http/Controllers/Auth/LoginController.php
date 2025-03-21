@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Log;
 
 class LoginController extends BaseController
 {
+    private const ENTITY = 'user';
+
     /** 
      * Login the user
      * 
@@ -27,6 +29,15 @@ class LoginController extends BaseController
         try {
             $user = User::whereEmail($validated['email'])->first();
 
+            if (!$user) {
+                return $this->errorResponse(
+                    'auth.login.not_found',
+                    ['attribute' => self::ENTITY],
+                    'No user record found.',
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
             if (Hash::check($validated['password'], $user->password)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
                 $user->remember_token = $token;
@@ -34,26 +45,45 @@ class LoginController extends BaseController
 
                 Auth::login($user);
 
-                return $this->successResponse([
-                    'id' => $user->id,
-                    'email' => $user->email,
-                    'token' => $token
-                ], 'User logged in.');
+                return $this->successResponse(
+                    [
+                        'id' => $user->id,
+                        'email' => $user->email,
+                        'token' => $token,
+                    ],
+                    'auth.login.success',
+                    ['attribute' => self::ENTITY]
+                );
             } else {
-                return $this->errorResponse('Incorrect password.', 'Incorrect password.');
+                return $this->errorResponse(
+                    'auth.login.password_incorrect',
+                    ['attribute' => self::ENTITY],
+                    'Incorrect password.',
+                    Response::HTTP_UNAUTHORIZED
+                );
             }
         } catch (QueryException $e) {
             Log::error('Failed to login the user: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return $this->errorResponse('Failed to login the user.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->errorResponse(
+                'auth.login.error',
+                ['attribute' => self::ENTITY],
+                $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         } catch (\Exception $e) {
             Log::error('Failed to login the user: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return $this->errorResponse('Failed to login the user.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->errorResponse(
+                'auth.login.error',
+                ['attribute' => self::ENTITY],
+                $e->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

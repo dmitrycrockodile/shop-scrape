@@ -15,6 +15,8 @@ use App\Http\Requests\User\ManageRetailersRequest;
 use App\Http\Resources\Retailer\RetailerResource;
 
 class UserController extends BaseController {
+   private const ENTITY = 'user';
+
    /**
     * Retrieves the regular users.
     * 
@@ -26,13 +28,22 @@ class UserController extends BaseController {
             ->with('retailers')
             ->get();
 
-         return $this->successResponse(UserResource::collection($users));
+         return $this->successResponse(
+            UserResource::collection($users),
+            'messages.index.success',
+            ['attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to retrieve the users: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
 
-         return $this->errorResponse('Failed to retrieve the users, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.index.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    }
 
@@ -49,13 +60,23 @@ class UserController extends BaseController {
       try {
          $user = User::create($data);
 
-         return $this->successResponse(new UserResource($user), 'Successfully created the user!', Response::HTTP_CREATED);
+         return $this->successResponse(
+            new UserResource($user),
+            'messages.store.success',
+            ['attribute' => self::ENTITY],
+            Response::HTTP_CREATED
+         );
       } catch (\Exception $e) {
          Log::error('Failed to create the user: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
 
-         return $this->errorResponse('Failed to create the user, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.store.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    } 
 
@@ -79,13 +100,23 @@ class UserController extends BaseController {
             'location' => $data['location'] ?? $user->location
          ]);
 
-         return $this->successResponse(new UserResource($user), 'Successfully updated the user!', Response::HTTP_CREATED);
+         return $this->successResponse(
+            new UserResource($user),
+            'messages.update.success',
+            ['attribute' => self::ENTITY],
+            Response::HTTP_CREATED
+         );
       } catch (\Exception $e) {
          Log::error('Failed to create the user: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
 
-         return $this->errorResponse('Failed to update the user, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.update.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }   
    } 
 
@@ -103,21 +134,31 @@ class UserController extends BaseController {
       try {
          if ($user->role->value === UserRole::SUPER_USER->value) {
             return $this->errorResponse(
-               'Retailers assignment to the super user is not allowed.', 
-               "Tried to assign retailers to the super user, id = $user->id, role = {$user->role->value}", 
-               Response::HTTP_INTERNAL_SERVER_ERROR
+               'messages.assign.not_allowed',
+               ['assigned' => 'retailers', 'attribute' => self::ENTITY],
+               "Attempted to assign retailers to a super user (ID: {$user->id})",
+               Response::HTTP_FORBIDDEN
             );
          }
 
          $user->retailers()->syncWithoutDetaching($data['retailers']);
 
-         return $this->successResponse(RetailerResource::collection($user->retailers));
+         return $this->successResponse(
+            RetailerResource::collection($user->retailers),
+            'messages.assign.success',
+            ['assigned' => 'retailers', 'attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to retrieve the users: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
 
-         return $this->errorResponse('Failed to retrieve the users, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.assign.error',
+            ['assigned' => 'retailers', 'attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    }
 
@@ -135,21 +176,31 @@ class UserController extends BaseController {
       try {
          if ($user->role->value === UserRole::SUPER_USER->value) {
             return $this->errorResponse(
-               'Retailers revokement from the super user is not allowed.', 
-               "Tried to revoke retailers to the super user, id = $user->id, role = {$user->role->value}", 
-               Response::HTTP_INTERNAL_SERVER_ERROR
+               'messages.revoke.not_allowed',
+               ['revoked' => 'retailers', 'attribute' => self::ENTITY],
+               "Attempted to revoke retailers from a super user (ID: {$user->id})",
+               Response::HTTP_FORBIDDEN
             );
          }
 
          $user->retailers()->detach($data['retailers']);
 
-         return $this->successResponse(RetailerResource::collection($user->retailers));
+         return $this->successResponse(
+            RetailerResource::collection($user->retailers),
+            'messages.revoke.success',
+            ['revoked' => 'retailers', 'attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to retrieve the users: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
 
-         return $this->errorResponse('Failed to retrieve the users, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.revoke.error',
+            ['revoked' => 'retailers', 'attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    }
 
@@ -165,13 +216,22 @@ class UserController extends BaseController {
       try {
          $user->delete();
          
-         return $this->successResponse('User successfully deleted.');
+         return $this->successResponse(
+            null,
+            'messages.destroy.success',
+            ['attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to delete the user: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
          
-         return $this->errorResponse('Failed to delete the user, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.destroy.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    }
 }

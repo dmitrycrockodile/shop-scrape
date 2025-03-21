@@ -20,7 +20,7 @@ class RetailerService {
          $this->checkAndStoreLogo($data);
          $retailer = Retailer::create($data);
 
-         return $this->successResponse($retailer, 'Successfully created the retailer!');
+         return $this->successResponse($retailer);
       } catch (\Exception $e) {
          Log::error('Failed to store the retailer: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
@@ -43,7 +43,7 @@ class RetailerService {
          $this->checkAndStoreLogo($data);
          $retailer->update($data);
 
-         return $this->successResponse($retailer, 'Successfully updated the retailer!');
+         return $this->successResponse($retailer);
       } catch (\Exception $e) {
          Log::error('Failed to update the retailer: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString() 
@@ -79,7 +79,7 @@ class RetailerService {
             $retailer->products()->attach($attachData);
          }
 
-         return $this->successResponse($retailer, 'Successfuly updated the products list.');
+         return $this->successResponse($retailer);
       } catch (\Exception $e) {
          Log::error('Failed to update the products list: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
@@ -136,14 +136,13 @@ class RetailerService {
     * Success response formatting.
     *
     * @param Retailer $retailer
-    * @param string $message
+    *
     * @return array
    */
-    private function successResponse(Retailer $retailer, string $message): array {
+    private function successResponse(Retailer $retailer): array {
       return [
          'success' => true,
-         'retailer' => new RetailerResource($retailer),
-         'message' => $message,
+         'retailer' => new RetailerResource($retailer)
       ];
    }
 
@@ -162,7 +161,6 @@ class RetailerService {
 
       return [
          'success' => false,
-         'message' => $errorMessage,
          'error' => $exception->getMessage(),
          'status' => $statusCode,
       ];

@@ -48,7 +48,7 @@ class ScrapedDataService {
          }
 
          DB::commit();
-         return $this->successResponse($scrapedData, 'Successfully stored scriped data!');
+         return $this->successResponse($scrapedData);
       } catch (\Exception $e) {
          DB::rollBack();
 
@@ -133,14 +133,13 @@ class ScrapedDataService {
     * Success response formatting.
     *
     * @param ScrapedData $scrapedData
-    * @param string $message
+    * 
     * @return array
     */
-    private function successResponse(ScrapedData $scrapedData, string $message): array {
+    private function successResponse(ScrapedData $scrapedData): array {
       return [
          'success' => true,
-         'scrapedData' => new ScrapedDataResource($scrapedData),
-         'message' => $message,
+         'scrapedData' => new ScrapedDataResource($scrapedData)
       ];
    }
 
@@ -149,6 +148,7 @@ class ScrapedDataService {
     *
     * @param string $errorMessage
     * @param Exception $exception
+    *
     * @return array
     */
    private function errorResponse(string $errorMessage, \Exception $exception, int $statusCode = 500): array {
@@ -159,9 +159,8 @@ class ScrapedDataService {
 
       return [
          'success' => false,
-         'message' => $errorMessage,
          'error' => $exception->getMessage(),
-         'status' => $statusCode,
+         'status' => $statusCode
       ];
    }
 }

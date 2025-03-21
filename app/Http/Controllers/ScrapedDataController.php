@@ -11,6 +11,8 @@ use Illuminate\Http\JsonResponse;
 class ScrapedDataController extends BaseController {
    protected ScrapedDataService $scrapedDataService;
 
+   private const ENTITY = 'scraped data';
+
    public function __construct(ScrapedDataService $scrapedDataService) {
       $this->scrapedDataService = $scrapedDataService;
    }
@@ -47,8 +49,18 @@ class ScrapedDataController extends BaseController {
       $serviceResponse = $this->scrapedDataService->store($data);
       
       return $serviceResponse['success']
-         ? $this->successResponse($serviceResponse['scrapedData'], $serviceResponse['message'], Response::HTTP_CREATED)
-         : $this->errorResponse($serviceResponse['message'], $serviceResponse['error'], $serviceResponse['status']);
+         ? $this->successResponse(
+            $serviceResponse['scrapedData'],
+            'messages.store.success',
+            ['attribute' => self::ENTITY],
+            Response::HTTP_CREATED
+         )
+         : $this->errorResponse(
+            'messages.store.error',
+            ['attribute' => self::ENTITY],
+            $serviceResponse['error'],
+            $serviceResponse['status']
+         );
    } 
 
    // /**

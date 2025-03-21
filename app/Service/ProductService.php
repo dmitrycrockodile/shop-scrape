@@ -42,7 +42,7 @@ class ProductService {
          }
 
          DB::commit();
-         return $this->successResponse($product, 'Successfully created the product!');
+         return $this->successResponse($product);
       } catch (\Exception $e) {
          DB::rollBack();
 
@@ -75,7 +75,7 @@ class ProductService {
          }
 
          DB::commit();
-         return $this->successResponse($product, 'Successfully updated the product!');
+         return $this->successResponse($product);
       } catch (\Exception $e) {
          DB::rollBack();
 
@@ -125,14 +125,13 @@ class ProductService {
     * Success response formatting.
     *
     * @param Product $product
-    * @param string $message
+    *
     * @return array
     */
-    private function successResponse(Product $product, string $message): array {
+    private function successResponse(Product $product): array {
       return [
          'success' => true,
-         'product' => new ProductResource($product),
-         'message' => $message,
+         'product' => new ProductResource($product)
       ];
    }
 
@@ -151,7 +150,6 @@ class ProductService {
 
       return [
          'success' => false,
-         'message' => $errorMessage,
          'error' => $exception->getMessage(),
          'status' => $statusCode,
       ];

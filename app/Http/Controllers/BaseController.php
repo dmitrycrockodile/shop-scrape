@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -11,19 +10,21 @@ class BaseController {
     * Method for all controllers to handle successful JSON responses
     *
     * @param array $data The data client needs to recieve
-    * @param string $message Additional message for the client
+    * @param string $messageLocal String with message localization
+    * @param array $placeholders Array with placeholders to error message localization
     * @param int $statusCode The response status 
     *
     * @return JsonResponse The response with all data
    */
    protected function successResponse( 
       mixed $data = [], 
-      string $message = 'Success!', 
+      string $messageLocal, 
+      array $placeholders = [],
       int $statusCode = Response::HTTP_OK
    ): JsonResponse {
       return response()->json([
          'success' => true,
-         'message' => $message,
+         'message' => __($messageLocal, $placeholders),
          'data' => $data,
       ], $statusCode);
    }
@@ -31,19 +32,22 @@ class BaseController {
    /**
     * Method for all controllers to handle JSON responses with failed operations
     *
-    * @param string $errorMessage Message with error info 
+    * @param string $messageLocal String with error localization
+    * @param array $placeholders Array with placeholders to error message localization
+    * @param string $error Raw error message,
     * @param int $statusCode The response status 
     *
     * @return JsonResponse The response with error info
    */
    protected function errorResponse( 
-      string $errorMessage = 'An error occured.', 
+      string $messageLocal,
+      array $placeholders = [],
       string $error = 'An error occured.',
       int $statusCode = Response::HTTP_BAD_REQUEST 
    ): JsonResponse {
       return response()->json([
          'success' => false,
-         'message' => $errorMessage,
+         'message' => __($messageLocal, $placeholders),
          'error' => $error
       ], $statusCode);
    }

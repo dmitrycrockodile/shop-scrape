@@ -8,7 +8,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ScrapedDataController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckSuperUser;
-use App\Models\ScrapedData;
 use Illuminate\Support\Facades\Route;
 
 // Accessible for REGULAR users routes

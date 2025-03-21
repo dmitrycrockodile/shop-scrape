@@ -11,6 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class PackSizeController extends BaseController {
+   private const ENTITY = 'pack size';
+
    /**
     * Retrieves the pack sizes.
     * 
@@ -20,13 +22,22 @@ class PackSizeController extends BaseController {
       try {
          $packSizes = PackSize::all();
 
-         return $this->successResponse(PackSizeResource::collection($packSizes));
+         return $this->successResponse(
+            PackSizeResource::collection($packSizes),
+            'messages.index.success',
+            ['attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to retrieve pack sizes: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
 
-         return $this->errorResponse('Failed to recieve pack sizes, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.index.error', 
+            ['attribute' => self::ENTITY],
+            $e->getMessage(), 
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    }
 
@@ -43,13 +54,23 @@ class PackSizeController extends BaseController {
       try {
          $packSize = PackSize::create($data);
 
-         return $this->successResponse(new PackSizeResource($packSize), 'Successfully created the pack size!', Response::HTTP_CREATED);
+         return $this->successResponse(
+            new PackSizeResource($packSize), 
+            'messages.store.success',
+            ['attribute' => self::ENTITY],
+            Response::HTTP_CREATED
+         );
       } catch (\Exception $e) {
          Log::error('Failed to create the pack size: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
 
-         return $this->errorResponse('Failed to create the pack size, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.store.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(), 
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    } 
 
@@ -67,13 +88,23 @@ class PackSizeController extends BaseController {
       try {
          $packSize->update($data);
 
-         return $this->successResponse(new PackSizeResource($packSize), 'Successfully updated the pack size!', Response::HTTP_CREATED);
+         return $this->successResponse(
+            new PackSizeResource($packSize), 
+            'messages.update.success',
+            ['attribute' => self::ENTITY],
+            Response::HTTP_CREATED
+         );
       } catch (\Exception $e) {
          Log::error('Failed to create the pack size: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
 
-         return $this->errorResponse('Failed to update the pack size, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.update.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }   
    } 
 
@@ -88,13 +119,22 @@ class PackSizeController extends BaseController {
       try {
          $packSize->delete();
          
-         return $this->successResponse('Pack size successfully deleted.');
+         return $this->successResponse(
+            null,
+            'messages.destroy.success',
+            ['attribute' => self::ENTITY]
+         );
       } catch (\Exception $e) {
          Log::error('Failed to delete the pack size: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString()
          ]);
          
-         return $this->errorResponse('Failed to delete the pack size, please try again.', $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+         return $this->errorResponse(
+            'messages.destroy.error',
+            ['attribute' => self::ENTITY],
+            $e->getMessage(),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+         );
       }
    }
 }
