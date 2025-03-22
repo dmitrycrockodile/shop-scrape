@@ -26,8 +26,8 @@ class ProductRequest extends FormRequest
             'description' => 'required|string',
             'manufacturer_part_number' => 'required|string|max:255',
             'pack_size_id' => 'required|integer|exists:pack_sizes,id',
-            'images' => 'required|array',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif'
+            'images' => 'nullable|array',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ];
     }
 

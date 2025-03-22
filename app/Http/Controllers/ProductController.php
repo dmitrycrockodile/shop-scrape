@@ -95,6 +95,8 @@ class ProductController extends BaseController {
     * @return JsonResponse A JSON response containing updated product or error info.
    */
    public function update(ProductRequest $request, Product $product): JsonResponse {
+      $this->authorize('accessProduct', $product);
+
       $data = $request->validated();
       $serviceResponse = $this->productService->update($data, $product);
 
@@ -113,6 +115,8 @@ class ProductController extends BaseController {
     * @return JsonResponse A JSON response containing success message for user or an error.
    */
    public function destroy(Product $product): JsonResponse {
+      $this->authorize('accessProduct', $product);
+      
       $product->delete();
       return $this->successResponse(
          null,
