@@ -28,6 +28,8 @@ class ProductController extends BaseController {
     * @return JsonResponse A JSON response containing retrieved paginated products.
    */
    public function index(IndexRequest $request): JsonResponse {
+      $this->authorize('seeProducts', Product::class);
+
       $data = $request->validated();
       $products = Product::with(['packSize', 'images'])->paginate(
          $data['dataPerPage'] ?? 100, 
@@ -51,6 +53,8 @@ class ProductController extends BaseController {
     * @return JsonResponse A JSON response containing product retailers or error info.
    */
    public function getRetailers(Product $product): JsonResponse {
+      $this->authorize('getRetailers', Product::class);
+
       $retailers = $product->retailers;
 
       return $this->successResponse(
@@ -95,7 +99,7 @@ class ProductController extends BaseController {
     * @return JsonResponse A JSON response containing updated product or error info.
    */
    public function update(ProductRequest $request, Product $product): JsonResponse {
-      $this->authorize('accessProduct', $product);
+      $this->authorize('update', $product);
 
       $data = $request->validated();
       $serviceResponse = $this->productService->update($data, $product);
@@ -115,7 +119,7 @@ class ProductController extends BaseController {
     * @return JsonResponse A JSON response containing success message for user or an error.
    */
    public function destroy(Product $product): JsonResponse {
-      $this->authorize('accessProduct', $product);
+      $this->authorize('delete', Product::class);
       
       $product->delete();
       return $this->successResponse(

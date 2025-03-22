@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Enums\UserRole;
 use App\Models\User;
 use App\Http\Controllers\BaseController;
@@ -23,28 +22,17 @@ class UserController extends BaseController {
     * @return JsonResponse A JSON response containing retrieved regular users.
    */
    public function index(): JsonResponse {
-      try {
-         $users = User::where('role', UserRole::REGULAR_USER->value)
-            ->with('retailers')
-            ->get();
+      $this->authorize('manageUsers', User::class);
 
-         return $this->successResponse(
-            UserResource::collection($users),
-            'messages.index.success',
-            ['attribute' => self::ENTITY]
-         );
-      } catch (\Exception $e) {
-         Log::error('Failed to retrieve the users: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-         ]);
+      $users = User::where('role', UserRole::REGULAR_USER->value)
+         ->with('retailers')
+         ->get();
 
-         return $this->errorResponse(
-            'messages.index.error',
-            ['attribute' => self::ENTITY],
-            $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
-         );
-      }
+      return $this->successResponse(
+         UserResource::collection($users),
+         'messages.index.success',
+         ['attribute' => self::ENTITY]
+      );
    }
 
    /**
@@ -55,6 +43,8 @@ class UserController extends BaseController {
     * @return JsonResponse A JSON response containing newly created user or error info.
    */
    public function store(StoreRequest $request): JsonResponse {
+      $this->authorize('manageUsers', User::class);
+
       $data = $request->validated();
       
       $user = User::create($data);
@@ -76,6 +66,8 @@ class UserController extends BaseController {
     * @return JsonResponse A JSON response containing updated user or error info.
    */
    public function update(UpdateRequest $request, User $user): JsonResponse {
+      $this->authorize('manageUsers', User::class);
+
       $data = $request->validated();
 
       $user->update([
@@ -89,8 +81,7 @@ class UserController extends BaseController {
       return $this->successResponse(
          new UserResource($user),
          'messages.update.success',
-         ['attribute' => self::ENTITY],
-         Response::HTTP_CREATED
+         ['attribute' => self::ENTITY]
       );
    } 
 
@@ -103,6 +94,8 @@ class UserController extends BaseController {
     * @return JsonResponse A JSON response containing updated user retailers list or error info.
    */
    public function assignRetailers(ManageRetailersRequest $request, User $user): JsonResponse {
+      $this->authorize('manageUsers', User::class);
+
       $data = $request->validated();
 
       if ($user->role->value === UserRole::SUPER_USER->value) {
@@ -132,6 +125,8 @@ class UserController extends BaseController {
     * @return JsonResponse A JSON response containing updated user retailers list or error info.
    */
    public function revokeRetailers(ManageRetailersRequest $request, User $user): JsonResponse {
+      $this->authorize('manageUsers', User::class);
+
       $data = $request->validated();
 
       if ($user->role->value === UserRole::SUPER_USER->value) {
@@ -161,6 +156,8 @@ class UserController extends BaseController {
     * @return JsonResponse A JSON response containing success message for user or an error.
    */
    public function destroy(User $user): JsonResponse {
+      $this->authorize('manageUsers', User::class);
+
       $user->delete();
       
       return $this->successResponse(

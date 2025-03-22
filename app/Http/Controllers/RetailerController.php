@@ -26,6 +26,8 @@ class RetailerController extends BaseController {
     * @return JsonResponse A JSON response containing retrieved retailers or error message.
    */
    public function index(): JsonResponse {
+      $this->authorize('seeAll', Retailer::class);
+
       $retailers = Retailer::with('currency')->get();
 
       return $this->successResponse(
@@ -43,6 +45,8 @@ class RetailerController extends BaseController {
     * @return JsonResponse A JSON response containing retailer products or error info.
    */
    public function getProducts(Retailer $retailer): JsonResponse {
+      $this->authorize('seeProducts', $retailer);
+
       $products = $retailer->products;
 
       return $this->successResponse(
@@ -61,6 +65,8 @@ class RetailerController extends BaseController {
     * @return JsonResponse A JSON response containing retailer products or error info.
    */
    public function addProducts(AddProductsRequest $request, Retailer $retailer): JsonResponse {
+      $this->authorize('addProducts', $retailer);
+      
       $data = $request->validated();
       $products = $data['products'] ?? [];
 
@@ -68,8 +74,8 @@ class RetailerController extends BaseController {
 
       return $this->successResponse(
          $serviceResponse['retailer'],
-         'messages.store.success',
-         ['attribute' => 'products']
+         'messages.assign.success',
+         ['assigned' => 'Product', 'attribute' => 'retailer']
       );
    }
 
@@ -81,6 +87,8 @@ class RetailerController extends BaseController {
     * @return JsonResponse A JSON response containing newly created retailer or error info.
    */
    public function store(RetailerRequest $request): JsonResponse {
+      $this->authorize('store', Retailer::class);
+
       $data = $request->validated();
 
       $serviceResponse = $this->retailerService->store($data);
@@ -102,6 +110,8 @@ class RetailerController extends BaseController {
     * @return JsonResponse A JSON response containing updated retailer or error info.
    */
    public function update(RetailerRequest $request, Retailer $retailer): JsonResponse {
+      $this->authorize('update', Retailer::class);
+
       $data = $request->validated();
       $serviceResponse = $this->retailerService->update($data, $retailer);
 
@@ -120,6 +130,8 @@ class RetailerController extends BaseController {
     * @return JsonResponse A JSON response containing success message for user or an error.
    */
    public function destroy(Retailer $retailer): JsonResponse {
+      $this->authorize('delete', Retailer::class);
+
       $retailer->delete();
 
       return $this->successResponse(

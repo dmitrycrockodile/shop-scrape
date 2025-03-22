@@ -64,6 +64,8 @@ class PackSizeController extends BaseController {
     * @return JsonResponse A JSON response containing updated pack size or error info.
    */
    public function update(StoreRequest $request, PackSize $packSize): JsonResponse {
+      $this->authorize('update', PackSize::class);
+
       $data = $request->validated();
       $packSize->update($data);
 
@@ -83,6 +85,7 @@ class PackSizeController extends BaseController {
     * @return JsonResponse A JSON response containing success message for user or an error.
    */
    public function destroy(PackSize $packSize): JsonResponse {
+      $this->authorize('delete', PackSize::class);
       $packSize->delete();
       
       return $this->successResponse(

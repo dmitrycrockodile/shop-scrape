@@ -30,7 +30,7 @@ class StoreRequest extends FormRequest
          'price' => 'required|numeric|min:0', 
          'stock_count' => 'required|integer|min:0', 
          'avg_rating' => 'required|numeric|min:0',
-         'images' => 'required|array',
+         'images' => 'nullable|array',
          'images.*.url' => 'required|image|mimes:jpeg,png,jpg,gif',
          'images.*.name' => 'required|string|max:255',
          'images.*.position' => 'required|integer|min:0',

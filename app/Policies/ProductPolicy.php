@@ -15,7 +15,19 @@ class ProductPolicy
         //
     }
 
-    public function accessProduct(User $user, Product $product) {
+    public function seeProducts(User $user) {
+        return $user->isSuperUser();
+    }
+
+    public function delete(User $user) {
+        return $user->isSuperUser();
+    }
+
+    public function update(User $user, Product $product) {
+        if ($user->isSuperUser()) {
+            return true;
+        }
+
         $userRetailers = $user->retailers;
 
         foreach ($userRetailers as $retailer) {
@@ -25,5 +37,9 @@ class ProductPolicy
         }
 
         return false;
+    }
+
+    public function getRetailers(User $user) {
+        return $user->isSuperUser();
     }
 }
