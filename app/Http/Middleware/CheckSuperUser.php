@@ -18,7 +18,7 @@ class CheckSuperUser
     public function handle(Request $request, Closure $next): Response
     {
         $currentUser = Auth::user();
-        if (!$currentUser || !Gate::allows('manage-users',$currentUser)) {
+        if (!$currentUser || !Gate::allows('manage-users', $currentUser)) {
             abort(403, 'Access Denied, only administrator can do this.');
         }
 

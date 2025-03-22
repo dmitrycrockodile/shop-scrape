@@ -27,4 +27,7 @@ return [
       'error' => 'Failed to revoke :revoked from :attribute. Please try again later.',
       'not_allowed' => ':revoked revokement from the super user is not allowed.',
    ],
+   'getMetrics' => [
+      'not_allowed' => 'You have no access to :attribute metrics.',
+   ]
 ];

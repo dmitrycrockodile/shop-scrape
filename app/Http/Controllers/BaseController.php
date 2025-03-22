@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class BaseController {
+   use AuthorizesRequests;
+
    /**
     * Method for all controllers to handle successful JSON responses
     *

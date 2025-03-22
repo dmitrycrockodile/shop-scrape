@@ -5,6 +5,7 @@ use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\PackSizeController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\MetricsController;
 use App\Http\Controllers\ScrapedDataController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckSuperUser;
@@ -19,6 +20,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
    Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
    Route::post('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+
+   Route::post('/retailers/metrics', [MetricsController::class, 'getRetailerMetrics'])->name('metrics.retailers.index');
 });
 
 Route::post('/scraped-data', [ScrapedDataController::class, 'store'])->name('scraped-data.store');
