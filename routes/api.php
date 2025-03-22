@@ -28,26 +28,19 @@ Route::post('/scraped-data', [ScrapedDataController::class, 'store'])->name('scr
 
 // Accessible for SUPER users routes
 Route::middleware(['auth:sanctum', CheckSuperUser::class])->group(function() {
-   Route::get('/users', [UserController::class, 'index'])->name('users.index');
-   Route::post('/users', [UserController::class, 'store'])->name('users.store');
-   Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+   Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
    Route::post('/users/{user}/assign-retailers', [UserController::class, 'assignRetailers'])->name('users.retailers.assign');
    Route::post('/users/{user}/revoke-retailers', [UserController::class, 'revokeRetailers'])->name('users.retailers.revoke');
-   Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
-   Route::get('/retailers', [RetailerController::class, 'index'])->name('retailers.index');
+   Route::resource('retailers', RetailerController::class)->only(['index', 'store', 'update', 'destroy']);
    Route::get('/retailers/{retailer}/products', [RetailerController::class, 'getProducts'])->name('retailers.products.get');
-   Route::post('/retailers', [RetailerController::class, 'store'])->name('retailers.store');
    Route::post('/retailers/{retailer}/products', [RetailerController::class, 'addProducts'])->name('retailers.products.add');
-   Route::put('/retailers/{retailer}', [RetailerController::class, 'update'])->name('retailers.update');
-   Route::delete('/retailers/{retailer}', [RetailerController::class, 'destroy'])->name('retailers.destroy');
 
    Route::get('/products/{product}/retailers', [ProductController::class, 'getRetailers'])->name('products.retailers');
    Route::post('/products', [ProductController::class, 'index'])->name('products.index');
    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
-   Route::put('/pack-sizes/{packSize}', [PackSizeController::class, 'update'])->name('pack-sizes.update');
-   Route::delete('/pack-sizes/{packSize}', [PackSizeController::class, 'destroy'])->name('pack-sizes.destroy');
+   Route::resource('pack-sizes', PackSizeController::class)->only(['update', 'destroy']);
 });
 
 // Accessible for guests routes
