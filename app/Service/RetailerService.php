@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Http\Resources\Retailer\RetailerResource;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 use App\Models\Retailer;
 
 class RetailerService {
@@ -16,18 +15,10 @@ class RetailerService {
     * @return array
    */
    public function store(array $data): array {
-      try {
-         $this->checkAndStoreLogo($data);
-         $retailer = Retailer::create($data);
+      $this->checkAndStoreLogo($data);
+      $retailer = Retailer::create($data);
 
-         return $this->successResponse($retailer);
-      } catch (\Exception $e) {
-         Log::error('Failed to store the retailer: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-         ]);
-
-         return $this->errorResponse($e->getMessage(), $e);
-      }
+      return $this->successResponse($retailer);
    } 
 
    /**
@@ -39,18 +30,10 @@ class RetailerService {
     * @return array
    */
    public function update(array $data, Retailer $retailer): array {
-      try {
-         $this->checkAndStoreLogo($data);
-         $retailer->update($data);
+      $this->checkAndStoreLogo($data);
+      $retailer->update($data);
 
-         return $this->successResponse($retailer);
-      } catch (\Exception $e) {
-         Log::error('Failed to update the retailer: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString() 
-         ]);
-
-         return $this->errorResponse('Failed to update the retailer, please try again.', $e);
-      }
+      return $this->successResponse($retailer);
    }
 
    /**
@@ -62,31 +45,23 @@ class RetailerService {
     * @return array
    */
    public function syncOrAttachProducts(Retailer $retailer, $products): array {
-      try {
-         $productIds = array_column($products, 'id');
+      $productIds = array_column($products, 'id');
 
-         $existingProducts = $retailer->products()
-            ->whereIn('products.id', $productIds)
-            ->pluck('products.id')
-            ->toArray();
+      $existingProducts = $retailer->products()
+         ->whereIn('products.id', $productIds)
+         ->pluck('products.id')
+         ->toArray();
 
-         [$attachData, $syncData] = $this->prepareProductData($products, $existingProducts);
-         
-         if (!empty($syncData)) {
-            $retailer->products()->syncWithoutDetaching($syncData);
-         }
-         if (!empty($attachData)) {
-            $retailer->products()->attach($attachData);
-         }
-
-         return $this->successResponse($retailer);
-      } catch (\Exception $e) {
-         Log::error('Failed to update the products list: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-         ]);
-
-         return $this->errorResponse($e->getMessage(), $e);
+      [$attachData, $syncData] = $this->prepareProductData($products, $existingProducts);
+      
+      if (!empty($syncData)) {
+         $retailer->products()->syncWithoutDetaching($syncData);
       }
+      if (!empty($attachData)) {
+         $retailer->products()->attach($attachData);
+      }
+
+      return $this->successResponse($retailer);
    }
 
    /**
@@ -139,30 +114,10 @@ class RetailerService {
     *
     * @return array
    */
-    private function successResponse(Retailer $retailer): array {
+   private function successResponse(Retailer $retailer): array {
       return [
          'success' => true,
          'retailer' => new RetailerResource($retailer)
-      ];
-   }
-
-   /**
-    * Error response formatting.
-    *
-    * @param string $errorMessage
-    * @param Exception $exception
-    * @return array
-   */
-   private function errorResponse(string $errorMessage, \Exception $exception, int $statusCode = 500): array {
-      Log::error($errorMessage, [
-         'exception' => $exception->getMessage(),
-         'trace' => $exception->getTraceAsString(),
-      ]);
-
-      return [
-         'success' => false,
-         'error' => $exception->getMessage(),
-         'status' => $statusCode,
       ];
    }
 }

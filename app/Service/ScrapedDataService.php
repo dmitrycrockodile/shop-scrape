@@ -21,43 +21,33 @@ class ScrapedDataService {
     * @return array
     */
    public function store(array $data): array {
-      try {
-         $productRetailer = ProductRetailer::whereHas('product', function ($query) use ($data) {
-            $query->where('manufacturer_part_number', $data['mpn']);
-         })->where('id', $data['product_retailer_id'])->first();
-   
-         if (!$productRetailer) {
-            return $this->errorResponse(
-               'Product Retailer with provided MPN not found.', 
-               new \Exception('Product Retailer with provided MPN not found.'),
-               Response::HTTP_NOT_FOUND
-            );
-         }
+      $productRetailer = ProductRetailer::whereHas('product', function ($query) use ($data) {
+         $query->where('manufacturer_part_number', $data['mpn']);
+      })->where('id', $data['product_retailer_id'])->first();
 
-         DB::beginTransaction();
-
-         $images = $this->extractImages($data);
-         $ratings = $this->extractRatings($data);
-         $scrapedData = ScrapedData::create($data);
-
-         if ($images) {
-            $this->storeScrapedDataImages($images, $scrapedData);
-         }
-         if ($ratings) {
-            $this->storeScrapedDataRatings($ratings, $scrapedData);
-         }
-
-         DB::commit();
-         return $this->successResponse($scrapedData);
-      } catch (\Exception $e) {
-         DB::rollBack();
-
-         Log::error('Failed to store the scriped data: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString() 
-         ]);
-
-         return $this->errorResponse($e->getMessage(), $e);
+      if (!$productRetailer) {
+         return $this->errorResponse(
+            'Product Retailer with provided MPN not found.', 
+            new \Exception('Product Retailer with provided MPN not found.'),
+            Response::HTTP_NOT_FOUND
+         );
       }
+
+      DB::beginTransaction();
+
+      $images = $this->extractImages($data);
+      $ratings = $this->extractRatings($data);
+      $scrapedData = ScrapedData::create($data);
+
+      if ($images) {
+         $this->storeScrapedDataImages($images, $scrapedData);
+      }
+      if ($ratings) {
+         $this->storeScrapedDataRatings($ratings, $scrapedData);
+      }
+
+      DB::commit();
+      return $this->successResponse($scrapedData);
    } 
 
    /**

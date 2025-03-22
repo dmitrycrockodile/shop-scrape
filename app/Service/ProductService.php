@@ -19,39 +19,29 @@ class ProductService {
     * @return array
     */
    public function store(array $data): array {
-      try {
-         DB::beginTransaction();
+      DB::beginTransaction();
 
-         $existingProduct = Product::where('manufacturer_part_number', $data['manufacturer_part_number'])
-            ->where('pack_size_id', $data['pack_size_id'])
-            ->first();
+      $existingProduct = Product::where('manufacturer_part_number', $data['manufacturer_part_number'])
+         ->where('pack_size_id', $data['pack_size_id'])
+         ->first();
 
-         if ($existingProduct) {
-            return $this->errorResponse(
-               'Product with this MPN (Manufacturer Part Number) and pack size (id) already exists.',
-               new \Exception('Duplicate product entry'),
-               Response::HTTP_UNPROCESSABLE_ENTITY
-            );
-         }
-
-         $images = $this->extractImages($data);
-         $product = Product::create($data);
-
-         if ($images) {
-            $this->storeProductImages($images, $product);
-         }
-
-         DB::commit();
-         return $this->successResponse($product);
-      } catch (\Exception $e) {
-         DB::rollBack();
-
-         Log::error('Failed to store the product: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString() 
-         ]);
-
-         return $this->errorResponse($e->getMessage(), $e);
+      if ($existingProduct) {
+         return $this->errorResponse(
+            'Product with this MPN (Manufacturer Part Number) and pack size (id) already exists.',
+            new \Exception('Duplicate product entry'),
+            Response::HTTP_UNPROCESSABLE_ENTITY
+         );
       }
+
+      $images = $this->extractImages($data);
+      $product = Product::create($data);
+
+      if ($images) {
+         $this->storeProductImages($images, $product);
+      }
+
+      DB::commit();
+      return $this->successResponse($product);
    } 
 
    /**
@@ -63,28 +53,18 @@ class ProductService {
     * @return array
     */
    public function update(array $data, Product $product): array {
-      try {
-         DB::beginTransaction();
+      DB::beginTransaction();
 
-         $images = $this->extractImages($data);
-         $product->update($data);
+      $images = $this->extractImages($data);
+      $product->update($data);
 
-         if ($images) {
-            ProductImage::where('product_id', $product->id)->delete();
-            $this->storeProductImages($images, $product);
-         }
-
-         DB::commit();
-         return $this->successResponse($product);
-      } catch (\Exception $e) {
-         DB::rollBack();
-
-         Log::error('Failed to update the product: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString() 
-         ]);
-
-         return $this->errorResponse('Failed to update the product, please try again.', $e);
+      if ($images) {
+         ProductImage::where('product_id', $product->id)->delete();
+         $this->storeProductImages($images, $product);
       }
+
+      DB::commit();
+      return $this->successResponse($product);
    }
 
    /**

@@ -25,64 +25,39 @@ class LoginController extends BaseController
     */
     public function login(LoginRequest $request): JsonResponse {
         $validated = $request->validated();
+        $user = User::whereEmail($validated['email'])->first();
 
-        try {
-            $user = User::whereEmail($validated['email'])->first();
-
-            if (!$user) {
-                return $this->errorResponse(
-                    'auth.login.not_found',
-                    ['attribute' => self::ENTITY],
-                    'No user record found.',
-                    Response::HTTP_NOT_FOUND
-                );
-            }
-
-            if (Hash::check($validated['password'], $user->password)) {
-                $token = $user->createToken('auth_token')->plainTextToken;
-                $user->remember_token = $token;
-                $user->save();
-
-                Auth::login($user);
-
-                return $this->successResponse(
-                    [
-                        'id' => $user->id,
-                        'email' => $user->email,
-                        'token' => $token,
-                    ],
-                    'auth.login.success',
-                    ['attribute' => self::ENTITY]
-                );
-            } else {
-                return $this->errorResponse(
-                    'auth.login.password_incorrect',
-                    ['attribute' => self::ENTITY],
-                    'Incorrect password.',
-                    Response::HTTP_UNAUTHORIZED
-                );
-            }
-        } catch (QueryException $e) {
-            Log::error('Failed to login the user: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
-            ]);
-
+        if (!$user) {
             return $this->errorResponse(
-                'auth.login.error',
+                'auth.login.not_found',
                 ['attribute' => self::ENTITY],
-                $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                'No user record found.',
+                Response::HTTP_NOT_FOUND
             );
-        } catch (\Exception $e) {
-            Log::error('Failed to login the user: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
-            ]);
+        }
 
+        if (Hash::check($validated['password'], $user->password)) {
+            $token = $user->createToken('auth_token')->plainTextToken;
+            $user->remember_token = $token;
+            $user->save();
+
+            Auth::login($user);
+
+            return $this->successResponse(
+                [
+                    'id' => $user->id,
+                    'email' => $user->email,
+                    'token' => $token,
+                ],
+                'auth.login.success',
+                ['attribute' => self::ENTITY]
+            );
+        } else {
             return $this->errorResponse(
-                'auth.login.error',
+                'auth.login.password_incorrect',
                 ['attribute' => self::ENTITY],
-                $e->getMessage(),
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                'Incorrect password.',
+                Response::HTTP_UNAUTHORIZED
             );
         }
     }

@@ -56,28 +56,15 @@ class UserController extends BaseController {
    */
    public function store(StoreRequest $request): JsonResponse {
       $data = $request->validated();
+      
+      $user = User::create($data);
 
-      try {
-         $user = User::create($data);
-
-         return $this->successResponse(
-            new UserResource($user),
-            'messages.store.success',
-            ['attribute' => self::ENTITY],
-            Response::HTTP_CREATED
-         );
-      } catch (\Exception $e) {
-         Log::error('Failed to create the user: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-         ]);
-
-         return $this->errorResponse(
-            'messages.store.error',
-            ['attribute' => self::ENTITY],
-            $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
-         );
-      }
+      return $this->successResponse(
+         new UserResource($user),
+         'messages.store.success',
+         ['attribute' => self::ENTITY],
+         Response::HTTP_CREATED
+      );
    } 
 
    /**
@@ -91,33 +78,20 @@ class UserController extends BaseController {
    public function update(UpdateRequest $request, User $user): JsonResponse {
       $data = $request->validated();
 
-      try {
-         $user->update([
-            'name' => $data['name'] ?? $user->name,
-            'email' => $data['email'] ?? $user->email,
-            'password' => isset($validatedData['password']) ? bcrypt($validatedData['password']) : $user->password,
-            'role' => $data['role'] ?? $user->role,
-            'location' => $data['location'] ?? $user->location
-         ]);
+      $user->update([
+         'name' => $data['name'] ?? $user->name,
+         'email' => $data['email'] ?? $user->email,
+         'password' => isset($validatedData['password']) ? bcrypt($validatedData['password']) : $user->password,
+         'role' => $data['role'] ?? $user->role,
+         'location' => $data['location'] ?? $user->location
+      ]);
 
-         return $this->successResponse(
-            new UserResource($user),
-            'messages.update.success',
-            ['attribute' => self::ENTITY],
-            Response::HTTP_CREATED
-         );
-      } catch (\Exception $e) {
-         Log::error('Failed to create the user: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-         ]);
-
-         return $this->errorResponse(
-            'messages.update.error',
-            ['attribute' => self::ENTITY],
-            $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
-         );
-      }   
+      return $this->successResponse(
+         new UserResource($user),
+         'messages.update.success',
+         ['attribute' => self::ENTITY],
+         Response::HTTP_CREATED
+      );
    } 
 
    /**
@@ -131,35 +105,22 @@ class UserController extends BaseController {
    public function assignRetailers(ManageRetailersRequest $request, User $user): JsonResponse {
       $data = $request->validated();
 
-      try {
-         if ($user->role->value === UserRole::SUPER_USER->value) {
-            return $this->errorResponse(
-               'messages.assign.not_allowed',
-               ['assigned' => 'retailers', 'attribute' => self::ENTITY],
-               "Attempted to assign retailers to a super user (ID: {$user->id})",
-               Response::HTTP_FORBIDDEN
-            );
-         }
-
-         $user->retailers()->syncWithoutDetaching($data['retailers']);
-
-         return $this->successResponse(
-            RetailerResource::collection($user->retailers),
-            'messages.assign.success',
-            ['assigned' => 'retailers', 'attribute' => self::ENTITY]
-         );
-      } catch (\Exception $e) {
-         Log::error('Failed to retrieve the users: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-         ]);
-
+      if ($user->role->value === UserRole::SUPER_USER->value) {
          return $this->errorResponse(
-            'messages.assign.error',
+            'messages.assign.not_allowed',
             ['assigned' => 'retailers', 'attribute' => self::ENTITY],
-            $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
+            "Attempted to assign retailers to a super user (ID: {$user->id})",
+            Response::HTTP_FORBIDDEN
          );
       }
+
+      $user->retailers()->syncWithoutDetaching($data['retailers']);
+
+      return $this->successResponse(
+         RetailerResource::collection($user->retailers),
+         'messages.assign.success',
+         ['assigned' => 'retailers', 'attribute' => self::ENTITY]
+      );
    }
 
    /**
@@ -173,35 +134,22 @@ class UserController extends BaseController {
    public function revokeRetailers(ManageRetailersRequest $request, User $user): JsonResponse {
       $data = $request->validated();
 
-      try {
-         if ($user->role->value === UserRole::SUPER_USER->value) {
-            return $this->errorResponse(
-               'messages.revoke.not_allowed',
-               ['revoked' => 'retailers', 'attribute' => self::ENTITY],
-               "Attempted to revoke retailers from a super user (ID: {$user->id})",
-               Response::HTTP_FORBIDDEN
-            );
-         }
-
-         $user->retailers()->detach($data['retailers']);
-
-         return $this->successResponse(
-            RetailerResource::collection($user->retailers),
-            'messages.revoke.success',
-            ['revoked' => 'retailers', 'attribute' => self::ENTITY]
-         );
-      } catch (\Exception $e) {
-         Log::error('Failed to retrieve the users: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-         ]);
-
+      if ($user->role->value === UserRole::SUPER_USER->value) {
          return $this->errorResponse(
-            'messages.revoke.error',
+            'messages.revoke.not_allowed',
             ['revoked' => 'retailers', 'attribute' => self::ENTITY],
-            $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
+            "Attempted to revoke retailers from a super user (ID: {$user->id})",
+            Response::HTTP_FORBIDDEN
          );
       }
+
+      $user->retailers()->detach($data['retailers']);
+
+      return $this->successResponse(
+         RetailerResource::collection($user->retailers),
+         'messages.revoke.success',
+         ['revoked' => 'retailers', 'attribute' => self::ENTITY]
+      );
    }
 
 
@@ -213,25 +161,12 @@ class UserController extends BaseController {
     * @return JsonResponse A JSON response containing success message for user or an error.
    */
    public function destroy(User $user): JsonResponse {
-      try {
-         $user->delete();
-         
-         return $this->successResponse(
-            null,
-            'messages.destroy.success',
-            ['attribute' => self::ENTITY]
-         );
-      } catch (\Exception $e) {
-         Log::error('Failed to delete the user: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-         ]);
-         
-         return $this->errorResponse(
-            'messages.destroy.error',
-            ['attribute' => self::ENTITY],
-            $e->getMessage(),
-            Response::HTTP_INTERNAL_SERVER_ERROR
-         );
-      }
+      $user->delete();
+      
+      return $this->successResponse(
+         null,
+         'messages.destroy.success',
+         ['attribute' => self::ENTITY]
+      );
    }
 }
