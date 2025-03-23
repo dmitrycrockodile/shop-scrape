@@ -91,6 +91,13 @@ class MetricsController extends BaseController {
          'per_page' => $metrics->perPage(),
          'last_page' => $metrics->lastPage(),
          'total' => $metrics->total(),
+         'filters' => [
+            'product_ids' => $productIds,
+            'manufacturer_part_numbers' => $mpns,
+            'retailer_ids' => $retailerIds,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+         ]
       ];
 
       return $this->successResponse(
