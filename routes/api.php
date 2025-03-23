@@ -35,7 +35,6 @@ Route::middleware('auth:sanctum')->group(function() {
 });
 Route::post('/scraped-data', [ScrapedDataController::class, 'store'])->name('scraped-data.store');
 
-// Accessible for guests routes
 Route::middleware('guest:sanctum')->group(function() {
    Route::post('/login', [LoginController::class, 'login']);
 });

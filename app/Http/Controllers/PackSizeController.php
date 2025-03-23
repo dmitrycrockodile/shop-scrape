@@ -57,11 +57,19 @@ class PackSizeController extends BaseController {
          'page', 
          $data['page'] ?? 1
       );;
+      $meta = [
+         'current_page' => $packSizes->currentPage(),
+         'per_page' => $packSizes->perPage(),
+         'last_page' => $packSizes->lastPage(),
+         'total' => $packSizes->total(),
+      ];
 
       return $this->successResponse(
          PackSizeResource::collection($packSizes),
          'messages.index.success',
-         ['attribute' => self::ENTITY]
+         ['attribute' => self::ENTITY],
+         Response::HTTP_OK,
+         $meta
       );
    }
 

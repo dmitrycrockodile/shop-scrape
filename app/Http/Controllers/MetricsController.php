@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 /**
  * @OA\PathItem(path="/api/retailers/metrics")
@@ -79,12 +80,25 @@ class MetricsController extends BaseController {
          $mpns, 
          $retailerIds
       );
-      $metrics = $query->get();
+      $metrics = $query->paginate(
+         $data['dataPerPage'] ?? 100, 
+         ['*'], 
+         'page', 
+         $data['page'] ?? 1
+      );
+      $meta = [
+         'current_page' => $metrics->currentPage(),
+         'per_page' => $metrics->perPage(),
+         'last_page' => $metrics->lastPage(),
+         'total' => $metrics->total(),
+      ];
 
       return $this->successResponse(
          MetricResource::collection($metrics),
          'messages.index.success',
-         ['attribute' => self::ENTITY]
+         ['attribute' => self::ENTITY],
+         Response::HTTP_OK,
+         $meta
       );
    } 
 

@@ -35,13 +35,20 @@ class BaseController {
       mixed $data = [], 
       string $messageLocal, 
       array $placeholders = [],
-      int $statusCode = Response::HTTP_OK
+      int $statusCode = Response::HTTP_OK,
+      ?array $meta = null
    ): JsonResponse {
-      return response()->json([
+      $response = [
          'success' => true,
          'message' => __($messageLocal, $placeholders),
          'data' => $data,
-      ], $statusCode);
+      ];
+
+      if (!is_null($meta)) {
+         $response['meta'] = $meta;
+      }
+      
+      return response()->json($response, $statusCode);
    }
 
    /**

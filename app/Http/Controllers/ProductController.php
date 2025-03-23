@@ -67,11 +67,19 @@ class ProductController extends BaseController {
          'page', 
          $data['page'] ?? 1
       );
+      $meta = [
+         'current_page' => $products->currentPage(),
+         'per_page' => $products->perPage(),
+         'last_page' => $products->lastPage(),
+         'total' => $products->total(),
+      ];
 
       return $this->successResponse(
          ProductResource::collection($products),
          'messages.index.success',
-         ['attribute' => self::ENTITY]
+         ['attribute' => self::ENTITY],
+         Response::HTTP_OK,
+         $meta
       );
    } 
 
