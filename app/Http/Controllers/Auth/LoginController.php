@@ -28,8 +28,9 @@ class LoginController extends BaseController
      * @OA\Post(
      *     path="/api/login",
      *     summary="User Login",
-     *     description="Authenticates the user and returns an access token.",
+     *     description="Authenticates the user and returns the user's basic details upon successful login.",
      *     tags={"Authentication"},
+     *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -43,9 +44,8 @@ class LoginController extends BaseController
      *         description="Successful login",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="id", type="integer", example=1),
-     *             @OA\Property(property="email", type="string", example="user@example.com"),
-     *             @OA\Property(property="token", type="string", example="1|long-jwt-token-here")
+     *             @OA\Property(property="id", type="integer", example=1, description="User ID"),
+     *             @OA\Property(property="email", type="string", example="user@example.com", description="User email address")
      *         )
      *     ),
      *     @OA\Response(response=401, description="Incorrect password"),
@@ -75,8 +75,7 @@ class LoginController extends BaseController
             return $this->successResponse(
                 [
                     'id' => $user->id,
-                    'email' => $user->email,
-                    'token' => $token,
+                    'email' => $user->email
                 ],
                 'auth.login.success',
                 ['attribute' => self::ENTITY]

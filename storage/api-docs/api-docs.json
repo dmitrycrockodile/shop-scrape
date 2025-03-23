@@ -11,7 +11,7 @@
                     "Authentication"
                 ],
                 "summary": "User Login",
-                "description": "Authenticates the user and returns an access token.",
+                "description": "Authenticates the user and returns the user's basic details upon successful login.",
                 "operationId": "3673edffcdc18c06ac5aef5e2219d774",
                 "requestBody": {
                     "required": true,
@@ -47,16 +47,14 @@
                                 "schema": {
                                     "properties": {
                                         "id": {
+                                            "description": "User ID",
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "email": {
+                                            "description": "User email address",
                                             "type": "string",
                                             "example": "user@example.com"
-                                        },
-                                        "token": {
-                                            "type": "string",
-                                            "example": "1|long-jwt-token-here"
                                         }
                                     },
                                     "type": "object"
@@ -70,7 +68,12 @@
                     "404": {
                         "description": "User not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/retailers/metrics": {
