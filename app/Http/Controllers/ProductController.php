@@ -34,7 +34,7 @@ class ProductController extends BaseController {
     * @OA\Post(
     *     path="/api/products",
     *     summary="Retrieve products",
-    *     description="Fetches a list of products with optional pagination.",
+    *     description="Fetches a list of products with optional pagination. Includes metadata such as current page, total items, and items per page.",
     *     tags={"Products"},
     *     security={{"bearerAuth":{}}},
     *     @OA\RequestBody(
@@ -48,8 +48,23 @@ class ProductController extends BaseController {
     *         response=200,
     *         description="Successful response",
     *         @OA\JsonContent(
-    *             type="array",
-    *             @OA\Items(ref="#/components/schemas/ProductResource")
+    *             @OA\Property(property="success", type="boolean", example=true),
+    *             @OA\Property(property="message", type="string", example="Data retrieved successfully."),
+    *             @OA\Property(
+    *                 property="meta",
+    *                 type="object",
+    *                 description="Pagination metadata",
+    *                 @OA\Property(property="current_page", type="integer", example=1, description="Current page number"),
+    *                 @OA\Property(property="per_page", type="integer", example=10, description="Number of items per page"),
+    *                 @OA\Property(property="last_page", type="integer", example=5, description="Total number of pages"),
+    *                 @OA\Property(property="total", type="integer", example=50, description="Total number of records")
+    *             ),
+    *             @OA\Property(
+    *                 property="data",
+    *                 type="array",
+    *                 description="Retrieved products",
+    *                 @OA\Items(ref="#/components/schemas/ProductResource")
+    *             )
     *         )
     *     ),
     *     @OA\Response(response=401, description="Unauthorized"),

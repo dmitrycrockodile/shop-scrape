@@ -27,7 +27,7 @@ class PackSizeController extends BaseController {
     * @OA\Post(
     *     path="/api/pack-sizes",
     *     summary="Retrieve pack sizes",
-    *     description="Fetches a list of pack sizes with optional pagination.",
+    *     description="Fetches a list of pack sizes with optional pagination. Includes metadata such as current page, total items, and items per page.",
     *     tags={"Pack Sizes"},
     *     security={{"bearerAuth":{}}},
     *     @OA\RequestBody(
@@ -41,8 +41,23 @@ class PackSizeController extends BaseController {
     *         response=200,
     *         description="Successful response",
     *         @OA\JsonContent(
-    *             type="array",
-    *             @OA\Items(ref="#/components/schemas/PackSizeResource")
+    *             @OA\Property(property="success", type="boolean", example=true),
+    *             @OA\Property(property="message", type="string", example="Data retrieved successfully."),
+    *             @OA\Property(
+    *                 property="meta",
+    *                 type="object",
+    *                 description="Pagination metadata",
+    *                 @OA\Property(property="current_page", type="integer", example=1, description="Current page number"),
+    *                 @OA\Property(property="per_page", type="integer", example=10, description="Number of items per page"),
+    *                 @OA\Property(property="last_page", type="integer", example=5, description="Total number of pages"),
+    *                 @OA\Property(property="total", type="integer", example=50, description="Total number of records")
+    *             ),
+    *             @OA\Property(
+    *                 property="data",
+    *                 type="array",
+    *                 description="Retrieved pack sizes",
+    *                 @OA\Items(ref="#/components/schemas/PackSizeResource")
+    *             )
     *         )
     *     ),
     *     @OA\Response(response=401, description="Unauthorized"),

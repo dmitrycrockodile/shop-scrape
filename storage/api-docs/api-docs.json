@@ -26,12 +26,12 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "super2@user.com"
+                                        "example": "test2@user.com"
                                     },
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "5UPER_user_passw0rd"
+                                        "example": "TE5T_user_passw0rd"
                                     }
                                 },
                                 "type": "object"
@@ -79,7 +79,7 @@
                     "Metrics"
                 ],
                 "summary": "Retrieve retailer metrics",
-                "description": "Fetches retailer metrics based on various filters such as product IDs, manufacturer part numbers, and retailer IDs. Requires authentication.",
+                "description": "Fetches retailer metrics based on various filters such as product IDs, manufacturer part numbers, and retailer IDs. Includes pagination metadata in the response.",
                 "operationId": "0bdabee8e2a0891c0ac750b21d8f4e1c",
                 "requestBody": {
                     "required": true,
@@ -95,10 +95,12 @@
                                 ],
                                 "properties": {
                                     "dataPerPage": {
+                                        "description": "Number of records per page",
                                         "type": "integer",
                                         "example": 10
                                     },
                                     "page": {
+                                        "description": "Page number",
                                         "type": "integer",
                                         "example": 1
                                     },
@@ -155,10 +157,96 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/MetricResource"
-                                    }
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data retrieved successfully."
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "description": "Current page number",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "per_page": {
+                                                    "description": "Number of items per page",
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "last_page": {
+                                                    "description": "Total number of pages",
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "total": {
+                                                    "description": "Total number of records",
+                                                    "type": "integer",
+                                                    "example": 50
+                                                },
+                                                "filters": {
+                                                    "description": "Filters applied to the query",
+                                                    "properties": {
+                                                        "product_ids": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "integer"
+                                                            },
+                                                            "example": [
+                                                                1,
+                                                                2,
+                                                                3
+                                                            ]
+                                                        },
+                                                        "manufacturer_part_numbers": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            },
+                                                            "example": [
+                                                                "MPN123",
+                                                                "MPN456"
+                                                            ]
+                                                        },
+                                                        "retailer_ids": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "integer"
+                                                            },
+                                                            "example": [
+                                                                1,
+                                                                2
+                                                            ]
+                                                        },
+                                                        "start_date": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2025-01-01"
+                                                        },
+                                                        "end_date": {
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2025-12-31"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "description": "Retrieved metrics",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/MetricResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -186,7 +274,7 @@
                     "Pack Sizes"
                 ],
                 "summary": "Retrieve pack sizes",
-                "description": "Fetches a list of pack sizes with optional pagination.",
+                "description": "Fetches a list of pack sizes with optional pagination. Includes metadata such as current page, total items, and items per page.",
                 "operationId": "a71003c272c1c9e5b1de18ca5a083dc7",
                 "requestBody": {
                     "required": true,
@@ -216,10 +304,50 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/PackSizeResource"
-                                    }
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data retrieved successfully."
+                                        },
+                                        "meta": {
+                                            "description": "Pagination metadata",
+                                            "properties": {
+                                                "current_page": {
+                                                    "description": "Current page number",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "per_page": {
+                                                    "description": "Number of items per page",
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "last_page": {
+                                                    "description": "Total number of pages",
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "total": {
+                                                    "description": "Total number of records",
+                                                    "type": "integer",
+                                                    "example": 50
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "description": "Retrieved pack sizes",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/PackSizeResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -244,7 +372,7 @@
                     "Products"
                 ],
                 "summary": "Retrieve products",
-                "description": "Fetches a list of products with optional pagination.",
+                "description": "Fetches a list of products with optional pagination. Includes metadata such as current page, total items, and items per page.",
                 "operationId": "48cf0348a9cb2ad566b7a4db9c71f0c6",
                 "requestBody": {
                     "required": true,
@@ -274,10 +402,50 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/ProductResource"
-                                    }
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data retrieved successfully."
+                                        },
+                                        "meta": {
+                                            "description": "Pagination metadata",
+                                            "properties": {
+                                                "current_page": {
+                                                    "description": "Current page number",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "per_page": {
+                                                    "description": "Number of items per page",
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "last_page": {
+                                                    "description": "Total number of pages",
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "total": {
+                                                    "description": "Total number of records",
+                                                    "type": "integer",
+                                                    "example": 50
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "description": "Retrieved products",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ProductResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }

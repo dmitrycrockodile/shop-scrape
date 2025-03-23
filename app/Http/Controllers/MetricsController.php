@@ -30,15 +30,15 @@ class MetricsController extends BaseController {
     * @OA\Post(
     *     path="/api/retailers/metrics",
     *     summary="Retrieve retailer metrics",
-    *     description="Fetches retailer metrics based on various filters such as product IDs, manufacturer part numbers, and retailer IDs. Requires authentication.",
+    *     description="Fetches retailer metrics based on various filters such as product IDs, manufacturer part numbers, and retailer IDs. Includes pagination metadata in the response.",
     *     tags={"Metrics"},
     *     security={{"bearerAuth":{}}},
     *     @OA\RequestBody(
     *         required=true,
     *         @OA\JsonContent(
     *             required={"product_ids", "manufacturer_part_numbers", "retailer_ids", "start_date", "end_date"},
-    *             @OA\Property(property="dataPerPage", type="integer", example=10),
-    *             @OA\Property(property="page", type="integer", example=1),
+    *             @OA\Property(property="dataPerPage", type="integer", example=10, description="Number of records per page"),
+    *             @OA\Property(property="page", type="integer", example=1, description="Page number"),
     *             @OA\Property(property="product_ids", type="array", @OA\Items(type="integer"), example={1, 2, 3}),
     *             @OA\Property(property="manufacturer_part_numbers", type="array", @OA\Items(type="string"), example={"MPN123", "MPN456"}),
     *             @OA\Property(property="retailer_ids", type="array", @OA\Items(type="integer"), example={1, 2}),
@@ -50,8 +50,32 @@ class MetricsController extends BaseController {
     *         response=200,
     *         description="Successful response",
     *         @OA\JsonContent(
-    *             type="array",
-    *             @OA\Items(ref="#/components/schemas/MetricResource")
+    *             @OA\Property(property="success", type="boolean", example=true),
+    *             @OA\Property(property="message", type="string", example="Data retrieved successfully."),
+    *             @OA\Property(
+    *                 property="meta",
+    *                 type="object",
+    *                 @OA\Property(property="current_page", type="integer", example=1, description="Current page number"),
+    *                 @OA\Property(property="per_page", type="integer", example=10, description="Number of items per page"),
+    *                 @OA\Property(property="last_page", type="integer", example=5, description="Total number of pages"),
+    *                 @OA\Property(property="total", type="integer", example=50, description="Total number of records"),
+    *                 @OA\Property(
+    *                     property="filters",
+    *                     type="object",
+    *                     description="Filters applied to the query",
+    *                     @OA\Property(property="product_ids", type="array", @OA\Items(type="integer"), example={1, 2, 3}),
+    *                     @OA\Property(property="manufacturer_part_numbers", type="array", @OA\Items(type="string"), example={"MPN123", "MPN456"}),
+    *                     @OA\Property(property="retailer_ids", type="array", @OA\Items(type="integer"), example={1, 2}),
+    *                     @OA\Property(property="start_date", type="string", format="date", example="2025-01-01"),
+    *                     @OA\Property(property="end_date", type="string", format="date", example="2025-12-31")
+    *                 )
+    *             ),
+    *             @OA\Property(
+    *                 property="data",
+    *                 type="array",
+    *                 description="Retrieved metrics",
+    *                 @OA\Items(ref="#/components/schemas/MetricResource")
+    *             )
     *         )
     *     ),
     *     @OA\Response(response=401, description="Unauthorized"),
