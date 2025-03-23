@@ -8,11 +8,23 @@ use Illuminate\Support\Carbon;
 
 class MetricResource extends JsonResource
 {
+   
    /**
-    * Transform the resource into an array.
-    *
-    * @return array<string, mixed>
-    */
+    * @OA\Schema(
+    *     schema="MetricResource",
+    *     type="object",
+    *     title="Metric Resource",
+    *     description="Schema for retailer metrics",
+    *     @OA\Property(property="retailer_id", type="integer", example=1),
+    *     @OA\Property(property="retailer_title", type="string", example="Amazon"),
+    *     @OA\Property(property="product_id", type="integer", example=101),
+    *     @OA\Property(property="product_title", type="string", example="Laptop XYZ"),
+    *     @OA\Property(property="avg_rating", type="number", format="float", example=4.5),
+    *     @OA\Property(property="avg_price", type="number", format="float", example=999.99),
+    *     @OA\Property(property="avg_images", type="number", format="float", example=3.2),
+    *     @OA\Property(property="Date", type="string", example="2024-03-22 to 2024-03-29"),
+    * )
+   */
    public function toArray(Request $request): array
    {
       return [

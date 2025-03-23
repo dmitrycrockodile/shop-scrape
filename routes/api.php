@@ -25,14 +25,14 @@ Route::middleware('auth:sanctum')->group(function() {
 
    Route::resource('retailers', RetailerController::class)->only(['index', 'store', 'update', 'destroy']);
    Route::get('/retailers/{retailer}/products', [RetailerController::class, 'getProducts'])->name('retailers.products.get');
-   Route::post('/retailers/metrics', [MetricsController::class, 'getRetailerMetrics'])->name('metrics.retailers.index');
    Route::post('/retailers/{retailer}/products', [RetailerController::class, 'addProducts'])->name('retailers.products.add');
+   
+   Route::post('/retailers/metrics', [MetricsController::class, 'getRetailerMetrics'])->name('metrics.retailers.index');
 
    Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
    Route::post('/users/{user}/assign-retailers', [UserController::class, 'assignRetailers'])->name('users.retailers.assign');
    Route::post('/users/{user}/revoke-retailers', [UserController::class, 'revokeRetailers'])->name('users.retailers.revoke');
 });
-
 Route::post('/scraped-data', [ScrapedDataController::class, 'store'])->name('scraped-data.store');
 
 // Accessible for guests routes

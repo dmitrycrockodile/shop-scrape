@@ -12,6 +12,9 @@ use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @OA\PathItem(path="/api/retailers/metrics")
+*/
 class MetricsController extends BaseController {
    private const ENTITY = 'metrics';
 
@@ -21,6 +24,39 @@ class MetricsController extends BaseController {
     * @param RetailerMetricsRequest $request Request with pagination and filters data (If provided)
     * 
     * @return JsonResponse A JSON response containing retrieved retailer metrics or error message.
+   */
+   /**
+    * @OA\Post(
+    *     path="/api/retailers/metrics",
+    *     summary="Retrieve retailer metrics",
+    *     description="Fetches retailer metrics based on various filters such as product IDs, manufacturer part numbers, and retailer IDs. Requires authentication.",
+    *     tags={"Metrics"},
+    *     security={{"bearerAuth":{}}},
+    *     @OA\RequestBody(
+    *         required=true,
+    *         @OA\JsonContent(
+    *             required={"product_ids", "manufacturer_part_numbers", "retailer_ids", "start_date", "end_date"},
+    *             @OA\Property(property="dataPerPage", type="integer", example=10),
+    *             @OA\Property(property="page", type="integer", example=1),
+    *             @OA\Property(property="product_ids", type="array", @OA\Items(type="integer"), example={1, 2, 3}),
+    *             @OA\Property(property="manufacturer_part_numbers", type="array", @OA\Items(type="string"), example={"MPN123", "MPN456"}),
+    *             @OA\Property(property="retailer_ids", type="array", @OA\Items(type="integer"), example={1, 2}),
+    *             @OA\Property(property="start_date", type="string", format="date", example="2025-01-01"),
+    *             @OA\Property(property="end_date", type="string", format="date", example="2025-12-31")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="Successful response",
+    *         @OA\JsonContent(
+    *             type="array",
+    *             @OA\Items(ref="#/components/schemas/MetricResource")
+    *         )
+    *     ),
+    *     @OA\Response(response=401, description="Unauthorized"),
+    *     @OA\Response(response=403, description="Forbidden - User does not have access"),
+    *     @OA\Response(response=422, description="Validation error"),
+    * )
    */
    public function getRetailerMetrics(RetailerMetricsRequest $request): JsonResponse {
       $this->authorize('getMetrics', Retailer::class); 

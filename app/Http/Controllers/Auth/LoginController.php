@@ -9,9 +9,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Log;
 
+/**
+ * @OA\PathItem(path="/api/login")
+*/
 class LoginController extends BaseController
 {
     private const ENTITY = 'user';
@@ -22,6 +23,34 @@ class LoginController extends BaseController
      * @param LoginRequest $request
      * 
      * @return JsonResponse A JSON response with success or failure.
+    */
+    /**
+     * @OA\Post(
+     *     path="/api/login",
+     *     summary="User Login",
+     *     description="Authenticates the user and returns an access token.",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", format="email", example="test2@user.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="TE5T_user_passw0rd")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful login",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="email", type="string", example="user@example.com"),
+     *             @OA\Property(property="token", type="string", example="1|long-jwt-token-here")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Incorrect password"),
+     *     @OA\Response(response=404, description="User not found")
+     * )
     */
     public function login(LoginRequest $request): JsonResponse {
         $validated = $request->validated();

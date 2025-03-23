@@ -6,6 +6,18 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+/**
+ * @OA\Info(
+ *   title="APIs for Shop Scrape App",
+ *   version="1.0.0",
+ * ),
+ * @OA\SecurityScheme(
+ *   securityScheme="bearerAuth",
+ *   type="http",
+ *   scheme="bearer",
+ *   bearerFormat="JWT"
+ * ),
+*/
 class BaseController {
    use AuthorizesRequests;
 

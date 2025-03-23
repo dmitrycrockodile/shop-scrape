@@ -18,13 +18,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // SuperUserSeeder::class,
-            // CurrenciesSeeder::class,
-            // PackSizesSeeder::class,
-            // RetailersSeeder::class,
+            SuperUserSeeder::class,
+            CurrenciesSeeder::class,
+            PackSizesSeeder::class,
+            RetailersSeeder::class,
             ProductsSeeder::class,
             ProductRetailerRelationshipSeeder::class,
-            // ScrapedDataSeeder::class
+            ScrapedDataSeeder::class
         ]);
     }
 }

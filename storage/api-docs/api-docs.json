@@ -1,0 +1,1972 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "APIs for Shop Scrape App",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User Login",
+                "description": "Authenticates the user and returns an access token.",
+                "operationId": "3673edffcdc18c06ac5aef5e2219d774",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "super2@user.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "5UPER_user_passw0rd"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "user@example.com"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|long-jwt-token-here"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Incorrect password"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/api/retailers/metrics": {
+            "post": {
+                "tags": [
+                    "Metrics"
+                ],
+                "summary": "Retrieve retailer metrics",
+                "description": "Fetches retailer metrics based on various filters such as product IDs, manufacturer part numbers, and retailer IDs. Requires authentication.",
+                "operationId": "0bdabee8e2a0891c0ac750b21d8f4e1c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_ids",
+                                    "manufacturer_part_numbers",
+                                    "retailer_ids",
+                                    "start_date",
+                                    "end_date"
+                                ],
+                                "properties": {
+                                    "dataPerPage": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "page": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "product_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "manufacturer_part_numbers": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "MPN123",
+                                            "MPN456"
+                                        ]
+                                    },
+                                    "retailer_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-01-01"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-31"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/MetricResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden - User does not have access"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pack-sizes": {
+            "post": {
+                "tags": [
+                    "Pack Sizes"
+                ],
+                "summary": "Retrieve pack sizes",
+                "description": "Fetches a list of pack sizes with optional pagination.",
+                "operationId": "a71003c272c1c9e5b1de18ca5a083dc7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "dataPerPage": {
+                                        "description": "Number of items per page",
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "page": {
+                                        "description": "Page number for pagination",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PackSizeResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/products": {
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Retrieve products",
+                "description": "Fetches a list of products with optional pagination.",
+                "operationId": "48cf0348a9cb2ad566b7a4db9c71f0c6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "dataPerPage": {
+                                        "description": "Number of items per page",
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "page": {
+                                        "description": "Page number for pagination",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/retailers": {
+            "get": {
+                "tags": [
+                    "Retailers"
+                ],
+                "summary": "Retrieve all retailers",
+                "description": "Fetches a list of all retailers with their associated currencies.",
+                "operationId": "ef677653347acacab3fe5655eb27c198",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetailerResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Retailers"
+                ],
+                "summary": "Create a retailer",
+                "description": "Stores a new retailer in the database.",
+                "operationId": "0c02c85dfc6a75fce58175bfd84720ed",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "Title of the retailer",
+                                        "type": "string",
+                                        "example": "Retailer 1"
+                                    },
+                                    "url": {
+                                        "description": "URL of the retailer",
+                                        "type": "string",
+                                        "example": "http://retailer1.com"
+                                    },
+                                    "currency_id": {
+                                        "description": "Currency ID associated with the retailer",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Retailer created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetailerResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/scraped-data": {
+            "post": {
+                "tags": [
+                    "Scraped Data"
+                ],
+                "summary": "Store scraped data",
+                "description": "Stores new scraped data in the database.",
+                "operationId": "f3a1ff29833e035abf948108d50596f8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ScrapedDataResource"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Scraped data stored successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "description": "Operation success status",
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Scraped data stored successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/ScrapedDataResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Retrieve regular users",
+                "description": "Fetches a list of all regular users with their associated retailers.",
+                "operationId": "c457726701591d1183b53aa71fc13441",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Store a new user",
+                "description": "Creates a new user and saves it in the database.",
+                "operationId": "592819a0265360b2014512d6dbfaf0e7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the user",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "description": "Email address of the user",
+                                        "type": "string",
+                                        "example": "johndoe@example.com"
+                                    },
+                                    "password": {
+                                        "description": "Password for the user",
+                                        "type": "string",
+                                        "example": "securepassword"
+                                    },
+                                    "role": {
+                                        "description": "Role of the user",
+                                        "type": "string",
+                                        "example": "REGULAR_USER"
+                                    },
+                                    "location": {
+                                        "description": "Location of the user",
+                                        "type": "string",
+                                        "example": "New York"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout user",
+                "description": "Logs the user out and deletes their authentication tokens. Requires authentication.",
+                "operationId": "e1ce4a7f89309fb2feda43934b1e3357",
+                "requestBody": {
+                    "description": "No payload required. The action will log out the authenticated user.",
+                    "required": false
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful logout response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged out successfully."
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid token or not authenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pack-sizes/store": {
+            "post": {
+                "tags": [
+                    "Pack Sizes"
+                ],
+                "summary": "Store a pack size",
+                "description": "Creates a new pack size.",
+                "operationId": "e0042a376b94a2309dcd3764cc919d1f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the pack size",
+                                        "type": "string",
+                                        "example": "Small"
+                                    },
+                                    "description": {
+                                        "description": "Description of the pack size",
+                                        "type": "string",
+                                        "example": "Small sized package"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pack size created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PackSizeResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pack-sizes/{packSize}": {
+            "put": {
+                "tags": [
+                    "Pack Sizes"
+                ],
+                "summary": "Update a pack size",
+                "description": "Updates an existing pack size.",
+                "operationId": "f02d341ed512536182abe913c4c5e924",
+                "parameters": [
+                    {
+                        "name": "packSize",
+                        "in": "path",
+                        "description": "ID of the pack size to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Updated name of the pack size",
+                                        "type": "string",
+                                        "example": "Medium"
+                                    },
+                                    "description": {
+                                        "description": "Updated description of the pack size",
+                                        "type": "string",
+                                        "example": "Medium sized package"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pack size updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PackSizeResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Pack Sizes"
+                ],
+                "summary": "Delete a pack size",
+                "description": "Deletes a pack size by ID.",
+                "operationId": "02d0ef2987cc136ed494ae7a37a8b384",
+                "parameters": [
+                    {
+                        "name": "packSize",
+                        "in": "path",
+                        "description": "ID of the pack size to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pack size deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "description": "Operation success status",
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Pack size deleted successfully."
+                                        },
+                                        "data": {
+                                            "description": "Additional response data (empty for delete operation)",
+                                            "type": "object",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/products/{product}/retailers": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Retrieve retailers for a product",
+                "description": "Fetches the retailers associated with a specific product.",
+                "operationId": "8f478988c4bb945d58825cdb7f4324c1",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "ID of the product",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetailerResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/products/store": {
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Create a new product",
+                "description": "Stores a new product in the database.",
+                "operationId": "90841008e6d2f8cb3655547d2377fb01",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "Title of the product",
+                                        "type": "string",
+                                        "example": "Laptop"
+                                    },
+                                    "description": {
+                                        "description": "Description of the product",
+                                        "type": "string",
+                                        "example": "High-performance laptop"
+                                    },
+                                    "manufacturer_part_number": {
+                                        "description": "Manufacturer part number",
+                                        "type": "string",
+                                        "example": "LAP12345"
+                                    },
+                                    "pack_size_id": {
+                                        "description": "ID of the associated pack size",
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Product created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/products/{product}": {
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Update a product",
+                "description": "Updates an existing product by its ID.",
+                "operationId": "1ccf5e8c248bb93dc515c3b3c28af2a4",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "ID of the product to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "Updated title of the product",
+                                        "type": "string",
+                                        "example": "Gaming Laptop"
+                                    },
+                                    "description": {
+                                        "description": "Updated description",
+                                        "type": "string",
+                                        "example": "High-performance gaming laptop"
+                                    },
+                                    "manufacturer_part_number": {
+                                        "description": "Updated part number",
+                                        "type": "string",
+                                        "example": "LAP67890"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Delete a product",
+                "description": "Deletes a product by its ID.",
+                "operationId": "1a0a353d0842ff4f9347bb66ec53e3ea",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "ID of the product to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "description": "Operation success status",
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Product deleted successfully."
+                                        },
+                                        "data": {
+                                            "description": "Additional response data (empty for delete operation)",
+                                            "type": "object",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/retailers/{retailer}/products": {
+            "get": {
+                "tags": [
+                    "Retailers"
+                ],
+                "summary": "Retrieve retailer's products",
+                "description": "Fetches the list of products associated with a specific retailer.",
+                "operationId": "22a259427e19d37514be1e090a6a036b",
+                "parameters": [
+                    {
+                        "name": "retailer",
+                        "in": "path",
+                        "description": "ID of the retailer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Retailers"
+                ],
+                "summary": "Add products to a retailer",
+                "description": "Assigns a list of products to a specific retailer.",
+                "operationId": "8a98573b3bb1f205160a1e5c1945c249",
+                "parameters": [
+                    {
+                        "name": "retailer",
+                        "in": "path",
+                        "description": "ID of the retailer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "products": {
+                                        "description": "List of product IDs to be assigned",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Products assigned to retailer",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetailerResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/retailers/{retailer}": {
+            "put": {
+                "tags": [
+                    "Retailers"
+                ],
+                "summary": "Update a retailer",
+                "description": "Updates an existing retailer by its ID.",
+                "operationId": "84f52f899b9ed757b1f1cee365845c92",
+                "parameters": [
+                    {
+                        "name": "retailer",
+                        "in": "path",
+                        "description": "ID of the retailer to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "Updated title of the retailer",
+                                        "type": "string",
+                                        "example": "Updated Retailer"
+                                    },
+                                    "url": {
+                                        "description": "Updated URL",
+                                        "type": "string",
+                                        "example": "http://new-retailer.com"
+                                    },
+                                    "currency_id": {
+                                        "description": "Updated currency ID",
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Retailer updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetailerResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Retailers"
+                ],
+                "summary": "Delete a retailer",
+                "description": "Deletes a retailer by its ID.",
+                "operationId": "d151bc2b89e222572d28b36b07f4cf07",
+                "parameters": [
+                    {
+                        "name": "retailer",
+                        "in": "path",
+                        "description": "ID of the retailer to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retailer deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "description": "Operation success status",
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Retailer deleted successfully."
+                                        },
+                                        "data": {
+                                            "description": "Additional response data (empty for delete operation)",
+                                            "type": "object",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Retailer not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{user}": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update a user",
+                "description": "Updates an existing user by its ID.",
+                "operationId": "e29fc231c7937ab09483d35e6e3d1214",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID of the user to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Updated name of the user",
+                                        "type": "string",
+                                        "example": "Jane Doe"
+                                    },
+                                    "email": {
+                                        "description": "Updated email address of the user",
+                                        "type": "string",
+                                        "example": "janedoe@example.com"
+                                    },
+                                    "password": {
+                                        "description": "Updated password",
+                                        "type": "string",
+                                        "example": "newsecurepassword"
+                                    },
+                                    "role": {
+                                        "description": "Updated role of the user",
+                                        "type": "string",
+                                        "example": "REGULAR_USER"
+                                    },
+                                    "location": {
+                                        "description": "Updated location of the user",
+                                        "type": "string",
+                                        "example": "San Francisco"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete a user",
+                "description": "Deletes a user by its ID.",
+                "operationId": "e0f9a385a1d6788b99e519bd98cf7239",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID of the user to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "description": "Operation success status",
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "User deleted successfully."
+                                        },
+                                        "data": {
+                                            "description": "Additional response data",
+                                            "type": "object",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{user}/assign-retailers": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Assign retailers to a user",
+                "description": "Assigns a list of retailers to a specific user.",
+                "operationId": "85c69a1b9c1923c7573701c91238ad2e",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID of the user to assign retailers to",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "retailers": {
+                                        "description": "List of retailer IDs to assign",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 10
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Retailers assigned successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetailerResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{user}/revoke-retailers": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Revoke retailers from a user",
+                "description": "Removes a list of retailers from a specific user.",
+                "operationId": "682df37d765eda8379b5aff9485e1e69",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID of the user to revoke retailers from",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "retailers": {
+                                        "description": "List of retailer IDs to revoke",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 10
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Retailers revoked successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RetailerResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CurrencyResource": {
+                "description": "Currency resource schema",
+                "properties": {
+                    "id": {
+                        "description": "ID of the currency",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "code": {
+                        "description": "Currency code",
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "name": {
+                        "description": "Currency name",
+                        "type": "string",
+                        "example": "US Dollar"
+                    },
+                    "symbol": {
+                        "description": "Currency symbol",
+                        "type": "string",
+                        "example": "$"
+                    }
+                },
+                "type": "object"
+            },
+            "MetricResource": {
+                "title": "Metric Resource",
+                "description": "Schema for retailer metrics",
+                "properties": {
+                    "retailer_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "retailer_title": {
+                        "type": "string",
+                        "example": "Amazon"
+                    },
+                    "product_id": {
+                        "type": "integer",
+                        "example": 101
+                    },
+                    "product_title": {
+                        "type": "string",
+                        "example": "Laptop XYZ"
+                    },
+                    "avg_rating": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 4.5
+                    },
+                    "avg_price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 999.99
+                    },
+                    "avg_images": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 3.2
+                    },
+                    "Date": {
+                        "type": "string",
+                        "example": "2024-03-22 to 2024-03-29"
+                    }
+                },
+                "type": "object"
+            },
+            "PackSizeResource": {
+                "description": "Pack Size resource schema",
+                "properties": {
+                    "id": {
+                        "description": "ID of the pack size",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Name of the pack size",
+                        "type": "string",
+                        "example": "Small"
+                    },
+                    "weight": {
+                        "description": "Weight of the pack size with unit",
+                        "type": "string",
+                        "example": "500 g"
+                    },
+                    "amount": {
+                        "description": "Amount of items in the pack",
+                        "type": "integer",
+                        "example": 10
+                    }
+                },
+                "type": "object"
+            },
+            "ProductResource": {
+                "description": "Product resource schema",
+                "properties": {
+                    "id": {
+                        "description": "ID of the product",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "description": "Title of the product",
+                        "type": "string",
+                        "example": "Laptop"
+                    },
+                    "description": {
+                        "description": "Description of the product",
+                        "type": "string",
+                        "example": "High-performance laptop"
+                    },
+                    "manufacturer_part_number": {
+                        "description": "Manufacturer part number",
+                        "type": "string",
+                        "example": "LAP12345"
+                    },
+                    "pack_size": {
+                        "$ref": "#/components/schemas/PackSizeResource"
+                    },
+                    "images": {
+                        "description": "List of product images",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductImageResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ProductImageResource": {
+                "description": "Product image resource schema",
+                "properties": {
+                    "id": {
+                        "description": "ID of the product image",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "file_url": {
+                        "description": "URL of the image file",
+                        "type": "string",
+                        "example": "http://example.com/image.jpg"
+                    },
+                    "file_name": {
+                        "description": "Name of the image file",
+                        "type": "string",
+                        "example": "image.jpg"
+                    }
+                },
+                "type": "object"
+            },
+            "RatingResource": {
+                "description": "Rating breakdown resource schema",
+                "properties": {
+                    "one star": {
+                        "description": "Number of one-star ratings",
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "two stars": {
+                        "description": "Number of two-star ratings",
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "three stars": {
+                        "description": "Number of three-star ratings",
+                        "type": "integer",
+                        "example": 30
+                    },
+                    "four stars": {
+                        "description": "Number of four-star ratings",
+                        "type": "integer",
+                        "example": 40
+                    },
+                    "five stars": {
+                        "description": "Number of five-star ratings",
+                        "type": "integer",
+                        "example": 50
+                    }
+                },
+                "type": "object"
+            },
+            "RetailerResource": {
+                "description": "Retailer resource schema",
+                "properties": {
+                    "id": {
+                        "description": "ID of the retailer",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "description": "Title or name of the retailer",
+                        "type": "string",
+                        "example": "Best Buy"
+                    },
+                    "url": {
+                        "description": "URL of the retailer",
+                        "type": "string",
+                        "example": "http://www.bestbuy.com"
+                    },
+                    "logo": {
+                        "description": "Logo URL of the retailer",
+                        "type": "string",
+                        "example": "http://www.bestbuy.com/logo.png"
+                    },
+                    "currency": {
+                        "$ref": "#/components/schemas/CurrencyResource"
+                    }
+                },
+                "type": "object"
+            },
+            "ScrapedDataResource": {
+                "description": "Scraped Data resource schema",
+                "properties": {
+                    "product-retailer id": {
+                        "description": "ID of the product-retailer relationship",
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "scraping session id": {
+                        "description": "ID of the scraping session",
+                        "type": "integer",
+                        "example": 7
+                    },
+                    "title": {
+                        "description": "Title of the scraped product",
+                        "type": "string",
+                        "example": "Product Title"
+                    },
+                    "description": {
+                        "description": "Description of the scraped product",
+                        "type": "string",
+                        "example": "A detailed product description."
+                    },
+                    "price": {
+                        "description": "Price of the product",
+                        "type": "number",
+                        "format": "float",
+                        "example": 29.99
+                    },
+                    "stock count": {
+                        "description": "Stock count of the product",
+                        "type": "integer",
+                        "example": 150
+                    },
+                    "average rating": {
+                        "description": "Average rating of the product",
+                        "type": "number",
+                        "format": "float",
+                        "example": 4.8
+                    },
+                    "images": {
+                        "description": "List of images associated with the product",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ScrapedDataImageResource"
+                        }
+                    },
+                    "rating": {
+                        "description": "Ratings breakdown by stars",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RatingResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ScrapedDataImageResource": {
+                "description": "Image resource associated with scraped data",
+                "properties": {
+                    "id": {
+                        "description": "ID of the image entry",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "file_url": {
+                        "description": "URL of the image file",
+                        "type": "string",
+                        "example": "http://example.com/image1.jpg"
+                    },
+                    "file_name": {
+                        "description": "Name of the image file",
+                        "type": "string",
+                        "example": "image1.jpg"
+                    },
+                    "position": {
+                        "description": "Position of the image in the gallery",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "UserResource": {
+                "description": "User resource schema",
+                "properties": {
+                    "id": {
+                        "description": "ID of the user",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Name of the user",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "description": "Email address of the user",
+                        "type": "string",
+                        "example": "johndoe@example.com"
+                    },
+                    "is_verified": {
+                        "description": "Whether the user's email is verified",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "role": {
+                        "description": "Role of the user",
+                        "type": "string",
+                        "example": "REGULAR_USER"
+                    },
+                    "location": {
+                        "description": "Location of the user",
+                        "type": "string",
+                        "example": "New York"
+                    },
+                    "retailers": {
+                        "description": "List of retailers associated with the user",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RetailerResource"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Metrics",
+            "description": "Metrics"
+        },
+        {
+            "name": "Pack Sizes",
+            "description": "Pack Sizes"
+        },
+        {
+            "name": "Products",
+            "description": "Products"
+        },
+        {
+            "name": "Retailers",
+            "description": "Retailers"
+        },
+        {
+            "name": "Scraped Data",
+            "description": "Scraped Data"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        }
+    ]
+}
