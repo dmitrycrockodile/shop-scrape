@@ -67,6 +67,7 @@ class LoginController extends BaseController
         }
 
         if (Hash::check($validated['password'], $user->password)) {
+            $user->tokens()->delete();
             $token = $user->createToken('auth_token')->plainTextToken;
             $user->remember_token = $token;
             $user->save();
