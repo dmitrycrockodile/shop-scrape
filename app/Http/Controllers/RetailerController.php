@@ -18,7 +18,7 @@ use Illuminate\Http\Response;
 class RetailerController extends BaseController
 {
     protected RetailerService $retailerService;
-    private const ENTITY = 'retailer';
+    private const ENTITY_KEY = 'retailer';
 
     public function __construct(RetailerService $retailerService)
     {
@@ -58,7 +58,7 @@ class RetailerController extends BaseController
         return $this->successResponse(
             RetailerResource::collection($retailers),
             'messages.index.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 
@@ -210,7 +210,7 @@ class RetailerController extends BaseController
         return $this->successResponse(
             $serviceResponse['retailer'],
             'messages.store.success',
-            ['attribute' => self::ENTITY],
+            ['attribute' => self::ENTITY_KEY],
             Response::HTTP_CREATED
         );
     }
@@ -265,7 +265,7 @@ class RetailerController extends BaseController
         return $this->successResponse(
             $serviceResponse['retailer'],
             'messages.update.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 
@@ -313,7 +313,7 @@ class RetailerController extends BaseController
         return $this->successResponse(
             null,
             'messages.destroy.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 }

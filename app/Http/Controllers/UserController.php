@@ -18,7 +18,7 @@ use Illuminate\Http\Response;
  */
 class UserController extends BaseController
 {
-    private const ENTITY = 'user';
+    private const ENTITY_KEY = 'user';
 
     /**
      * Retrieves the regular users.
@@ -55,7 +55,7 @@ class UserController extends BaseController
         return $this->successResponse(
             UserResource::collection($users),
             'messages.index.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 
@@ -103,7 +103,7 @@ class UserController extends BaseController
         return $this->successResponse(
             new UserResource($user),
             'messages.store.success',
-            ['attribute' => self::ENTITY],
+            ['attribute' => self::ENTITY_KEY],
             Response::HTTP_CREATED
         );
     }
@@ -167,7 +167,7 @@ class UserController extends BaseController
         return $this->successResponse(
             new UserResource($user),
             'messages.update.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 
@@ -226,7 +226,7 @@ class UserController extends BaseController
         if ($user->role->value === UserRole::SUPER_USER->value) {
             return $this->errorResponse(
                 'messages.assign.not_allowed',
-                ['assigned' => 'retailers', 'attribute' => self::ENTITY],
+                ['assigned' => 'retailers', 'attribute' => self::ENTITY_KEY],
                 "Attempted to assign retailers to a super user (ID: {$user->id})",
                 Response::HTTP_FORBIDDEN
             );
@@ -237,7 +237,7 @@ class UserController extends BaseController
         return $this->successResponse(
             RetailerResource::collection($user->retailers),
             'messages.assign.success',
-            ['assigned' => 'retailers', 'attribute' => self::ENTITY]
+            ['assigned' => 'retailers', 'attribute' => self::ENTITY_KEY]
         );
     }
 
@@ -296,7 +296,7 @@ class UserController extends BaseController
         if ($user->role->value === UserRole::SUPER_USER->value) {
             return $this->errorResponse(
                 'messages.revoke.not_allowed',
-                ['revoked' => 'retailers', 'attribute' => self::ENTITY],
+                ['revoked' => 'retailers', 'attribute' => self::ENTITY_KEY],
                 "Attempted to revoke retailers from a super user (ID: {$user->id})",
                 Response::HTTP_FORBIDDEN
             );
@@ -307,7 +307,7 @@ class UserController extends BaseController
         return $this->successResponse(
             RetailerResource::collection($user->retailers),
             'messages.revoke.success',
-            ['revoked' => 'retailers', 'attribute' => self::ENTITY]
+            ['revoked' => 'retailers', 'attribute' => self::ENTITY_KEY]
         );
     }
 
@@ -356,7 +356,7 @@ class UserController extends BaseController
         return $this->successResponse(
             null,
             'messages.destroy.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 }

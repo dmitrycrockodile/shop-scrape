@@ -18,7 +18,7 @@ use Illuminate\Http\Response;
  */
 class MetricsController extends BaseController
 {
-    private const ENTITY = 'metrics';
+    private const ENTITY_KEY = 'metrics';
 
     /**
      * Retrieves the retailers.
@@ -129,7 +129,7 @@ class MetricsController extends BaseController
         return $this->successResponse(
             MetricResource::collection($metrics),
             'messages.index.success',
-            ['attribute' => self::ENTITY],
+            ['attribute' => self::ENTITY_KEY],
             Response::HTTP_OK,
             $meta
         );

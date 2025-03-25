@@ -15,7 +15,7 @@ class ScrapedDataController extends BaseController
 {
     protected ScrapedDataService $scrapedDataService;
 
-    private const ENTITY = 'scraped data';
+    private const ENTITY_KEY = 'scraped_data';
 
     public function __construct(ScrapedDataService $scrapedDataService)
     {
@@ -67,12 +67,12 @@ class ScrapedDataController extends BaseController
             ? $this->successResponse(
                 $serviceResponse['scrapedData'],
                 'messages.store.success',
-                ['attribute' => self::ENTITY],
+                ['attribute' => self::ENTITY_KEY],
                 Response::HTTP_CREATED
             )
             : $this->errorResponse(
                 'messages.store.error',
-                ['attribute' => self::ENTITY],
+                ['attribute' => self::ENTITY_KEY],
                 $serviceResponse['error'],
                 $serviceResponse['status']
             );

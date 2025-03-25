@@ -18,7 +18,7 @@ use Illuminate\Http\Response;
 class ProductController extends BaseController
 {
     protected ProductService $productService;
-    private const ENTITY = 'product';
+    private const ENTITY_KEY = 'product';
 
     public function __construct(ProductService $productService)
     {
@@ -95,7 +95,7 @@ class ProductController extends BaseController
         return $this->successResponse(
             ProductResource::collection($products),
             'messages.index.success',
-            ['attribute' => self::ENTITY],
+            ['attribute' => self::ENTITY_KEY],
             Response::HTTP_OK,
             $meta
         );
@@ -189,12 +189,12 @@ class ProductController extends BaseController
             ? $this->successResponse(
                 $serviceResponse['product'],
                 'messages.store.success',
-                ['attribute' => self::ENTITY],
+                ['attribute' => self::ENTITY_KEY],
                 Response::HTTP_CREATED
             )
             : $this->errorResponse(
                 'messages.store.error',
-                ['attribute' => self::ENTITY],
+                ['attribute' => self::ENTITY_KEY],
                 $serviceResponse['error'],
                 $serviceResponse['status']
             );
@@ -250,7 +250,7 @@ class ProductController extends BaseController
         return $this->successResponse(
             $serviceResponse['product'],
             'messages.update.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 
@@ -297,7 +297,7 @@ class ProductController extends BaseController
         return $this->successResponse(
             null,
             'messages.destroy.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 }

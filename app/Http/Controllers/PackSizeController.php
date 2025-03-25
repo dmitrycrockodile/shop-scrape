@@ -15,7 +15,7 @@ use Illuminate\Http\JsonResponse;
  */
 class PackSizeController extends BaseController
 {
-    private const ENTITY = 'pack size';
+    private const ENTITY_KEY = 'pack size';
 
     /**
      * Retrieves the pack sizes.
@@ -84,7 +84,7 @@ class PackSizeController extends BaseController
         return $this->successResponse(
             PackSizeResource::collection($packSizes),
             'messages.index.success',
-            ['attribute' => self::ENTITY],
+            ['attribute' => self::ENTITY_KEY],
             Response::HTTP_OK,
             $meta
         );
@@ -128,7 +128,7 @@ class PackSizeController extends BaseController
         return $this->successResponse(
             new PackSizeResource($packSize),
             'messages.store.success',
-            ['attribute' => self::ENTITY],
+            ['attribute' => self::ENTITY_KEY],
             Response::HTTP_CREATED
         );
     }
@@ -182,7 +182,7 @@ class PackSizeController extends BaseController
         return $this->successResponse(
             new PackSizeResource($packSize),
             'messages.update.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 
@@ -229,7 +229,7 @@ class PackSizeController extends BaseController
         return $this->successResponse(
             null,
             'messages.destroy.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 }

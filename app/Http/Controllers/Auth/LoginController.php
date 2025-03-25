@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
  */
 class LoginController extends BaseController
 {
-    private const ENTITY = 'user';
+    private const ENTITY_KEY = 'user';
 
     /** 
      * Login the user
@@ -60,7 +60,7 @@ class LoginController extends BaseController
         if (!$user) {
             return $this->errorResponse(
                 'auth.login.not_found',
-                ['attribute' => self::ENTITY],
+                ['attribute' => self::ENTITY_KEY],
                 'No user record found.',
                 Response::HTTP_NOT_FOUND
             );
@@ -80,12 +80,12 @@ class LoginController extends BaseController
                     'email' => $user->email
                 ],
                 'auth.login.success',
-                ['attribute' => self::ENTITY]
+                ['attribute' => self::ENTITY_KEY]
             );
         } else {
             return $this->errorResponse(
                 'auth.login.password_incorrect',
-                ['attribute' => self::ENTITY],
+                ['attribute' => self::ENTITY_KEY],
                 'Incorrect password.',
                 Response::HTTP_UNAUTHORIZED
             );

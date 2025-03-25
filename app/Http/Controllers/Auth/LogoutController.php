@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class LogoutController extends BaseController
 {
-    private const ENTITY = 'user';
+    private const ENTITY_KEY = 'user';
 
     /**
      * Handles user unauthorization.
@@ -49,7 +49,7 @@ class LogoutController extends BaseController
         return $this->successResponse(
             [],
             'auth.logout.success',
-            ['attribute' => self::ENTITY]
+            ['attribute' => self::ENTITY_KEY]
         );
     }
 }
