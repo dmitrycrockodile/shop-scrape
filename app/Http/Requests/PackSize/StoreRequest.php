@@ -55,5 +55,5 @@ class StoreRequest extends FormRequest
             'amount.required' => 'Please choose the amount',
             'amount.integer' => 'Amount must be a valid integer',
         ];
-   }
+    }
 }

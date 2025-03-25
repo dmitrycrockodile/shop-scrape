@@ -15,15 +15,18 @@ class ProductPolicy
         //
     }
 
-    public function seeProducts(User $user) {
+    public function seeProducts(User $user)
+    {
         return $user->isSuperUser();
     }
 
-    public function delete(User $user) {
+    public function delete(User $user)
+    {
         return $user->isSuperUser();
     }
 
-    public function update(User $user, Product $product) {
+    public function update(User $user, Product $product)
+    {
         if ($user->isSuperUser()) {
             return true;
         }
@@ -32,14 +35,15 @@ class ProductPolicy
 
         foreach ($userRetailers as $retailer) {
             if ($retailer->products->contains($product)) {
-                return true; 
+                return true;
             }
         }
 
         return false;
     }
 
-    public function getRetailers(User $user) {
+    public function getRetailers(User $user)
+    {
         return $user->isSuperUser();
     }
 }

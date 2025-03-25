@@ -11,7 +11,7 @@ class CurrencyResource extends JsonResource
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
-    */
+     */
     /**
      * @OA\Schema(
      *     schema="CurrencyResource",
@@ -22,7 +22,7 @@ class CurrencyResource extends JsonResource
      *     @OA\Property(property="name", type="string", example="US Dollar", description="Currency name"),
      *     @OA\Property(property="symbol", type="string", example="$", description="Currency symbol")
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [

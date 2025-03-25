@@ -17,7 +17,8 @@ class Currency extends Model
         'symbol'
     ];
 
-    public function retailers(): HasMany {
+    public function retailers(): HasMany
+    {
         return $this->hasMany(Retailer::class, 'currency_id', 'id');
     }
 }

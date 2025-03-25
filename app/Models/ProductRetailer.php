@@ -20,15 +20,18 @@ class ProductRetailer extends Model
         'updated_at'
     ];
 
-    public function product(): BelongsTo {
+    public function product(): BelongsTo
+    {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function retailer(): BelongsTo {
+    public function retailer(): BelongsTo
+    {
         return $this->belongsTo(Retailer::class, 'retailer_id', 'id');
     }
 
-    public function scrapedData(): HasMany {
+    public function scrapedData(): HasMany
+    {
         return $this->hasMany(ScrapedData::class, 'product_retailer_id', 'id');
     }
 }

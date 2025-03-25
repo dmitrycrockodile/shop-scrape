@@ -22,8 +22,9 @@ class RetailerPolicy
      * @param User $user
      * 
      * @return bool
-    */
-    public function getMetrics(User $user): bool {
+     */
+    public function getMetrics(User $user): bool
+    {
         if ($user->isSuperUser()) {
             return true;
         }
@@ -37,23 +38,28 @@ class RetailerPolicy
         return true;
     }
 
-    public function seeAll(User $user): bool {
+    public function seeAll(User $user): bool
+    {
         return $user->isSuperUser();
     }
 
-    public function store(User $user): bool {
+    public function store(User $user): bool
+    {
         return $user->isSuperUser();
     }
 
-    public function update(User $user): bool {
+    public function update(User $user): bool
+    {
         return $user->isSuperUser();
     }
 
-    public function delete(User $user): bool {
+    public function delete(User $user): bool
+    {
         return $user->isSuperUser();
     }
 
-    public function seeProducts(User $user, Retailer $retailer): bool {
+    public function seeProducts(User $user, Retailer $retailer): bool
+    {
         if ($user->isSuperUser()) {
             return true;
         }
@@ -64,7 +70,8 @@ class RetailerPolicy
             ->exists();
     }
 
-    public function addProducts(User $user, Retailer $retailer): bool {
+    public function addProducts(User $user, Retailer $retailer): bool
+    {
         if ($user->isSuperUser()) {
             return true;
         }

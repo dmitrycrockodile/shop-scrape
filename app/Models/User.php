@@ -55,15 +55,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function isSuperUser(): bool {
+    public function isSuperUser(): bool
+    {
         return $this->role === UserRole::SUPER_USER;
     }
 
-    public function isRegularUser(): bool {
+    public function isRegularUser(): bool
+    {
         return $this->role === UserRole::REGULAR_USER;
     }
 
-    public function retailers(): BelongsToMany {
+    public function retailers(): BelongsToMany
+    {
         return $this->belongsToMany(Retailer::class, 'user_retailers', 'user_id', 'retailer_id');
     }
 }

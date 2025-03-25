@@ -11,7 +11,7 @@ class PackSizeResource extends JsonResource
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
-    */
+     */
     /**
      * @OA\Schema(
      *     schema="PackSizeResource",
@@ -22,7 +22,7 @@ class PackSizeResource extends JsonResource
      *     @OA\Property(property="weight", type="string", example="500 g", description="Weight of the pack size with unit"),
      *     @OA\Property(property="amount", type="integer", example=10, description="Amount of items in the pack")
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [

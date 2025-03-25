@@ -17,7 +17,8 @@ class ScrapedDataImage extends Model
         'position'
     ];
 
-    public function scrapedData() {
+    public function scrapedData()
+    {
         return $this->belongsTo(ScrapedData::class, 'scraped_data_id');
     }
 }

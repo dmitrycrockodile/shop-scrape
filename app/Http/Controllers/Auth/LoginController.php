@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 /**
  * @OA\PathItem(path="/api/login")
-*/
+ */
 class LoginController extends BaseController
 {
     private const ENTITY = 'user';
@@ -23,7 +23,7 @@ class LoginController extends BaseController
      * @param LoginRequest $request
      * 
      * @return JsonResponse A JSON response with success or failure.
-    */
+     */
     /**
      * @OA\Post(
      *     path="/api/login",
@@ -51,8 +51,9 @@ class LoginController extends BaseController
      *     @OA\Response(response=401, description="Incorrect password"),
      *     @OA\Response(response=404, description="User not found")
      * )
-    */
-    public function login(LoginRequest $request): JsonResponse {
+     */
+    public function login(LoginRequest $request): JsonResponse
+    {
         $validated = $request->validated();
         $user = User::whereEmail($validated['email'])->first();
 

@@ -16,28 +16,32 @@ class Retailer extends Model
 
     protected $table = 'retailers';
     protected $fillable = [
-        'title', 
-        'url', 
-        'currency_id', 
+        'title',
+        'url',
+        'currency_id',
         'logo',
         'created_at',
         'updated_at'
     ];
 
-    public function products(): BelongsToMany {
+    public function products(): BelongsToMany
+    {
         return $this->belongsToMany(Product::class, 'product_retailers', 'retailer_id', 'product_id')
             ->withPivot('product_url');
     }
 
-    public function users(): BelongsToMany {
+    public function users(): BelongsToMany
+    {
         return $this->belongsToMany(User::class, 'user_retailers', 'retailer_id', 'user_id');
     }
 
-    public function scrapedData(): HasMany {
+    public function scrapedData(): HasMany
+    {
         return $this->hasMany(ScrapedData::class, 'retailer_id', 'id');
     }
 
-    public function currency(): BelongsTo {
+    public function currency(): BelongsTo
+    {
         return $this->belongsTo(Currency::class, 'currency_id', 'id');
     }
 }

@@ -31,7 +31,7 @@ class UserResource extends JsonResource
      *         @OA\Items(ref="#/components/schemas/RetailerResource")
      *     )
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [

@@ -35,7 +35,7 @@ class ProductResource extends JsonResource
      *         description="List of product images"
      *     )
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [

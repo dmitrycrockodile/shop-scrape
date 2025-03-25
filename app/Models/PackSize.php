@@ -18,7 +18,8 @@ class PackSize extends Model
         'amount'
     ];
 
-    public function products(): HasMany {
+    public function products(): HasMany
+    {
         return $this->hasMany(Product::class, 'pack_size_id', 'id');
     }
 }

@@ -39,16 +39,16 @@ class ScrapedDataResource extends JsonResource
      *         @OA\Items(ref="#/components/schemas/RatingResource")
      *     )
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [
-            'product-retailer id' => $this->product_retailer_id, 
+            'product-retailer id' => $this->product_retailer_id,
             'scraping session id' => $this->scraping_session_id,
-            'title' => $this->title, 
-            'description' => $this->description, 
-            'price' => $this->price, 
-            'stock count' => $this->stock_count, 
+            'title' => $this->title,
+            'description' => $this->description,
+            'price' => $this->price,
+            'stock count' => $this->stock_count,
             'average rating' => $this->avg_rating,
             'images' => ScrapedDataImageResource::collection($this->images),
             'rating' => RatingResource::collection($this->ratings)

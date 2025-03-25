@@ -11,7 +11,7 @@ class ProductImageResource extends JsonResource
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
-    */
+     */
     /**
      * @OA\Schema(
      *     schema="ProductImageResource",
@@ -21,7 +21,7 @@ class ProductImageResource extends JsonResource
      *     @OA\Property(property="file_url", type="string", example="http://example.com/image.jpg", description="URL of the image file"),
      *     @OA\Property(property="file_name", type="string", example="image.jpg", description="Name of the image file")
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [

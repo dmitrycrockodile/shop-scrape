@@ -11,7 +11,7 @@ class RatingResource extends JsonResource
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
-    */
+     */
     /**
      * @OA\Schema(
      *     schema="RatingResource",
@@ -23,12 +23,12 @@ class RatingResource extends JsonResource
      *     @OA\Property(property="four stars", type="integer", example=40, description="Number of four-star ratings"),
      *     @OA\Property(property="five stars", type="integer", example=50, description="Number of five-star ratings")
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [
-            'one star' => $this->one_star, 
-            'two stars'  => $this->two_stars, 
+            'one star' => $this->one_star,
+            'two stars'  => $this->two_stars,
             'three stars'  => $this->three_stars,
             'four stars'  => $this->four_stars,
             'five stars'  => $this->five_stars

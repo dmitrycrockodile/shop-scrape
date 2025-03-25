@@ -18,11 +18,11 @@ class RatingFactory extends Factory
     public function definition(): array
     {
         return [
-            'scraped_data_id' => ScrapedData::factory(), 
-            'one_star' => $this->faker->numberBetween(0, 100), 
-            'two_stars' => $this->faker->numberBetween(0, 100),  
-            'three_stars' => $this->faker->numberBetween(0, 100), 
-            'four_stars' => $this->faker->numberBetween(0, 100), 
+            'scraped_data_id' => ScrapedData::factory(),
+            'one_star' => $this->faker->numberBetween(0, 100),
+            'two_stars' => $this->faker->numberBetween(0, 100),
+            'three_stars' => $this->faker->numberBetween(0, 100),
+            'four_stars' => $this->faker->numberBetween(0, 100),
             'five_stars' => $this->faker->numberBetween(0, 100),
             'created_at' => now()->subDays(rand(0, 365)),
             'updated_at' => now()->subDays(rand(0, 365))

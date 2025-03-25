@@ -33,5 +33,5 @@ class IndexRequest extends FormRequest
             'dataPerPage.integer' => 'The data per page count must be an integer',
             'page.integer' => 'The page number must be an integer'
         ];
-   }
+    }
 }

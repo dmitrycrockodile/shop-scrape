@@ -14,11 +14,13 @@ class PackSizePolicy
         //
     }
 
-    public function update(User $user) {
+    public function update(User $user)
+    {
         return $user->isSuperUser();
     }
 
-    public function delete(User $user) {
+    public function delete(User $user)
+    {
         return $user->isSuperUser();
     }
 }

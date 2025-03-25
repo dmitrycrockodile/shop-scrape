@@ -27,7 +27,8 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    public function messages() { 
+    public function messages()
+    {
         return [
             'email.required' => 'Please write the email',
             'email.email' => 'Please write a valid email address',

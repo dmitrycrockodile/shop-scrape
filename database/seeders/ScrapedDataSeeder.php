@@ -24,7 +24,7 @@ class ScrapedDataSeeder extends Seeder
         $productRetailers = ProductRetailer::all();
         $productRetailers->each(function ($productRetailer) {
             $this->seedScrapedData($productRetailer);
-        }); 
+        });
 
         $this->updateProductRatings();
     }
@@ -36,12 +36,13 @@ class ScrapedDataSeeder extends Seeder
      * for which scraped data will be generated.
      * 
      * @return void
-    */
-    private function seedScrapedData(ProductRetailer $productRetailer): void {
+     */
+    private function seedScrapedData(ProductRetailer $productRetailer): void
+    {
         $scrapedDataBatch = [];
         $scrapingSession = $this->getScrapingSession($productRetailer);
 
-        for ($i = 0; $i < self::DATA_SCRAPE_DAYS; $i++) {  
+        for ($i = 0; $i < self::DATA_SCRAPE_DAYS; $i++) {
             $scrapedDataBatch[] = $this->createScrapedDataArray($productRetailer, $scrapingSession, $i);
 
             if (count($scrapedDataBatch) >= self::BATCH_SIZE) {
@@ -67,8 +68,9 @@ class ScrapedDataSeeder extends Seeder
      * and images will be generated.
      * 
      * @return void
-    */
-    private function seedRatingsAndImages($scrapedDataIds): void {
+     */
+    private function seedRatingsAndImages($scrapedDataIds): void
+    {
         $ratingBatch = [];
         $imageBatch = [];
 
@@ -105,8 +107,9 @@ class ScrapedDataSeeder extends Seeder
      * scraping session is being retrieved or created.
      * 
      * @return ScrapingSession The existing or newly created ScrapingSession instance.
-    */
-    private function getScrapingSession(ProductRetailer $productRetailer): ScrapingSession {
+     */
+    private function getScrapingSession(ProductRetailer $productRetailer): ScrapingSession
+    {
         return ScrapingSession::firstOrCreate([
             'retailer_id' => $productRetailer->retailer->id
         ], [
@@ -125,8 +128,9 @@ class ScrapedDataSeeder extends Seeder
      * for setting the created and updated timestamps.
      * 
      * @return array The formatted array ready for insertion into the scraped_data table.
-    */
-    private function createScrapedDataArray(ProductRetailer $productRetailer, ScrapingSession $scrapingSession, int $days): array {
+     */
+    private function createScrapedDataArray(ProductRetailer $productRetailer, ScrapingSession $scrapingSession, int $days): array
+    {
         return [
             'product_retailer_id' => $productRetailer->id,
             'scraping_session_id' => $scrapingSession->id,
@@ -147,8 +151,9 @@ class ScrapedDataSeeder extends Seeder
      * for the same scraped data record.
      * 
      * @return array The formatted array ready for insertion into the scraped_data_images table.
-    */
-    private function createImageArray(int $scrapedDataId, int $position): array {
+     */
+    private function createImageArray(int $scrapedDataId, int $position): array
+    {
         return [
             'scraped_data_id' => $scrapedDataId,
             'file_url' => fake()->imageUrl(400, 400, 'product'),
@@ -166,13 +171,14 @@ class ScrapedDataSeeder extends Seeder
      * the rating belongs.
      * 
      * @return array The formatted array ready for insertion into the ratings table.
-    */
-    private function createRatingArray(int $scrapedDataId): array {
+     */
+    private function createRatingArray(int $scrapedDataId): array
+    {
         return [
             'scraped_data_id' => $scrapedDataId,
             'one_star'   => rand(0, 100),
             'two_stars'  => rand(0, 100),
-            'three_stars'=> rand(0, 100),
+            'three_stars' => rand(0, 100),
             'four_stars' => rand(0, 100),
             'five_stars' => rand(0, 100),
             'created_at' => now(),
@@ -184,8 +190,9 @@ class ScrapedDataSeeder extends Seeder
      * Update the average rating for each scraped data record based on its associated ratings.
      * 
      * @return void
-    */
-    private function updateProductRatings(): void {
+     */
+    private function updateProductRatings(): void
+    {
         DB::statement("
             UPDATE scraped_data
             JOIN (

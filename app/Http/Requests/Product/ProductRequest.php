@@ -51,5 +51,5 @@ class ProductRequest extends FormRequest
             'images.*.image' => 'Each file must be a valid image.',
             'images.*.mimes' => 'Supported image formats: jpeg, png, jpg, gif.',
         ];
-   }
+    }
 }

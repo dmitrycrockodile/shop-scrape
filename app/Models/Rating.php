@@ -13,9 +13,9 @@ class Rating extends Model
 
     protected $table = 'ratings';
     protected $fillable = [
-        'scraped_data_id', 
-        'one_star', 
-        'two_stars', 
+        'scraped_data_id',
+        'one_star',
+        'two_stars',
         'three_stars',
         'four_stars',
         'five_stars',
@@ -23,7 +23,8 @@ class Rating extends Model
         'updated_at'
     ];
 
-    public function scrapedData(): BelongsTo {
+    public function scrapedData(): BelongsTo
+    {
         return $this->belongsTo(ScrapedData::class, 'scraped_data_id', 'id');
     }
 }

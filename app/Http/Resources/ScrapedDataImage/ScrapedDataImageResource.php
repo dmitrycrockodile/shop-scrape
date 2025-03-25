@@ -11,7 +11,7 @@ class ScrapedDataImageResource extends JsonResource
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
-    */
+     */
     /**
      * @OA\Schema(
      *     schema="ScrapedDataImageResource",
@@ -22,7 +22,7 @@ class ScrapedDataImageResource extends JsonResource
      *     @OA\Property(property="file_name", type="string", example="image1.jpg", description="Name of the image file"),
      *     @OA\Property(property="position", type="integer", example=1, description="Position of the image in the gallery")
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [

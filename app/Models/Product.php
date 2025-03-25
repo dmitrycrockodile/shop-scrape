@@ -22,20 +22,24 @@ class Product extends Model
         'updated_at'
     ];
 
-    public function images(): HasMany {
+    public function images(): HasMany
+    {
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
 
-    public function scrapedData(): HasMany {
+    public function scrapedData(): HasMany
+    {
         return $this->hasMany(ScrapedData::class, 'product_id', 'id');
     }
 
-    public function retailers(): BelongsToMany {
+    public function retailers(): BelongsToMany
+    {
         return $this->belongsToMany(Retailer::class, 'product_retailers', 'product_id', 'retailer_id')
             ->withPivot('product_url');
     }
 
-    public function packSize(): BelongsTo {
+    public function packSize(): BelongsTo
+    {
         return $this->belongsTo(PackSize::class, 'pack_size_id', 'id');
     }
 }

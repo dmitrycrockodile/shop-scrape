@@ -12,145 +12,153 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ProductRetailer;
 use Illuminate\Http\Response;
 
-class ScrapedDataService {
-   /**
-    * Store new scraped data.
-    *
-    * @param array $data
-    *
-    * @return array
-    */
-   public function store(array $data): array {
-      $productRetailer = ProductRetailer::whereHas('product', function ($query) use ($data) {
-         $query->where('manufacturer_part_number', $data['mpn']);
-      })->where('id', $data['product_retailer_id'])->first();
+class ScrapedDataService
+{
+    /**
+     * Store new scraped data.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function store(array $data): array
+    {
+        $productRetailer = ProductRetailer::whereHas('product', function ($query) use ($data) {
+            $query->where('manufacturer_part_number', $data['mpn']);
+        })->where('id', $data['product_retailer_id'])->first();
 
-      if (!$productRetailer) {
-         return $this->errorResponse(
-            'Product Retailer with provided MPN not found.', 
-            new \Exception('Product Retailer with provided MPN not found.'),
-            Response::HTTP_NOT_FOUND
-         );
-      }
+        if (!$productRetailer) {
+            return $this->errorResponse(
+                'Product Retailer with provided MPN not found.',
+                new \Exception('Product Retailer with provided MPN not found.'),
+                Response::HTTP_NOT_FOUND
+            );
+        }
 
-      DB::beginTransaction();
+        DB::beginTransaction();
 
-      $images = $this->extractImages($data);
-      $ratings = $this->extractRatings($data);
-      $scrapedData = ScrapedData::create($data);
+        $images = $this->extractImages($data);
+        $ratings = $this->extractRatings($data);
+        $scrapedData = ScrapedData::create($data);
 
-      if ($images) {
-         $this->storeScrapedDataImages($images, $scrapedData);
-      }
-      if ($ratings) {
-         $this->storeScrapedDataRatings($ratings, $scrapedData);
-      }
+        if ($images) {
+            $this->storeScrapedDataImages($images, $scrapedData);
+        }
+        if ($ratings) {
+            $this->storeScrapedDataRatings($ratings, $scrapedData);
+        }
 
-      DB::commit();
-      return $this->successResponse($scrapedData);
-   } 
+        DB::commit();
+        return $this->successResponse($scrapedData);
+    }
 
-   /**
-    * Store images for the scraped data.
-    *
-    * @param array $images
-    * @param ScrapedData $scrapedData
-    *
-    * @return void
-   */
-   private function storeScrapedDataImages(array $images, ScrapedData $scrapedData): void {
-      foreach ($images as $image) {
-         $file_url = Storage::disk('public')->put('/images', $image['url']);
+    /**
+     * Store images for the scraped data.
+     *
+     * @param array $images
+     * @param ScrapedData $scrapedData
+     *
+     * @return void
+     */
+    private function storeScrapedDataImages(array $images, ScrapedData $scrapedData): void
+    {
+        foreach ($images as $image) {
+            $file_url = Storage::disk('public')->put('/images', $image['url']);
 
-         ScrapedDataImage::create([
+            ScrapedDataImage::create([
+                'scraped_data_id' => $scrapedData->id,
+                'file_url' => $file_url,
+                'file_name' => $image['name'],
+                'position' => $image['position'],
+            ]);
+        }
+    }
+
+    /**
+     * Store ratings for the scraped data.
+     *
+     * @param array $ratings
+     * @param ScrapedData $scrapedData
+     *
+     * @return void
+     */
+    private function storeScrapedDataRatings(array $ratings, ScrapedData $scrapedData): void
+    {
+        Rating::create([
             'scraped_data_id' => $scrapedData->id,
-            'file_url' => $file_url,
-            'file_name' => $image['name'],
-            'position' => $image['position'],
-         ]);
-      }
-   }
+            'one_star' => $ratings['one_star'],
+            'two_stars' => $ratings['two_stars'],
+            'three_stars' => $ratings['three_stars'],
+            'four_stars' => $ratings['four_stars'],
+            'five_stars' => $ratings['five_stars'],
+        ]);
+    }
 
-   /**
-    * Store ratings for the scraped data.
-    *
-    * @param array $ratings
-    * @param ScrapedData $scrapedData
-    *
-    * @return void
-   */
-   private function storeScrapedDataRatings(array $ratings, ScrapedData $scrapedData): void {
-      Rating::create([
-         'scraped_data_id' => $scrapedData->id, 
-         'one_star' => $ratings['one_star'],
-         'two_stars' => $ratings['two_stars'],
-         'three_stars' => $ratings['three_stars'],
-         'four_stars' => $ratings['four_stars'],
-         'five_stars' => $ratings['five_stars'],
-      ]);
-   }
-
-   /**
+    /**
      * Extract images from data.
      *
      * @param array $data Data from which we remove images
      * 
      * @return array|null
-   */
-   private function extractImages(array &$data): ?array {
-      $images = $data['images'] ?? null;
-      unset($data['images']);
+     */
+    private function extractImages(array &$data): ?array
+    {
+        $images = $data['images'] ?? null;
+        unset($data['images']);
 
-      return $images;
-   }
+        return $images;
+    }
 
-   /**
+    /**
      * Extract ratings from data.
      *
      * @param array $data Data from which we remove ratings
      * 
      * @return array|null
-   */
-   private function extractRatings(array &$data): ?array {
-      
-      $ratings = $data['ratings'] ?? null;
-      unset($data['ratings']);
+     */
+    private function extractRatings(array &$data): ?array
+    {
 
-      return $ratings;
-   }
+        $ratings = $data['ratings'] ?? null;
+        unset($data['ratings']);
 
-   /**
-    * Success response formatting.
-    *
-    * @param ScrapedData $scrapedData
-    * 
-    * @return array
-    */
-    private function successResponse(ScrapedData $scrapedData): array {
-      return [
-         'success' => true,
-         'scrapedData' => new ScrapedDataResource($scrapedData)
-      ];
-   }
+        return $ratings;
+    }
 
-   /**
-    * Error response formatting.
-    *
-    * @param string $errorMessage
-    * @param Exception $exception
-    *
-    * @return array
-    */
-   private function errorResponse(string $errorMessage, \Exception $exception, int $statusCode = 500): array {
-      Log::error($errorMessage, [
-         'exception' => $exception->getMessage(),
-         'trace' => $exception->getTraceAsString(),
-      ]);
+    /**
+     * Success response formatting.
+     *
+     * @param ScrapedData $scrapedData
+     * 
+     * @return array
+     */
+    private function successResponse(ScrapedData $scrapedData): array
+    {
+        return [
+            'success' => true,
+            'scrapedData' => new ScrapedDataResource($scrapedData)
+        ];
+    }
 
-      return [
-         'success' => false,
-         'error' => $exception->getMessage(),
-         'status' => $statusCode
-      ];
-   }
+    /**
+     * Error response formatting.
+     *
+     * @param string $errorMessage
+     * @param Exception $exception
+     *
+     * @return array
+     */
+    private function errorResponse(string $errorMessage, \Exception $exception, int $statusCode = 500): array
+    {
+        Log::error($errorMessage, [
+            'exception' => $exception->getMessage(),
+            'trace' => $exception->getTraceAsString(),
+        ]);
+
+        return [
+            'success' => false,
+            'error' => $exception->getMessage(),
+            'status' => $statusCode
+        ];
+    }
 }

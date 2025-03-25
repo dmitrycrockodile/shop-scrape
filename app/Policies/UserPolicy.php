@@ -4,8 +4,10 @@ namespace App\Policies;
 
 use App\Models\User;
 
-class UserPolicy {
-    public function manageUsers(User $user): bool {
+class UserPolicy
+{
+    public function manageUsers(User $user): bool
+    {
         return $user->isSuperUser();
     }
 }

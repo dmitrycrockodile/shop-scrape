@@ -28,7 +28,7 @@ class RetailerResource extends JsonResource
      *         description="Currency information for the retailer"
      *     )
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [

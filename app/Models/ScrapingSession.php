@@ -18,11 +18,13 @@ class ScrapingSession extends Model
         'updated_at'
     ];
 
-    public function scrapedData(): HasMany {
+    public function scrapedData(): HasMany
+    {
         return $this->hasMany(ScrapedData::class, 'scraping_session_id', 'id');
     }
 
-    public function retailer(): BelongsTo {
+    public function retailer(): BelongsTo
+    {
         return $this->belongsTo(Retailer::class, 'retailer_id', 'id');
     }
 }
