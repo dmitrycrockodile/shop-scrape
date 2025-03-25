@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\PackSize\IndexRequest;
 use App\Http\Requests\PackSize\StoreRequest;
 use App\Http\Resources\PackSize\PackSizeResource;
 use App\Models\PackSize;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\PackSize\IndexRequest;
 
 /**
  * @OA\PathItem(path="/api/pack-sizes")

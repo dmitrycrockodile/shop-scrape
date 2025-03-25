@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Requests\Retailer\RetailerRequest;
 use App\Http\Requests\Retailer\AddProductsRequest;
+use App\Http\Requests\Retailer\RetailerRequest;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Retailer\RetailerResource;
 use App\Models\Retailer;
 use App\Service\RetailerService;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 /**
  * @OA\PathItem(path="/api/retailers")

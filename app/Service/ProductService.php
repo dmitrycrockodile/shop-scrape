@@ -3,12 +3,12 @@
 namespace App\Service;
 
 use App\Http\Resources\Product\ProductResource;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {

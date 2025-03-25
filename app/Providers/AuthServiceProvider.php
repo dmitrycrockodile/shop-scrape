@@ -3,15 +3,15 @@
 namespace App\Providers;
 
 use App\Models\PackSize;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
-use App\Policies\UserPolicy;
-use App\Policies\ProductPolicy;
-use App\Policies\RetailerPolicy;
-use App\Policies\PackSizePolicy;
-use App\Models\User;
 use App\Models\Product;
 use App\Models\Retailer;
+use App\Models\User;
+use App\Policies\PackSizePolicy;
+use App\Policies\ProductPolicy;
+use App\Policies\RetailerPolicy;
+use App\Policies\UserPolicy;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {

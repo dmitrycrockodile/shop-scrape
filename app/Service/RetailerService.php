@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use App\Http\Resources\Retailer\RetailerResource;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Retailer;
+use Illuminate\Support\Facades\Storage;
 
 class RetailerService
 {

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
-use Illuminate\Http\Response;
 use App\Http\Requests\ScrapedData\StoreRequest;
 use App\Service\ScrapedDataService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 /**
  * @OA\PathItem(path="/api/scraped-data")

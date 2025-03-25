@@ -3,14 +3,14 @@
 namespace App\Service;
 
 use App\Http\Resources\ScrapedData\ScrapedDataResource;
+use App\Models\ProductRetailer;
 use App\Models\Rating;
 use App\Models\ScrapedData;
 use App\Models\ScrapedDataImage;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-use App\Models\ProductRetailer;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ScrapedDataService
 {

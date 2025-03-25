@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
-use App\Enums\UserRole;
-use App\Models\User;
 use App\Http\Controllers\BaseController;
-use App\Http\Resources\User\UserResource;
+use App\Http\Requests\User\ManageRetailersRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
-use App\Http\Requests\User\ManageRetailersRequest;
 use App\Http\Resources\Retailer\RetailerResource;
+use App\Http\Resources\User\UserResource;
+use App\Models\User;
+use App\Enums\UserRole;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 /**
  * @OA\PathItem(path="/api/users")
