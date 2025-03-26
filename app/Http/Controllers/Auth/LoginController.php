@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -75,10 +76,7 @@ class LoginController extends BaseController
             Auth::login($user);
 
             return $this->successResponse(
-                [
-                    'id' => $user->id,
-                    'email' => $user->email
-                ],
+                new UserResource($user),
                 'auth.login.success',
                 ['attribute' => self::ENTITY_KEY]
             );

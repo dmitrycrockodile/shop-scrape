@@ -8,6 +8,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Configuration\Middleware;
 
 function extractResourceName(Request $request): string {
     $segments = $request->segments();
@@ -37,9 +38,9 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(
-
-    )
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->statefulApi();
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             return response()->json([

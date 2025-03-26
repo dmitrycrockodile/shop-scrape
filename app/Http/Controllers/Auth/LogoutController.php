@@ -45,6 +45,8 @@ class LogoutController extends BaseController
         $user = $request->user();
 
         $user->tokens()->delete();
+        $request->session()->invalidate(); 
+        $request->session()->regenerateToken(); 
 
         return $this->successResponse(
             [],

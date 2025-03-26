@@ -41,7 +41,8 @@ class UserResource extends JsonResource
             'is_verified' => !!$this->email_verified_at,
             'role' => $this->role,
             'location' => $this->location,
-            'retailers' => RetailerResource::collection($this->retailers)
+            'retailers' => RetailerResource::collection($this->accessibleRetailers()->get()),
+            'token' => $this->remember_token
         ];
     }
 }

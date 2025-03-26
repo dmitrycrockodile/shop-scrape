@@ -69,4 +69,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Retailer::class, 'user_retailers', 'user_id', 'retailer_id');
     }
+
+    public function scopeAccessibleRetailers()
+    {
+        return $this->isSuperUser()
+            ? Retailer::query()
+            : $this->retailers();
+    }
 }
