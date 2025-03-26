@@ -272,35 +272,35 @@
             }
         },
         "/api/pack-sizes": {
-            "post": {
+            "get": {
                 "tags": [
                     "Pack Sizes"
                 ],
                 "summary": "Retrieve pack sizes",
                 "description": "Fetches a list of pack sizes with optional pagination. Includes metadata such as current page, total items, and items per page.",
-                "operationId": "a71003c272c1c9e5b1de18ca5a083dc7",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "dataPerPage": {
-                                        "description": "Number of items per page",
-                                        "type": "integer",
-                                        "example": 10
-                                    },
-                                    "page": {
-                                        "description": "Page number for pagination",
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
+                "operationId": "ac8440f2568c298043e845273a9cf1e4",
+                "parameters": [
+                    {
+                        "name": "dataPerPage",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number for pagination",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
                         }
                     }
-                },
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -320,22 +320,18 @@
                                             "description": "Pagination metadata",
                                             "properties": {
                                                 "current_page": {
-                                                    "description": "Current page number",
                                                     "type": "integer",
                                                     "example": 1
                                                 },
                                                 "per_page": {
-                                                    "description": "Number of items per page",
                                                     "type": "integer",
                                                     "example": 10
                                                 },
                                                 "last_page": {
-                                                    "description": "Total number of pages",
                                                     "type": "integer",
                                                     "example": 5
                                                 },
                                                 "total": {
-                                                    "description": "Total number of records",
                                                     "type": "integer",
                                                     "example": 50
                                                 }
