@@ -15,4 +15,12 @@ class ProductImage extends Model
         'file_url',
         'file_name'
     ];
+
+    public function getImageUrlAttribute() {
+        if ($this->file_url) {
+            return url('storage/' . $this->file_url);
+        } else {
+            return null;
+        }
+    }
 }
