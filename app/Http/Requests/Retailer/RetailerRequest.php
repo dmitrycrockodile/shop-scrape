@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Retailer;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RetailerRequest extends FormRequest
 {
@@ -22,7 +23,12 @@ class RetailerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|unique:retailers,title|max:255',
+          'title' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('retailers', 'title')->ignore($this->route('retailer')),
+            ],
             'url' => 'required|string|url|max:255',
             'currency_id' => 'required|integer|exists:currencies,id',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif'

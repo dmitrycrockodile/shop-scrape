@@ -44,4 +44,12 @@ class Retailer extends Model
     {
         return $this->belongsTo(Currency::class, 'currency_id', 'id');
     }
+
+    public function getLogoUrlAttribute() {
+        if ($this->logo) {
+            return url('storage/' . $this->logo);
+        } else {
+            return null;
+        }
+    }
 }

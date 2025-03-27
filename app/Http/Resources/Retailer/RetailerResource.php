@@ -35,7 +35,7 @@ class RetailerResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'url' => $this->url,
-            'logo' => $this->logo,
+            'logo' => $this->logoUrl,
             'currency' => new CurrencyResource($this->currency),
         ];
     }
