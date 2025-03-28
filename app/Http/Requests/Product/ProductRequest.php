@@ -27,7 +27,8 @@ class ProductRequest extends FormRequest
             'manufacturer_part_number' => 'required|string|max:255',
             'pack_size_id' => 'required|integer|exists:pack_sizes,id',
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif'
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image_urls' => 'nullable|string',
         ];
     }
 
@@ -50,6 +51,7 @@ class ProductRequest extends FormRequest
             'images.*.required' => 'Each uploaded file must be an image.',
             'images.*.image' => 'Each file must be a valid image.',
             'images.*.mimes' => 'Supported image formats: jpeg, png, jpg, gif.',
+            'image_urls.string' => 'Image URLs must be sent as a string.'
         ];
     }
 }

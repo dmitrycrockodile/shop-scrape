@@ -6,6 +6,7 @@ use App\Http\Resources\Product\ProductResource;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -81,7 +82,11 @@ class ProductService
     private function storeProductImages(array $images, Product $product): void
     {
         foreach ($images as $image) {
-            $file_url = Storage::disk('public')->put('/images', $image);
+            if ($image instanceof UploadedFile) {
+                $file_url = Storage::disk('public')->put('/images', $image);
+            } else {
+                $file_url = $image;
+            }
 
             ProductImage::create([
                 'product_id' => $product->id,
@@ -100,10 +105,12 @@ class ProductService
      */
     private function extractImages(array &$data): ?array
     {
-        $images = $data['images'] ?? null;
-        unset($data['images']);
+        $images = $data['images'] ?? [];
+        $imageUrls = isset($data['image_urls']) ? json_decode($data['image_urls'], true) : [];
+        
+        unset($data['images'], $data['image_urls']);
 
-        return $images;
+        return array_merge($images, $imageUrls);
     }
 
     /**
