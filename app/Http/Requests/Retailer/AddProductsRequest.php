@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Retailer;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AddProductsRequest extends FormRequest
 {
@@ -21,9 +22,18 @@ class AddProductsRequest extends FormRequest
      */
     public function rules(): array
     {
+        $retailerId = $this->route('retailer')->id;
+
         return [
             'products' => 'required|array',
-            'products.*.id' => 'required|integer|exists:products,id',
+            'products.*.id' => [
+                'required',
+                'integer',
+                'exists:products,id',
+                Rule::unique('product_retailers', 'product_id')->where(function ($query) use ($retailerId) {
+                    $query->where('retailer_id', $retailerId); 
+                })
+            ],
             'products.*.url' => 'required|string|url|max:255'
         ];
     }
@@ -36,6 +46,7 @@ class AddProductsRequest extends FormRequest
             'products.*.id.required' => 'Please add at least one product.',
             'products.*.id.integer' => 'Product ID must be an integer.',
             'products.*.id.exists' => 'There is no product with this ID.',
+            'products.*.id.unique' => 'The retailer has this product already.',
             'products.*.url.required' => 'Please add the link to the product on your website',
             'products.*.url.string' => 'Url of the product must be a string',
             'products.*.url.url' => 'Url of the product must be valid',

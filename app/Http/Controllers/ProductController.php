@@ -90,6 +90,7 @@ class ProductController extends BaseController
             'per_page' => $products->perPage(),
             'last_page' => $products->lastPage(),
             'total' => $products->total(),
+            'links' => $products->toArray()['links'],
         ];
 
         return $this->successResponse(

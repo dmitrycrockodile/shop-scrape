@@ -11,6 +11,7 @@ use App\Models\Retailer;
 use App\Service\RetailerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 /**
  * @OA\PathItem(path="/api/retailers")
@@ -96,16 +97,32 @@ class RetailerController extends BaseController
      *     @OA\Response(response=404, description="Not Found")
      * )
      */
-    public function getProducts(Retailer $retailer): JsonResponse
+    public function getProducts(Request $request, Retailer $retailer): JsonResponse
     {
         $this->authorize('seeProducts', $retailer);
 
-        $products = $retailer->products;
+        $dataPerPage = $request->query('dataPerPage', 10);
+        $page = $request->query('page', 2);
+        $products = $retailer->products()->paginate(
+            $dataPerPage,
+            ['*'],
+            'page',
+            $page
+        );
+        $meta = [
+            'current_page' => $products->currentPage(),
+            'per_page' => $products->perPage(),
+            'last_page' => $products->lastPage(),
+            'total' => $products->total(),
+            'links' => $products->toArray()['links'],
+        ];
 
         return $this->successResponse(
             ProductResource::collection($products),
             'messages.index.success',
-            ['attribute' => 'retailer\'s products']
+            ['attribute' => 'retailer\'s products'],
+            Response::HTTP_OK,
+            $meta
         );
     }
 

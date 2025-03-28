@@ -10,7 +10,7 @@ use App\Models\ProductRetailer;
 class ProductRetailerRelationshipSeeder extends Seeder
 {
     private const MIN_RETAILERS_PER_PRODUCT = 1;
-    private const MAX_RETAILERS_PER_PRODUCT = 2;
+    private const MAX_RETAILERS_PER_PRODUCT = 5;
 
     /**
      * Run the database seeds.
