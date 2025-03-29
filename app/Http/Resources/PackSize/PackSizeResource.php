@@ -28,7 +28,8 @@ class PackSizeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'weight' => "{$this->weight} {$this->weight_unit}",
+            'weight' => $this->weight,
+            'weight_unit' => $this->weight_unit,
             'amount' => $this->amount
         ];
     }

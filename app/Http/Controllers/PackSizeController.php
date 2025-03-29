@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Requests\PackSize\IndexRequest;
 use App\Http\Requests\PackSize\StoreRequest;
 use App\Http\Resources\PackSize\PackSizeResource;
 use App\Models\PackSize;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * @OA\PathItem(path="/api/pack-sizes")
@@ -20,7 +20,7 @@ class PackSizeController extends BaseController
     /**
      * Retrieves the pack sizes.
      *
-     * @param IndexRequest A request with pagination data (if provided)
+     * @param Request A request with pagination data (if provided)
      * 
      * @return JsonResponse A JSON response containing retrieved pack sizes.
      */
@@ -65,20 +65,22 @@ class PackSizeController extends BaseController
      *     @OA\Response(response=422, description="Validation error")
      * )
      */
-    public function index(IndexRequest $request): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $data = $request->validated();
+        $dataPerPage = $request->query('dataPerPage', 10);
+        $page = $request->query('page', 2);
         $packSizes = PackSize::paginate(
-            $data['dataPerPage'] ?? 100,
+            $dataPerPage,
             ['*'],
             'page',
-            $data['page'] ?? 1
+            $page
         );;
         $meta = [
             'current_page' => $packSizes->currentPage(),
             'per_page' => $packSizes->perPage(),
             'last_page' => $packSizes->lastPage(),
             'total' => $packSizes->total(),
+            'links' => $packSizes->toArray()['links'],
         ];
 
         return $this->successResponse(
@@ -98,8 +100,8 @@ class PackSizeController extends BaseController
      * @return JsonResponse A JSON response containing newly created pack size or error info.
      */
     /**
-     * @OA\Post(
-     *     path="/api/pack-sizes/store",
+     * @OA\Get(
+     *     path="/api/pack-sizes",
      *     summary="Store a pack size",
      *     description="Creates a new pack size.",
      *     tags={"Pack Sizes"},

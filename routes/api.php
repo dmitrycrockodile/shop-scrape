@@ -22,9 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // UI
     Route::post('/logout', [LogoutController::class, 'logout']);
 
-    Route::post('/pack-sizes', [PackSizeController::class, 'index'])->name('pack-sizes.index');
-    Route::post('/pack-sizes/store', [PackSizeController::class, 'store'])->name('pack-sizes.store');
-    Route::resource('pack-sizes', PackSizeController::class)->only(['update', 'destroy']);
+    // UI
+    Route::resource('pack-sizes', PackSizeController::class)->only(['index', 'store', 'update', 'destroy']);
 
     // UI
     Route::get('/products/{product}/retailers', [ProductController::class, 'getRetailers'])->name('products.retailers');
@@ -42,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/retailers/metrics', [MetricsController::class, 'getRetailerMetrics'])->name('metrics.retailers.index');
 
+    // UI
     Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::post('/users/{user}/assign-retailers', [UserController::class, 'assignRetailers'])->name('users.retailers.assign');
     Route::post('/users/{user}/revoke-retailers', [UserController::class, 'revokeRetailers'])->name('users.retailers.revoke');
