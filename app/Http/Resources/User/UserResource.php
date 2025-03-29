@@ -39,7 +39,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'is_verified' => !!$this->email_verified_at,
-            'role' => $this->role,
+            'role' => $this->role->text(),
             'location' => $this->location,
             'retailers' => RetailerResource::collection($this->accessibleRetailers()->get()),
             'token' => $this->remember_token

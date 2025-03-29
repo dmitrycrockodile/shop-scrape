@@ -23,7 +23,7 @@ class ManageRetailersRequest extends FormRequest
     {
         return [
             'retailers' => 'required|array',
-            'retailers.*' => 'required|integer|exists:retailers,id',
+            'retailers.*.id' => 'required|integer|exists:retailers,id',
         ];
     }
 
@@ -32,9 +32,9 @@ class ManageRetailersRequest extends FormRequest
         return [
             'retailers.required' => 'Please add at least one retailer ID.',
             'retailers.array' => 'Retailers must be sent as an array.',
-            'retailers.*.required' => 'Please add at least one retailer ID.',
-            'retailers.*.integer' => 'Retailer ID must be an integer.',
-            'retailers.*.exists' => 'There is no retailer with this ID.'
+            'retailers.*.id.required' => 'Please add at least one retailer ID.',
+            'retailers.*.id.integer' => 'Retailer ID must be an integer.',
+            'retailers.*.id.exists' => 'There is no retailer with this ID.'
         ];
     }
 }

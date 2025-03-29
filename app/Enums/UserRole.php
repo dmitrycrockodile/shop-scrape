@@ -11,7 +11,7 @@ enum UserRole: string
     {
         return match ($this) {
             self::SUPER_USER => 'Super user',
-            self::REGULAR_USER => 'Regular usere'
+            self::REGULAR_USER => 'Regular user'
         };
     }
 }

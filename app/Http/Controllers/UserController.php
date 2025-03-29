@@ -232,7 +232,8 @@ class UserController extends BaseController
             );
         }
 
-        $user->retailers()->syncWithoutDetaching($data['retailers']);
+        $retailerIds = collect($data['retailers'])->pluck('id')->all();
+        $user->retailers()->syncWithoutDetaching($retailerIds);
 
         return $this->successResponse(
             RetailerResource::collection($user->retailers),
