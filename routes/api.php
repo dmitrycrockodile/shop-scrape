@@ -5,6 +5,7 @@ use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\PackSizeController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\MetricsController;
 use App\Http\Controllers\ScrapedDataController;
 use App\Http\Controllers\UserController;
@@ -24,6 +25,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // UI
     Route::resource('pack-sizes', PackSizeController::class)->only(['index', 'store', 'update', 'destroy']);
+    
+    // UI
+    Route::get('/currencies', [CurrencyController::class, 'index'])->name('currencies.index');
 
     // UI
     Route::get('/products/{product}/retailers', [ProductController::class, 'getRetailers'])->name('products.retailers');

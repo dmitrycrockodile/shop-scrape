@@ -74,7 +74,7 @@ class PackSizeController extends BaseController
             ['*'],
             'page',
             $page
-        );;
+        );
         $meta = [
             'current_page' => $packSizes->currentPage(),
             'per_page' => $packSizes->perPage(),
