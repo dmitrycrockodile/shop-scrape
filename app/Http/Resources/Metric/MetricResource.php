@@ -30,8 +30,6 @@ class MetricResource extends JsonResource
         return [
             'Retailer ID' => $this->retailer_id,
             'Retailer title' => $this->retailer_title,
-            'Product ID' => $this->product_id,
-            'Product title' => $this->product_title,
             'Average rating' => round($this->avg_rating, 2),
             'Average price' => round($this->avg_price, 2),
             'Average images count' => round($this->avg_images, 2),
