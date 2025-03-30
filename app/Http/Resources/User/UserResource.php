@@ -40,6 +40,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'is_verified' => !!$this->email_verified_at,
             'role' => $this->role->text(),
+            'admin' => $this->isSuperUser(),
             'location' => $this->location,
             'retailers' => RetailerResource::collection($this->accessibleRetailers()->get())
         ];

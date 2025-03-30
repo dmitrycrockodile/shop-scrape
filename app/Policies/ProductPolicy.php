@@ -15,11 +15,6 @@ class ProductPolicy
         //
     }
 
-    public function seeProducts(User $user)
-    {
-        return $user->isSuperUser();
-    }
-
     public function delete(User $user)
     {
         return $user->isSuperUser();
@@ -40,10 +35,5 @@ class ProductPolicy
         }
 
         return false;
-    }
-
-    public function getRetailers(User $user)
-    {
-        return $user->isSuperUser();
     }
 }

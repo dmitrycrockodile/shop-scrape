@@ -76,10 +76,19 @@ class ProductController extends BaseController
      */
     public function index(IndexRequest $request): JsonResponse
     {
-        $this->authorize('seeProducts', Product::class);
-
         $data = $request->validated();
-        $products = Product::with(['packSize', 'images'])->paginate(
+        $user = auth()->user();
+    
+        $query = Product::with(['packSize', 'images']);
+
+        if (!$user->isSuperUser()) {
+            $retailerIds = $user->retailers()->pluck('retailers.id');
+            $query->whereHas('retailers', function ($q) use ($retailerIds) {
+                $q->whereIn('retailers.id', $retailerIds);
+            });
+        }
+
+        $products = $query->paginate(
             $data['dataPerPage'] ?? 100,
             ['*'],
             'page',
@@ -138,9 +147,15 @@ class ProductController extends BaseController
      */
     public function getRetailers(Product $product): JsonResponse
     {
-        $this->authorize('getRetailers', Product::class);
-
-        $retailers = $product->retailers;
+        $user = auth()->user();
+        
+        if ($user->isSuperUser()) {
+            $retailers = $product->retailers;
+        } else {
+            $userRetailerIds = $user->retailers()->pluck('retailers.id');
+    
+            $retailers = $product->retailers()->whereIn('retailers.id', $userRetailerIds)->get();
+        }
 
         return $this->successResponse(
             RetailerResource::collection($retailers),
