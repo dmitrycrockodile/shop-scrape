@@ -46,10 +46,6 @@ class Retailer extends Model
     }
 
     public function getLogoUrlAttribute() {
-        if ($this->logo) {
-            return url('storage/' . $this->logo);
-        } else {
-            return null;
-        }
+        return $this->logo ? url('storage/' . $this->logo) : null;
     }
 }

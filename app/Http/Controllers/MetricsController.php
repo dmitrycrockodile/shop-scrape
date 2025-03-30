@@ -118,6 +118,7 @@ class MetricsController extends BaseController
             'per_page' => $metrics->perPage(),
             'last_page' => $metrics->lastPage(),
             'total' => $metrics->total(),
+            'links' => $metrics->toArray()['links'],
             'filters' => [
                 'product_ids' => $productIds,
                 'manufacturer_part_numbers' => $mpns,
@@ -134,6 +135,102 @@ class MetricsController extends BaseController
             Response::HTTP_OK,
             $meta
         );
+    }
+
+    /**
+     * Fetch average rating for the retailers based on the past week.
+     *
+     * @param RetailerMetricsRequest $request
+     * @return JsonResponse
+     */
+    public function getAvgRatingForLastWeek(): JsonResponse
+    {
+        $endDate = Carbon::now();
+        $startDate = Carbon::now()->subDays(6);
+
+        $retailersRatings = ScrapedData::query()
+            ->select(
+                'retailers.id as retailer_id',
+                'retailers.title as retailer_title',
+                DB::raw('DATE(scraped_data.created_at) as rating_date'),
+                DB::raw('AVG(scraped_data.avg_rating) as avg_rating')
+            )
+            ->join('product_retailers', 'scraped_data.product_retailer_id', '=', 'product_retailers.id')
+            ->join('retailers', 'product_retailers.retailer_id', '=', 'retailers.id')
+            ->whereBetween('scraped_data.created_at', [$startDate, $endDate])
+            ->groupBy('retailers.id', 'retailers.title', 'rating_date')
+            ->orderBy('rating_date', 'asc')
+            ->get();
+
+        $formattedData = [];
+        $dates = collect(range(0, 6))->map(fn ($i) => Carbon::now()->subDays($i)->format('Y-m-d'))->reverse()->values();
+
+        foreach ($retailersRatings as $rating) {
+            $retailerId = $rating->retailer_id;
+
+            if (!isset($formattedData[$retailerId])) {
+                $formattedData[$retailerId] = [
+                    'retailer_id' => $retailerId,
+                    'retailer_title' => $rating->retailer_title,
+                    'avg_ratings' => array_fill(0, 7, null)
+                ];
+            }
+
+            $dateIndex = $dates->search($rating->rating_date);
+            if ($dateIndex !== false) {
+                $formattedData[$retailerId]['avg_ratings'][$dateIndex] = round($rating->avg_rating, 2);
+            }
+        }
+
+        $finalResponse = array_values($formattedData);
+
+        return $this->successResponse($finalResponse, 'messages.index.success', ['attribute' => self::ENTITY_KEY]);
+    }
+
+    public function getAvgPriceForLastWeek(): JsonResponse
+    {
+        $endDate = Carbon::now();
+        $startDate = Carbon::now()->subDays(6);
+        $user = auth()->user();
+        $accessibleRetailers = $this->getAccessibleRetailers($user);
+    
+        $retailersPrices = ScrapedData::query()
+            ->select(
+                'retailers.id as retailer_id',
+                'retailers.title as retailer_title',
+                DB::raw('DATE(scraped_data.created_at) as pricing_date'),
+                DB::raw('AVG(scraped_data.price) as avg_price')
+            )
+            ->join('product_retailers', 'scraped_data.product_retailer_id', '=', 'product_retailers.id')
+            ->join('retailers', 'product_retailers.retailer_id', '=', 'retailers.id')
+            ->whereBetween('scraped_data.created_at', [$startDate, $endDate])
+            ->whereIn('retailers.id', $accessibleRetailers)
+            ->groupBy('retailers.id', 'retailers.title', 'pricing_date')
+            ->orderBy('pricing_date', 'asc')
+            ->get();
+    
+        $formattedData = [];
+    
+        foreach ($retailersPrices as $price) {
+            $retailerId = $price->retailer_id;
+    
+            if (!isset($formattedData[$retailerId])) {
+                $formattedData[$retailerId] = [
+                    'retailer_id' => $retailerId,
+                    'retailer_title' => $price->retailer_title,
+                    'avg_prices' => [] 
+                ];
+            }
+    
+            $formattedData[$retailerId]['avg_prices'][] = [
+                'date' => $price->pricing_date,
+                'avg_price' => round($price->avg_price, 2),
+            ];
+        }
+    
+        $finalResponse = array_values($formattedData);
+    
+        return $this->successResponse($finalResponse, 'messages.index.success', ['attribute' => self::ENTITY_KEY]);
     }
 
     /**
@@ -175,6 +272,7 @@ class MetricsController extends BaseController
             ->select(
                 'retailers.id as retailer_id',
                 'retailers.title as retailer_title',
+                DB::raw("IFNULL(CONCAT('".url('storage/')."/', retailers.logo), NULL) as retailer_logo"),
                 DB::raw('AVG(scraped_data.avg_rating) as avg_rating'),
                 DB::raw('AVG(scraped_data.price) as avg_price'),
                 DB::raw('COUNT(scraped_data_images.id) / COUNT(DISTINCT scraped_data.id) as avg_images')
@@ -184,7 +282,7 @@ class MetricsController extends BaseController
             ->leftJoin('scraped_data_images', 'scraped_data.id', '=', 'scraped_data_images.scraped_data_id')
             ->whereBetween('scraped_data.created_at', [$startDate, $endDate])
             ->whereIn('retailers.id', $accessibleRetailers)
-            ->groupBy('retailers.id', 'retailers.title')
+            ->groupBy('retailers.id', 'retailers.title', 'retailers.url')
             ->orderBy('retailers.id', 'asc');
 
         $query->when(!empty($productIds), fn($q) => $q->whereIn('product_retailers.product_id', $productIds))

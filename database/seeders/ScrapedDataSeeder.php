@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class ScrapedDataSeeder extends Seeder
 {
-    private const DATA_SCRAPE_DAYS = 3;
+    private const DATA_SCRAPE_DAYS = 10;
     private const SCRAPED_IMAGES_COUNT = 2;
     private const BATCH_SIZE = 1000;
 

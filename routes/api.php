@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Delete retailer from the product ??
 
     Route::post('/retailers/metrics', [MetricsController::class, 'getRetailerMetrics'])->name('metrics.retailers.index');
+    Route::get('/retailers/weekly-ratings', [MetricsController::class, 'getAvgRatingForLastWeek']);
+    Route::get('/retailers/weekly-pricing', [MetricsController::class, 'getAvgPriceForLastWeek']);
 
     // UI
     Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
