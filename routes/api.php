@@ -20,34 +20,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    // UI
     Route::post('/logout', [LogoutController::class, 'logout']);
 
-    // UI
     Route::resource('pack-sizes', PackSizeController::class)->only(['index', 'store', 'update', 'destroy']);
     
-    // UI
     Route::get('/currencies', [CurrencyController::class, 'index'])->name('currencies.index');
 
-    // UI
     Route::get('/products/{product}/retailers', [ProductController::class, 'getRetailers'])->name('products.retailers');
     Route::post('/products', [ProductController::class, 'index'])->name('products.index');
     Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
-    // UI
     Route::resource('retailers', RetailerController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::get('/retailers/{retailer}/products', [RetailerController::class, 'getProducts'])->name('retailers.products.get');
     Route::post('/retailers/{retailer}/products', [RetailerController::class, 'addProducts'])->name('retailers.products.add');
-
-    // Delete retailer from the product ??
 
     Route::post('/retailers/metrics', [MetricsController::class, 'getRetailerMetrics'])->name('metrics.retailers.index');
     Route::get('/retailers/weekly-ratings', [MetricsController::class, 'getAvgRatingForLastWeek']);
     Route::get('/retailers/weekly-pricing', [MetricsController::class, 'getAvgPriceForLastWeek']);
 
-    // UI
     Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::post('/users/{user}/assign-retailers', [UserController::class, 'assignRetailers'])->name('users.retailers.assign');
     Route::post('/users/{user}/revoke-retailers', [UserController::class, 'revokeRetailers'])->name('users.retailers.revoke');
@@ -55,6 +47,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/scraped-data', [ScrapedDataController::class, 'store'])->name('scraped-data.store');
 
 Route::middleware('guest:sanctum')->group(function () {
-     // UI
     Route::post('/login', [LoginController::class, 'login']);
 });

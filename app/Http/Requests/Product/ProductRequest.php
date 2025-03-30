@@ -44,7 +44,7 @@ class ProductRequest extends FormRequest
             'manufacturer_part_number.string' => 'MPN (Manufacturer Part Number) must be a string',
             'manufacturer_part_number.max' => 'MPN (Manufacturer Part Number) must be less than 255 characters',
             'pack_size_id.required' => 'Please choose the pack size',
-            'pack_size_id.integer' => 'Pack size id must be an integer',
+            'pack_size_id.integer' => 'Please choose the pack size',
             'pack_size_id.exists' => 'It seems like this pack size does not exist',
             'images.required' => 'Please upload at least one image.',
             'images.array' => 'Images must be sent as an array.',
