@@ -36,7 +36,8 @@ class MetricResource extends JsonResource
             'avg_rating' => round($this->avg_rating, 2),
             'avg_price' => round($this->avg_price, 2),
             'avg_images_count' => round($this->avg_images, 2),
-            'date' => $this->getDateRange($request)
+            'date' => $this->getDateRange($request),
+            
         ];
     }
 
