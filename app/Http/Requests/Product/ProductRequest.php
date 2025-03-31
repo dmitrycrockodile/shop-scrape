@@ -36,10 +36,10 @@ class ProductRequest extends FormRequest
     {
         return [
             'title.required' => 'Please write the title',
-            'title.string' => 'Title must be a string',
+            'title.string' => 'Please write the title',
             'title.max' => 'Title must be less than 255 characters',
             'description.required' => 'Please write the description',
-            'description.string' => 'Description must be a string',
+            'description.string' => 'Please write the description',
             'manufacturer_part_number.required' => 'Please add the MPN (Manufacturer Part Number)',
             'manufacturer_part_number.string' => 'MPN (Manufacturer Part Number) must be a string',
             'manufacturer_part_number.max' => 'MPN (Manufacturer Part Number) must be less than 255 characters',

@@ -47,7 +47,7 @@ class RetailerRequest extends FormRequest
             'url.url' => 'Url of the retailer website must be valid',
             'url.max' => 'Url must be less than 255 characters',
             'currency_id.required' => 'Please choose the currency',
-            'currency_id.integer' => 'Currency id must be an integer',
+            'currency_id.integer' => 'Please choose the currency',
             'currency_id.exists' => 'It seems like this currency does not exist',
             'logo.image' => 'Logo file must be a valid image.',
             'logo.mimes' => 'Supported image formats: jpeg, png, jpg, gif.',

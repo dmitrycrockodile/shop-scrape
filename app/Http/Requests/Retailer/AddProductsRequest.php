@@ -44,7 +44,7 @@ class AddProductsRequest extends FormRequest
             'products.required' => 'Please add at least one product.',
             'products.array' => 'Products must be sent as an array.',
             'products.*.id.required' => 'Please add at least one product.',
-            'products.*.id.integer' => 'Product ID must be an integer.',
+            'products.*.id.integer' => 'Please add at least one product.',
             'products.*.id.exists' => 'There is no product with this ID.',
             'products.*.id.unique' => 'The retailer has this product already.',
             'products.*.url.required' => 'Please add the link to the product on your website',

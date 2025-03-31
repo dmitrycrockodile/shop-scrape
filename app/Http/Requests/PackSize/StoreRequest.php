@@ -42,14 +42,14 @@ class StoreRequest extends FormRequest
     {
         return [
             'name.required' => 'Please write the pack size name',
-            'name.string' => 'Pack size name must be a string',
+            'name.string' => 'Please write the pack size name',
             'name.max' => 'Pack size name must be less than 255 characters',
             'name.unique' => 'A pack size with the same name, weight, weight unit and amount already exists.',
             'weight.required' => 'Please write the pack size weight',
             'weight.numeric' => 'Pack size weight must be a number',
             'weight.min' => 'Pack size weight must be a positive number',
             'weight_unit.required' => 'Please add the weight unit',
-            'weight_unit.string' => 'Weight unit must be a string',
+            'weight_unit.string' => 'Please add the weight unit',
             'weight_unit.in' => 'The weight unit must be one of the following: "kg", "g", "l", "ml"',
             'weight_unit.max' => 'The weight unit value length must be less than 10 characters',
             'amount.required' => 'Please choose the amount',
