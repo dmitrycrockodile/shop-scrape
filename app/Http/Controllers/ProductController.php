@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CsvImportExceptionHandler;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Product\IndexRequest;
 use App\Http\Requests\Product\ProductRequest;
@@ -10,7 +11,9 @@ use App\Http\Resources\Retailer\RetailerResource;
 use App\Models\Product;
 use App\Service\ProductService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @OA\PathItem(path="/api/products")
@@ -78,7 +81,7 @@ class ProductController extends BaseController
     {
         $data = $request->validated();
         $user = auth()->user();
-    
+
         $query = Product::with(['packSize', 'images']);
 
         if (!$user->isSuperUser()) {
@@ -148,12 +151,12 @@ class ProductController extends BaseController
     public function getRetailers(Product $product): JsonResponse
     {
         $user = auth()->user();
-        
+
         if ($user->isSuperUser()) {
             $retailers = $product->retailers;
         } else {
             $userRetailerIds = $user->retailers()->pluck('retailers.id');
-    
+
             $retailers = $product->retailers()->whereIn('retailers.id', $userRetailerIds)->get();
         }
 
@@ -267,6 +270,28 @@ class ProductController extends BaseController
             $serviceResponse['product'],
             'messages.update.success',
             ['attribute' => self::ENTITY_KEY]
+        );
+    }
+
+    public function uploadCSV(Request $request): JsonResponse
+    {
+        $file = $request->file('file');
+        if (!$file) {
+            CsvImportExceptionHandler::handleEmptyCsvException();
+        }
+
+        $path = $file->store('uploads');
+        $fullPath = storage_path("app/{$path}");
+
+        $result = $this->productService->importProducts($fullPath);
+
+        Storage::delete($path);
+
+        return $this->successResponse(
+            $result,
+            'messages.import.success',
+            ['attribute' => self::ENTITY_KEY . 's'],
+            Response::HTTP_OK
         );
     }
 

@@ -29,5 +29,9 @@ return [
     ],
     'getMetrics' => [
         'not_allowed' => 'You have no access to :attribute metrics.',
+    ],
+    'import' => [
+        'success' => ':attribute imported successfully.',
+        'error' => 'Failed to import the :attribute. Please try again later.',
     ]
 ];

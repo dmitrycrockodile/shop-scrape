@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/products/{product}/retailers', [ProductController::class, 'getRetailers'])->name('products.retailers');
     Route::post('/products', [ProductController::class, 'index'])->name('products.index');
     Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
+    Route::post('/products/upload-csv', [ProductController::class, 'uploadCSV'])->name('products.file.upload');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 

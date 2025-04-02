@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Exceptions\CsvImportException;
 
 function extractResourceName(Request $request): string {
     $segments = $request->segments();
@@ -64,5 +65,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 'message' => __("messages.{$action}.error", ['attribute' => extractResourceName($request)]),
                 'errors' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        });
+
+        $exceptions->render(function (CsvImportException $e, Request $request) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'errors' => $e->getMessage(),
+            ], $e->statusCode);
         });
     })->create();
