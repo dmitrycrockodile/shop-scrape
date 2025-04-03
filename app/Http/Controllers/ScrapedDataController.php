@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\ScrapedData\StoreRequest;
+use App\Models\ScrapedData;
+use App\Service\CsvExporter;
 use App\Service\ScrapedDataService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Carbon;
 
 /**
  * @OA\PathItem(path="/api/scraped-data")
@@ -14,12 +19,14 @@ use Illuminate\Http\Response;
 class ScrapedDataController extends BaseController
 {
     protected ScrapedDataService $scrapedDataService;
+    protected CsvExporter $csvExporter;
 
     private const ENTITY_KEY = 'scraped_data';
 
-    public function __construct(ScrapedDataService $scrapedDataService)
+    public function __construct(ScrapedDataService $scrapedDataService, CsvExporter $csvExporter)
     {
         $this->scrapedDataService = $scrapedDataService;
+        $this->csvExporter = $csvExporter;
     }
 
     /**
@@ -76,5 +83,29 @@ class ScrapedDataController extends BaseController
                 $serviceResponse['error'],
                 $serviceResponse['status']
             );
+    }
+
+    /**
+     * Exports scraped data as a CSV file for a given date range.
+     *
+     * @param Request $request
+     * 
+     * @return StreamedResponse|JsonResponse A streamed CSV file or a JSON response in case of errors.
+     */
+    public function exportCSV(Request $request)
+    {
+        $latestAvailableDate = ScrapedData::query()->max('created_at');
+
+        $startDate = $request->query('startDate')
+            ? Carbon::parse($request->query('startDate'))->copy()->startOfDay()
+            : Carbon::parse($latestAvailableDate)->copy()->startOfDay();
+        $endDate = $request->query('endDate')
+            ? Carbon::parse($request->query('endDate'))->copy()->endOfDay()
+            : Carbon::parse($latestAvailableDate)->copy()->endOfDay();
+
+        $scrapedData = $this->scrapedDataService->getByDataRange($startDate, $endDate);
+        $fileName = "scraped_data_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv";
+
+        return $this->csvExporter->export($scrapedData, $fileName);
     }
 }

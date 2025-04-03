@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::post('/users/{user}/assign-retailers', [UserController::class, 'assignRetailers'])->name('users.retailers.assign');
     Route::post('/users/{user}/revoke-retailers', [UserController::class, 'revokeRetailers'])->name('users.retailers.revoke');
+
+    Route::get('/scraped-data/export', [ScrapedDataController::class, 'exportCSV'])->name('scraped-data.export');
 });
 Route::post('/scraped-data', [ScrapedDataController::class, 'store'])->name('scraped-data.store');
 

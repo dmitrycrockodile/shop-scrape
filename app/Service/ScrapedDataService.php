@@ -7,7 +7,9 @@ use App\Models\ProductRetailer;
 use App\Models\Rating;
 use App\Models\ScrapedData;
 use App\Models\ScrapedDataImage;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -50,6 +52,25 @@ class ScrapedDataService
 
         DB::commit();
         return $this->successResponse($scrapedData);
+    }
+
+    /**
+     * Retrieves scraped data within a specified date range.
+     *
+     * @param string $startDate The start date in 'YYYY-MM-DD' format.
+     * @param string $endDate The end date in 'YYYY-MM-DD' format.
+     * 
+     * @return Collection A collection of scraped data entries.
+     */
+    public function getByDataRange(string $startDate, string $endDate): Collection
+    {
+        $accessibleRetailerIds = auth()->user()->retailers()->pluck('retailers.id');
+
+        return ScrapedData::whereBetween('scraped_data.created_at', [$startDate, $endDate])
+            ->join('product_retailers', 'scraped_data.product_retailer_id', '=', 'product_retailers.id')
+            ->join('retailers', 'product_retailers.retailer_id', '=', 'retailers.id')
+            ->whereIn('product_retailers.retailer_id', $accessibleRetailerIds)
+            ->get(['scraped_data.*']);
     }
 
     /**
