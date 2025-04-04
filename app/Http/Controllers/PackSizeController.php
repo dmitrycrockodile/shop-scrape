@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\PackSize\StoreRequest;
 use App\Http\Resources\PackSize\PackSizeResource;
 use App\Models\PackSize;
+use App\Service\PackSizeService;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,14 @@ use Illuminate\Http\Request;
  */
 class PackSizeController extends BaseController
 {
+    protected PackSizeService $packSizeService;
+
     private const ENTITY_KEY = 'pack size';
+
+    public function __construct(PackSizeService $packSizeService)
+    {
+        $this->packSizeService = $packSizeService;
+    }
 
     /**
      * Retrieves the pack sizes.
@@ -128,10 +136,11 @@ class PackSizeController extends BaseController
     public function store(StoreRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $packSize = PackSize::create($data);
+        $user = $request->user();
+        $serviceResponse = $this->packSizeService->store($data, $user);
 
         return $this->successResponse(
-            new PackSizeResource($packSize),
+            $serviceResponse['packSize'],
             'messages.store.success',
             ['attribute' => self::ENTITY_KEY],
             Response::HTTP_CREATED

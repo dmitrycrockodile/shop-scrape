@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductRetailer;
 use App\Models\Retailer;
+use App\Models\User;
 use App\Service\CsvImporter;
 use Exception;
 use Illuminate\Http\Response;
@@ -27,7 +28,7 @@ class ProductService
      *
      * @return array
      */
-    public function store(array $data): array
+    public function store(array $data, User $user): array
     {
         DB::beginTransaction();
 
@@ -45,6 +46,8 @@ class ProductService
 
         $images = $this->extractImages($data);
         $product = Product::create($data);
+
+        $user->products()->attach($product->id);
 
         if ($images) {
             $this->storeProductImages($images, $product);

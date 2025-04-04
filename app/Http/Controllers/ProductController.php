@@ -203,7 +203,8 @@ class ProductController extends BaseController
     public function store(ProductRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $serviceResponse = $this->productService->store($data);
+        $user = $request->user();
+        $serviceResponse = $this->productService->store($data, $user);
 
         return $serviceResponse['success']
             ? $this->successResponse(
