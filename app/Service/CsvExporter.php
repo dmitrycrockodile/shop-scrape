@@ -30,10 +30,17 @@ class CsvExporter
             $output = fopen('php://output', 'w');
 
             fputcsv($output, $headers);
-            $rowsCount = 0;
 
+            $rowsCount = 0;
             foreach ($data as $row) {
-                fputcsv($output, $row->toArray());
+                $rowArray = $row->toArray();
+
+                $formattedRow = array_map(function ($value) {
+                    return is_string($value) ? trim(str_replace('"', '', $value)) : $value;
+                }, $rowArray);
+
+                fwrite($output, implode(',', $formattedRow) . PHP_EOL);
+
                 $rowsCount++;
             }
 

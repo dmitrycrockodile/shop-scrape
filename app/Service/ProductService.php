@@ -12,12 +12,14 @@ use App\Models\Retailer;
 use App\Models\User;
 use App\Service\CsvImporter;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
+use Illuminate\Support\Carbon;
 
 class ProductService
 {
@@ -135,6 +137,48 @@ class ProductService
         } catch (Throwable $e) {
             CsvImportExceptionHandler::handleImportException($e);
         }
+    }
+
+    /**
+     * Retrieves scraped data within a specified date range.
+     *
+     * @param string $startDate The start date in 'YYYY-MM-DD' format.
+     * @param string $endDate The end date in 'YYYY-MM-DD' format.
+     * 
+     * @return Collection A collection of scraped data entries.
+     */
+    public function getByDataRangeAndRetailers(?Carbon $startDate, ?Carbon $endDate, array $retailerIds): Collection
+    {
+        $accessibleRetailerIds = auth()->user()->retailers()->pluck('retailers.id');
+
+        $query = Product::join('product_retailers', 'products.id', '=', 'product_retailers.product_id')
+        ->join('pack_sizes', 'products.pack_size_id', '=', 'pack_sizes.id')
+        ->join('retailers', 'product_retailers.retailer_id', '=', 'retailers.id')
+        ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+        ->whereIn('product_retailers.retailer_id', $accessibleRetailerIds)
+        ->selectRaw("
+            products.title as title,
+            products.description as description,
+            products.manufacturer_part_number as manufacturer_part_number,
+            pack_sizes.name as pack_size_name,
+            pack_sizes.weight as pack_size_weight,
+            pack_sizes.weight_unit as pack_size_weight_unit,
+            pack_sizes.amount as pack_size_amount,
+            GROUP_CONCAT(DISTINCT retailers.title SEPARATOR '|') as retailer_titles,
+            GROUP_CONCAT(DISTINCT product_images.file_url SEPARATOR '|') as image_urls,
+            GROUP_CONCAT(DISTINCT product_images.file_name SEPARATOR '|') as image_names
+        ")
+        ->groupBy('products.id', 'pack_sizes.id');
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('products.created_at', [$startDate, $endDate]);
+        } 
+
+        if (count($retailerIds)) {
+            $query->whereIn('product_retailers.retailer_id', $retailerIds);
+        }
+
+        return $query->get();
     }
 
     /**
