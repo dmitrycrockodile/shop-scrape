@@ -70,6 +70,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Retailer::class, 'user_retailers', 'user_id', 'retailer_id');
     }
 
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'user_products', 'user_id', 'product_id');
+    }
+
+    public function packSizes(): BelongsToMany
+    {
+        return $this->belongsToMany(PackSize::class, 'user_pack_sizes', 'user_id', 'pack_size_id');
+    }
+
     public function scopeAccessibleRetailers()
     {
         return $this->isSuperUser()

@@ -147,6 +147,8 @@ class MetricsController extends BaseController
     {
         $endDate = Carbon::now();
         $startDate = Carbon::now()->subDays(6);
+        $user = auth()->user();
+        $accessibleRetailers = $this->getAccessibleRetailers($user);
 
         $retailersRatings = ScrapedData::query()
             ->select(
@@ -158,30 +160,30 @@ class MetricsController extends BaseController
             ->join('product_retailers', 'scraped_data.product_retailer_id', '=', 'product_retailers.id')
             ->join('retailers', 'product_retailers.retailer_id', '=', 'retailers.id')
             ->whereBetween('scraped_data.created_at', [$startDate, $endDate])
+            ->whereIn('retailers.id', $accessibleRetailers)
             ->groupBy('retailers.id', 'retailers.title', 'rating_date')
             ->orderBy('rating_date', 'asc')
             ->get();
 
         $formattedData = [];
-        $dates = collect(range(0, 6))->map(fn ($i) => Carbon::now()->subDays($i)->format('Y-m-d'))->reverse()->values();
 
         foreach ($retailersRatings as $rating) {
             $retailerId = $rating->retailer_id;
-
+    
             if (!isset($formattedData[$retailerId])) {
                 $formattedData[$retailerId] = [
                     'retailer_id' => $retailerId,
                     'retailer_title' => $rating->retailer_title,
-                    'avg_ratings' => array_fill(0, 7, null)
+                    'avg_ratings' => []
                 ];
             }
-
-            $dateIndex = $dates->search($rating->rating_date);
-            if ($dateIndex !== false) {
-                $formattedData[$retailerId]['avg_ratings'][$dateIndex] = round($rating->avg_rating, 2);
-            }
+    
+            $formattedData[$retailerId]['avg_ratings'][] = [
+                'date' => $rating->rating_date,
+                'avg_rating' => round($rating->avg_rating, 2),
+            ];
         }
-
+    
         $finalResponse = array_values($formattedData);
 
         return $this->successResponse($finalResponse, 'messages.index.success', ['attribute' => self::ENTITY_KEY]);

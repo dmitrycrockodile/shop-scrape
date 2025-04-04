@@ -9,6 +9,8 @@ use Database\Seeders\ProductRetailerRelationshipSeeder;
 use Database\Seeders\ScrapedDataSeeder;
 use Database\Seeders\CurrenciesSeeder;
 use Database\Seeders\PackSizesSeeder;
+use Database\Seeders\UserProductRelationshipSeeder;
+use Database\Seeders\UserPackSizeRelationshipSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +26,8 @@ class DatabaseSeeder extends Seeder
             RetailersSeeder::class,
             ProductsSeeder::class,
             ProductRetailerRelationshipSeeder::class,
+            UserProductRelationshipSeeder::class,
+            UserPackSizeRelationshipSeeder::class,
             ScrapedDataSeeder::class
         ]);
     }
