@@ -26,12 +26,9 @@ class ProductPolicy
             return true;
         }
 
-        $userRetailers = $user->retailers;
-
-        foreach ($userRetailers as $retailer) {
-            if ($retailer->products->contains($product)) {
-                return true;
-            }
+        $userProducts = $user->products;
+        if ($userProducts->contains($product)) {
+            return true;
         }
 
         return false;

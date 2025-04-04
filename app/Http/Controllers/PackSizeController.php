@@ -69,12 +69,15 @@ class PackSizeController extends BaseController
     {
         $dataPerPage = $request->query('dataPerPage', 10);
         $page = $request->query('page', 2);
-        $packSizes = PackSize::paginate(
-            $dataPerPage,
-            ['*'],
-            'page',
-            $page
-        );
+        $user = $request->user();
+        $isSuperUser = $user->isSuperUser();
+
+        if ($isSuperUser) {
+            $packSizes = PackSize::paginate($dataPerPage, ['*'], 'page', $page);
+        } else {
+            $packSizes = $user->packSizes()->paginate($dataPerPage, ['*'], 'page', $page);
+        }
+
         $meta = [
             'current_page' => $packSizes->currentPage(),
             'per_page' => $packSizes->perPage(),
@@ -176,7 +179,7 @@ class PackSizeController extends BaseController
      */
     public function update(StoreRequest $request, PackSize $packSize): JsonResponse
     {
-        $this->authorize('update', PackSize::class);
+        $this->authorize('update', $packSize);
 
         $data = $request->validated();
         $packSize->update($data);

@@ -80,23 +80,24 @@ class ProductController extends BaseController
     public function index(IndexRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $user = auth()->user();
+        $user = $request->user();
+        $isSuperUser = $user->isSuperUser();
 
-        $query = Product::with(['packSize', 'images']);
-
-        if (!$user->isSuperUser()) {
-            $retailerIds = $user->retailers()->pluck('retailers.id');
-            $query->whereHas('retailers', function ($q) use ($retailerIds) {
-                $q->whereIn('retailers.id', $retailerIds);
-            });
+        if ($isSuperUser) {
+            $products = Product::paginate(
+                $data['dataPerPage'] ?? 100, 
+                ['*'], 
+                'page', 
+                $data['page'] ?? 1
+            );
+        } else {
+            $products = $user->products()->paginate(
+                $data['dataPerPage'] ?? 100,
+                ['*'],
+                'page',
+                $data['page'] ?? 1
+            );
         }
-
-        $products = $query->paginate(
-            $data['dataPerPage'] ?? 100,
-            ['*'],
-            'page',
-            $data['page'] ?? 1
-        );
         $meta = [
             'current_page' => $products->currentPage(),
             'per_page' => $products->perPage(),

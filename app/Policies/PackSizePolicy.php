@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\PackSize;
 use App\Models\User;
 
 class PackSizePolicy
@@ -14,9 +15,18 @@ class PackSizePolicy
         //
     }
 
-    public function update(User $user)
+    public function update(User $user, PackSize $packSize)
     {
-        return $user->isSuperUser();
+        if ($user->isSuperUser()) {
+            return true;
+        }
+
+        $userPackSizes = $user->packSizes;
+        if ($userPackSizes->contains($packSize)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function delete(User $user)
