@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/retailers/{retailer}/products', [RetailerController::class, 'addProducts'])->name('retailers.products.add');
 
     Route::post('/retailers/metrics', [MetricsController::class, 'getRetailerMetrics'])->name('metrics.retailers.index');
+    Route::post('/retailers/metrics/export', [MetricsController::class, 'exportRetailerMetrics'])->name('metrics.retailers.export');
     Route::get('/retailers/weekly-ratings', [MetricsController::class, 'getAvgRatingForLastWeek']);
     Route::get('/retailers/weekly-pricing', [MetricsController::class, 'getAvgPriceForLastWeek']);
 
@@ -46,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/{user}/assign-retailers', [UserController::class, 'assignRetailers'])->name('users.retailers.assign');
     Route::post('/users/{user}/revoke-retailers', [UserController::class, 'revokeRetailers'])->name('users.retailers.revoke');
 
-    Route::get('/scraped-data/export', [ScrapedDataController::class, 'exportCSV'])->name('scraped-data.export');
+    Route::post('/scraped-data/export', [ScrapedDataController::class, 'exportCSV'])->name('scraped-data.export');
 });
 Route::post('/scraped-data', [ScrapedDataController::class, 'store'])->name('scraped-data.store');
 

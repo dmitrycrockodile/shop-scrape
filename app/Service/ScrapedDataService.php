@@ -7,9 +7,10 @@ use App\Models\ProductRetailer;
 use App\Models\Rating;
 use App\Models\ScrapedData;
 use App\Models\ScrapedDataImage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -55,22 +56,63 @@ class ScrapedDataService
     }
 
     /**
-     * Retrieves scraped data within a specified date range.
+     * Retrieves scraped data filtered by retailers, products and date range.
      *
-     * @param string $startDate The start date in 'YYYY-MM-DD' format.
-     * @param string $endDate The end date in 'YYYY-MM-DD' format.
+     * @param Carbon $startDate The start date in 'YYYY-MM-DD' format.
+     * @param Carbon $endDate The end date in 'YYYY-MM-DD' format.
+     * @param array $filters The retailers ids and the products ids.
      * 
      * @return Collection A collection of scraped data entries.
      */
-    public function getByDataRange(string $startDate, string $endDate): Collection
+    public function getFilteredScrapedData(Carbon $startDate, Carbon $endDate, array $filters): Collection
     {
-        $accessibleRetailerIds = auth()->user()->retailers()->pluck('retailers.id');
+        $filteredRetailerIds = $this->filterAccessibleRetailerIds($filters['retailer_ids'] ?? []);
+        $filteredProductIds = $this->filterAccessibleProductIds($filters['product_ids'] ?? []);
 
-        return ScrapedData::whereBetween('scraped_data.created_at', [$startDate, $endDate])
+        return ScrapedData::query()
             ->join('product_retailers', 'scraped_data.product_retailer_id', '=', 'product_retailers.id')
-            ->join('retailers', 'product_retailers.retailer_id', '=', 'retailers.id')
-            ->whereIn('product_retailers.retailer_id', $accessibleRetailerIds)
-            ->get(['scraped_data.*']);
+            ->join('products', 'product_retailers.product_id', '=', 'products.id')
+            ->whereBetween('scraped_data.created_at', [$startDate, $endDate])
+            ->whereIn('product_retailers.retailer_id', $filteredRetailerIds)
+            ->when(!empty($filteredProductIds), fn($q) => $q->whereIn('product_retailers.product_id', $filteredProductIds))
+            ->select('scraped_data.*')
+            ->get();
+    }
+
+    /**
+     * Retrievies an array of the accessible to user products.
+     *
+     * @param array $requestedIds The products ids from the request.
+     * 
+     * @return array An array of the accessible to user products.
+     */
+    private function filterAccessibleProductIds(array $requestedIds = []): array
+    {
+        $accessible = auth()->user()->retailers()
+            ->join('product_retailers', 'retailers.id', '=', 'product_retailers.retailer_id')
+            ->pluck('product_retailers.product_id')
+            ->unique()
+            ->toArray();
+
+        return empty($requestedIds)
+            ? $accessible
+            : array_values(array_intersect($requestedIds, $accessible));
+    }
+
+    /**
+     * Retrievies an array of the accessible to user retailers.
+     *
+     * @param array $requestedIds The retailers ids from the request.
+     * 
+     * @return array An array of the accessible to user retailers.
+     */
+    private function filterAccessibleRetailerIds(array $requestedIds = []): array
+    {
+        $accessible = auth()->user()->retailers()->pluck('retailers.id')->toArray();
+
+        return empty($requestedIds)
+            ? $accessible
+            : array_values(array_intersect($requestedIds, $accessible));
     }
 
     /**

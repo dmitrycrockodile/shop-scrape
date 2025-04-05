@@ -96,14 +96,21 @@ class ScrapedDataController extends BaseController
     {
         $latestAvailableDate = ScrapedData::query()->max('created_at');
 
-        $startDate = $request->query('startDate')
-            ? Carbon::parse($request->query('startDate'))->copy()->startOfDay()
-            : Carbon::parse($latestAvailableDate)->copy()->startOfDay();
-        $endDate = $request->query('endDate')
-            ? Carbon::parse($request->query('endDate'))->copy()->endOfDay()
-            : Carbon::parse($latestAvailableDate)->copy()->endOfDay();
+        $startDate = $request->input('startDate')
+            ? Carbon::parse($request->input('startDate'))->startOfDay()
+            : Carbon::parse($latestAvailableDate)->startOfDay();
 
-        $scrapedData = $this->scrapedDataService->getByDataRange($startDate, $endDate);
+        $endDate = $request->input('endDate')
+            ? Carbon::parse($request->input('endDate'))->endOfDay()
+            : Carbon::parse($latestAvailableDate)->endOfDay();
+
+        $filters = [
+            'retailer_ids' => $request->input('retailer_ids', []),
+            'product_ids' => $request->input('product_ids', []),
+        ];
+
+        $scrapedData = $this->scrapedDataService->getFilteredScrapedData($startDate, $endDate, $filters);
+
         $fileName = "scraped_data_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv";
 
         return $this->csvExporter->export($scrapedData, $fileName);

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\Metrics\ExportRequest;
 use App\Http\Requests\Metrics\RetailerMetricsRequest;
 use App\Http\Resources\Metric\MetricResource;
 use App\Models\Retailer;
 use App\Models\ScrapedData;
 use App\Models\User;
+use App\Service\CsvExporter;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +21,14 @@ use Illuminate\Http\Response;
  */
 class MetricsController extends BaseController
 {
+    protected CsvExporter $csvExporter;
+
     private const ENTITY_KEY = 'metrics';
+
+    public function __construct(CsvExporter $csvExporter)
+    {
+        $this->csvExporter = $csvExporter;
+    }
 
     /**
      * Retrieves the retailers.
@@ -94,7 +103,7 @@ class MetricsController extends BaseController
         $latestAvailableDate = ScrapedData::query()->max('created_at');
         $productIds = $data['product_ids'] ?? [];
         $mpns = $data['manufacturer_part_numbers'] ?? [];
-        $retailerIds = $data['retailer_ids'] ?? [];
+        $retailerIds = $data['retailers'] ?? [];
         $startDate = isset($data['start_date']) ? Carbon::parse($data['start_date'])->copy()->startOfDay() : Carbon::parse($latestAvailableDate)->copy()->startOfDay();
         $endDate = isset($data['end_date']) ? Carbon::parse($data['end_date'])->copy()->endOfDay() : Carbon::parse($latestAvailableDate)->copy()->endOfDay();
         $accessibleRetailers = $this->getAccessibleRetailers($user);
@@ -138,9 +147,45 @@ class MetricsController extends BaseController
     }
 
     /**
+     * Exports the retailers metrics CSV file based on filters (date, retailers).
+     * 
+     * @param ExportRequest $request The request with start/end dates, retailer ids 
+     * 
+     * @return StreamedResponse|JsonResponse A streamed CSV file or a JSON response in case of errors.
+     */
+    public function exportRetailerMetrics(ExportRequest $request) 
+    {
+        $this->authorize('getMetrics', Retailer::class);
+
+        $user = auth()->user();
+        $data = $request->validated();
+        $latestAvailableDate = ScrapedData::query()->max('created_at');
+        $retailerIds = $data['retailers'] ?? [];
+        $startDate = isset($data['start_date']) ? Carbon::parse($data['start_date'])->copy()->startOfDay() : Carbon::parse($latestAvailableDate)->copy()->startOfDay();
+        $endDate = isset($data['end_date']) ? Carbon::parse($data['end_date'])->copy()->endOfDay() : Carbon::parse($latestAvailableDate)->copy()->endOfDay();
+        $accessibleRetailers = $this->getAccessibleRetailers($user);
+
+        $query = $this->buildMetricsQuery(
+            $startDate,
+            $endDate,
+            $accessibleRetailers,
+            [],
+            [],
+            $retailerIds
+        );
+
+        $metrics = $query->get();
+
+        ($startDate && $endDate)
+        ? $fileName = "metrics_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv"
+        : $fileName = "metrics.csv";
+
+        return $this->csvExporter->export($metrics, $fileName);
+    }
+
+    /**
      * Fetch average rating for the retailers based on the past week.
      *
-     * @param RetailerMetricsRequest $request
      * @return JsonResponse
      */
     public function getAvgRatingForLastWeek(): JsonResponse
@@ -189,6 +234,11 @@ class MetricsController extends BaseController
         return $this->successResponse($finalResponse, 'messages.index.success', ['attribute' => self::ENTITY_KEY]);
     }
 
+    /**
+     * Fetch average price for the retailers based on the past week.
+     * 
+     * @return JsonResponse
+     */
     public function getAvgPriceForLastWeek(): JsonResponse
     {
         $endDate = Carbon::now();
@@ -265,10 +315,10 @@ class MetricsController extends BaseController
     private function buildMetricsQuery(
         Carbon $startDate,
         Carbon $endDate,
-        array $accessibleRetailers,
-        array $productIds,
-        array $mpns,
-        array $retailerIds
+        array $accessibleRetailers = [],
+        array $productIds = [],
+        array $mpns = [],
+        array $retailerIds = []
     ): Builder {
         $query = ScrapedData::query()
             ->select(
