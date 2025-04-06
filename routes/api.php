@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [LogoutController::class, 'logout']);
+    Route::delete('/logout', [LogoutController::class, 'logout']);
 
     Route::resource('pack-sizes', PackSizeController::class)->only(['index', 'store', 'update', 'destroy']);
     
