@@ -158,27 +158,27 @@ class MetricsController extends BaseController
         $this->authorize('getMetrics', Retailer::class);
 
         $user = auth()->user();
-        $data = $request->validated();
-        $latestAvailableDate = ScrapedData::query()->max('created_at');
-        $retailerIds = $data['retailers'] ?? [];
-        $startDate = isset($data['start_date']) ? Carbon::parse($data['start_date'])->copy()->startOfDay() : Carbon::parse($latestAvailableDate)->copy()->startOfDay();
-        $endDate = isset($data['end_date']) ? Carbon::parse($data['end_date'])->copy()->endOfDay() : Carbon::parse($latestAvailableDate)->copy()->endOfDay();
         $accessibleRetailers = $this->getAccessibleRetailers($user);
 
-        $query = $this->buildMetricsQuery(
+        $data = $request->validated();
+        $retailerIds = $data['retailers'] ?? [];
+
+        $latestAvailableDate = ScrapedData::query()->max('created_at');
+        $startDate = isset($data['start_date']) ? Carbon::parse($data['start_date'])->copy()->startOfDay() : Carbon::parse($latestAvailableDate)->copy()->startOfDay();
+        $endDate = isset($data['end_date']) ? Carbon::parse($data['end_date'])->copy()->endOfDay() : Carbon::parse($latestAvailableDate)->copy()->endOfDay();
+
+        $query = $this->buildExportMetricsQuery(
             $startDate,
             $endDate,
             $accessibleRetailers,
-            [],
-            [],
             $retailerIds
         );
 
         $metrics = $query->get();
 
         ($startDate && $endDate)
-        ? $fileName = "metrics_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv"
-        : $fileName = "metrics.csv";
+            ? $fileName = "metrics_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv"
+            : $fileName = "metrics.csv";
 
         return $this->csvExporter->export($metrics, $fileName);
     }
@@ -299,6 +299,37 @@ class MetricsController extends BaseController
         }
         return DB::table('user_retailers')->where('user_id', $user->id)->pluck('retailer_id')->toArray();
     }
+
+    private function buildExportMetricsQuery(
+        Carbon $startDate,
+        Carbon $endDate,
+        array $accessibleRetailers = [],
+        array $retailerIds = []
+    ): Builder {
+        $query = ScrapedData::query()
+        ->select(
+            'retailers.title as retailer_title',
+            DB::raw('CAST(AVG(scraped_data.avg_rating) AS DECIMAL(10,2)) as avg_rating'),
+            DB::raw('CAST(AVG(scraped_data.price) AS DECIMAL(10,2)) as avg_price'),
+            DB::raw('CAST(COUNT(scraped_data_images.id) / COUNT(DISTINCT scraped_data.id) AS DECIMAL(10,2)) as avg_images'),
+            DB::raw('DATE(scraped_data.created_at) as metric_date')
+        )
+        ->join('product_retailers', 'scraped_data.product_retailer_id', '=', 'product_retailers.id')
+        ->join('retailers', 'product_retailers.retailer_id', '=', 'retailers.id')
+        ->leftJoin('scraped_data_images', 'scraped_data.id', '=', 'scraped_data_images.scraped_data_id')
+        ->whereBetween('scraped_data.created_at', [$startDate, $endDate])
+        ->whereIn('retailers.id', $accessibleRetailers)
+        ->groupBy(DB::raw('DATE(scraped_data.created_at)'), 'retailers.title')
+        ->orderBy('metric_date', 'asc')
+        ->orderBy('retailers.title', 'asc');
+    
+        $query->when(!empty($retailerIds), fn($q) => 
+            $q->whereIn('retailers.id', array_intersect($retailerIds, $accessibleRetailers))
+        );
+      
+        return $query;
+    }
+    
 
     /**
      * Builds the query for retrieving retailer metrics.
