@@ -11,7 +11,8 @@ use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Retailer\RetailerResource;
 use App\Models\Product;
 use App\Service\CsvExporter;
-use App\Service\ProductService;
+use App\Service\Product\ImportService;
+use App\Service\Product\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,13 +25,15 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends BaseController
 {
     protected ProductService $productService;
+    protected ImportService $importService;
     protected CsvExporter $csvExporter;
 
     private const ENTITY_KEY = 'product';
 
-    public function __construct(ProductService $productService, CsvExporter $csvExporter)
+    public function __construct(ProductService $productService, ImportService $importService, CsvExporter $csvExporter)
     {
         $this->productService = $productService;
+        $this->importService = $importService;
         $this->csvExporter = $csvExporter;
     }
 
@@ -291,7 +294,7 @@ class ProductController extends BaseController
         $path = $file->store('uploads');
         $fullPath = storage_path("app/{$path}");
 
-        $result = $this->productService->importProducts($fullPath);
+        $result = $this->importService->importProducts($fullPath);
 
         Storage::delete($path);
 

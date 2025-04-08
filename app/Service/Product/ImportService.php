@@ -1,88 +1,26 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Product;
 
 use App\Exceptions\CsvImportExceptionHandler;
-use App\Http\Resources\Product\ProductResource;
 use App\Models\PackSize;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductRetailer;
 use App\Models\Retailer;
-use App\Models\User;
 use App\Service\CsvImporter;
-use Exception;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Response;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Throwable;
-use Illuminate\Support\Carbon;
 
-class ProductService
+class ImportService
 {
     /**
-     * Store a new product.
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    public function store(array $data, User $user): array
-    {
-        DB::beginTransaction();
-
-        $existingProduct = Product::where('manufacturer_part_number', $data['manufacturer_part_number'])
-            ->where('pack_size_id', $data['pack_size_id'])
-            ->first();
-
-        if ($existingProduct) {
-            return $this->errorResponse(
-                'Product with this MPN (Manufacturer Part Number) and pack size (id) already exists.',
-                new \Exception('Duplicate product entry'),
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
-        }
-
-        $images = $this->extractImages($data);
-        $product = Product::create($data);
-
-        $user->products()->attach($product->id);
-
-        if ($images) {
-            $this->storeProductImages($images, $product);
-        }
-
-        DB::commit();
-        return $this->successResponse($product);
-    }
-
-    /**
-     * Update the product.
-     *
-     * @param array $data
-     * @param Product $product
-     *
-     * @return array
-     */
-    public function update(array $data, Product $product): array
-    {
-        DB::beginTransaction();
-
-        $images = $this->extractImages($data);
-        $product->update($data);
-
-        if ($images) {
-            ProductImage::where('product_id', $product->id)->delete();
-            $this->storeProductImages($images, $product);
-        }
-
-        DB::commit();
-        return $this->successResponse($product);
-    }
-
+     * Imports the products from the csv files
+     * 
+     * @param string $filepath
+     * 
+     * @return array With statistics data and message
+     */   
     public function importProducts(string $filepath): array
     {
         DB::beginTransaction();
@@ -105,20 +43,15 @@ class ProductService
             $existingPackSizes = $this->getExistingPackSizes();
             $updatedPackSizes = $this->findAndInsertMissingPackSizes($records, $existingPackSizes);
 
-            list($products, $rawProductData) = $this->prepareProductData($records, $updatedPackSizes);
+            list(
+                $productsToCreate,
+                $rawProductsToCreate,
+                $productsToUpdate,
+                $rawProductsToUpdate
+            ) = $this->prepareProductData($records, $updatedPackSizes);
 
-            Product::insert($products);
-
-            $productMap = $this->buildProductLookupMap($rawProductData);
-
-            list($productImages, $productRetailers) = $this->prepareRelatedData($rawProductData, $existingRetailers, $productMap);
-
-            if (!empty($productImages)) {
-                ProductImage::insert($productImages);
-            }
-            if (!empty($productRetailers)) {
-                ProductRetailer::insert($productRetailers);
-            }
+            $createdProductsCount = $this->bulkStore($productsToCreate, $rawProductsToCreate, $existingRetailers);
+            $updatedProductsCount = $this->bulkUpdate($productsToUpdate, $rawProductsToUpdate, $existingRetailers);
 
             DB::commit();
             $endTime = microtime(true);
@@ -129,10 +62,11 @@ class ProductService
 
             return [
                 'message' => 'CSV processed successfully!',
-                'products' => $products,
+                'created' => $createdProductsCount,
+                'updated' => $updatedProductsCount,
                 'execution_time' => $executionTime * 1000 . ' ms',
                 'memory_used' => $memoryUsedInMB . ' MB',
-                'row_count' => $numberOfRows,      
+                'row_count' => $numberOfRows,
             ];
         } catch (Throwable $e) {
             CsvImportExceptionHandler::handleImportException($e);
@@ -140,45 +74,58 @@ class ProductService
     }
 
     /**
-     * Retrieves scraped data within a specified date range.
-     *
-     * @param string $startDate The start date in 'YYYY-MM-DD' format.
-     * @param string $endDate The end date in 'YYYY-MM-DD' format.
+     * Bulk stores the products
      * 
-     * @return Collection A collection of scraped data entries.
+     * @param array $products
+     * @param array $rawData
+     * @param array $existingRetailers
+     * 
+     * @return int count of the created products
      */
-    public function getByDataRangeAndRetailers(?Carbon $startDate, ?Carbon $endDate, array $retailerIds): Collection
+    private function bulkStore(array $products, array $rawData, array $existingRetailers): int
     {
-        $accessibleRetailerIds = auth()->user()->retailers()->pluck('retailers.id');
+        Product::insert($products);
 
-        $query = Product::join('product_retailers', 'products.id', '=', 'product_retailers.product_id')
-        ->join('pack_sizes', 'products.pack_size_id', '=', 'pack_sizes.id')
-        ->join('retailers', 'product_retailers.retailer_id', '=', 'retailers.id')
-        ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-        ->whereIn('product_retailers.retailer_id', $accessibleRetailerIds)
-        ->selectRaw("
-            products.title as title,
-            products.description as description,
-            products.manufacturer_part_number as manufacturer_part_number,
-            pack_sizes.name as pack_size_name,
-            pack_sizes.weight as pack_size_weight,
-            pack_sizes.weight_unit as pack_size_weight_unit,
-            pack_sizes.amount as pack_size_amount,
-            GROUP_CONCAT(DISTINCT retailers.title SEPARATOR '|') as retailer_titles,
-            GROUP_CONCAT(DISTINCT product_images.file_url SEPARATOR '|') as image_urls,
-            GROUP_CONCAT(DISTINCT product_images.file_name SEPARATOR '|') as image_names
-        ")
-        ->groupBy('products.id', 'pack_sizes.id');
+        $productMap = $this->buildProductLookupMap($rawData);
+        list($productImages, $productRetailers) = $this->prepareRelatedData($rawData, $existingRetailers, $productMap);
 
-        if ($startDate && $endDate) {
-            $query->whereBetween('products.created_at', [$startDate, $endDate]);
-        } 
-
-        if (count($retailerIds)) {
-            $query->whereIn('product_retailers.retailer_id', $retailerIds);
+        if (!empty($productImages)) {
+            ProductImage::insert($productImages);
+        }
+        if (!empty($productRetailers)) {
+            ProductRetailer::insert($productRetailers);
         }
 
-        return $query->get();
+        return count($products);
+    }
+
+    /**
+     * Bulk updates the products
+     * 
+     * @param array $products
+     * @param array $rawData
+     * @param array $existingRetailers
+     * 
+     * @return int Count of the updated products
+     */
+    private function bulkUpdate(array $products, array $rawData, array $existingRetailers): int
+    {
+        $productIds = array_filter(array_column($rawData, 'product_id'));
+        list($productImages, $productRetailers) = $this->prepareRelatedDataToUpdate($rawData, $existingRetailers);
+
+        ProductImage::whereIn('product_id', $productIds)->delete();
+        ProductImage::insert($productImages);
+
+        ProductRetailer::whereIn('product_id', $productIds)->delete();
+        ProductRetailer::insert($productRetailers);
+
+        foreach ($products as $product) {
+            if (!empty($product['id'])) {
+                Product::where('id', $product['id'])->update($product);
+            }
+        }
+
+        return count($products);
     }
 
     /**
@@ -260,17 +207,7 @@ class ProductService
         return $this->getExistingPackSizes();
     }
 
-    /**
-     * Fetch existing pack sizes.
-     *
-     * @return array An array of pack sizes (each as an associative array).
-     */
-    private function getExistingPackSizes(): array
-    {
-        return PackSize::all()->toArray();
-    }
-
-    /**
+     /**
      * Prepare product data for bulk insertion.
      *
      * Returns an array with two elements:
@@ -284,8 +221,10 @@ class ProductService
      */
     private function prepareProductData(array $records, array $packSizes): array
     {
-        $products = [];
-        $rawProductData = [];
+        $productsToCreate = [];
+        $productsToUpdate = [];
+        $rawProductsToCreate = [];
+        $rawProductsToUpdate = [];
 
         foreach ($records as $record) {
             $packSize = collect($packSizes)->firstWhere(function ($pack) use ($record) {
@@ -305,17 +244,28 @@ class ProductService
                 'updated_at' => now(),
             ];
 
-            $products[] = $productData;
-
-            $rawProductData[] = array_merge($productData, [
-                'image_urls' => $record['image_urls'] ?? null,
-                'file_name' => $record['image_name'] ?? null,
-                'product_url' => $record['product_url'] ?? null,
-                'retailer_title' => $record['retailer_title'] ?? null,
-            ]);
+            if (strtolower($record['action']) === 'create') {
+                $productsToCreate[] = $productData;
+                $rawProductsToCreate[] = array_merge($productData, [
+                    'image_urls' => $record['image_urls'] ?? null,
+                    'file_name' => $record['image_name'] ?? null,
+                    'product_url' => $record['product_url'] ?? null,
+                    'retailer_title' => $record['retailer_title'] ?? null,
+                ]);
+            }
+            if (strtolower($record['action']) === 'update') {
+                $productData['id'] = $record['product_id'];
+                $productsToUpdate[] = $productData;
+                $rawProductsToUpdate[] = array_merge($productData, [
+                    'image_urls' => $record['image_urls'] ?? null,
+                    'file_name' => $record['image_name'] ?? null,
+                    'product_url' => $record['product_url'] ?? null,
+                    'retailer_title' => $record['retailer_title'] ?? null,
+                ]);
+            }
         }
 
-        return [$products,  $rawProductData];
+        return [$productsToCreate,  $rawProductsToCreate, $productsToUpdate, $rawProductsToUpdate];
     }
 
     /**
@@ -339,6 +289,16 @@ class ProductService
             $productMap[$key] = $product->id;
         }
         return $productMap;
+    }
+
+    /**
+     * Fetch existing pack sizes.
+     *
+     * @return array An array of pack sizes (each as an associative array).
+     */
+    private function getExistingPackSizes(): array
+    {
+        return PackSize::all()->toArray();
     }
 
     /**
@@ -390,80 +350,48 @@ class ProductService
     }
 
     /**
-     * Store images for a product.
+     * Prepare related data for product images and product-retailer relationships on update.
      *
-     * @param array $images
-     * @param Product $product
-     *
-     * @return void
-     */
-    private function storeProductImages(array $images, Product $product): void
-    {
-        foreach ($images as $image) {
-            if ($image instanceof UploadedFile) {
-                $file_url = Storage::disk('public')->put('/images', $image);
-            } else {
-                $file_url = $image;
-            }
-
-            ProductImage::create([
-                'product_id' => $product->id,
-                'file_url' => $file_url,
-                'file_name' => "{$product->title} image"
-            ]);
-        }
-    }
-
-    /**
-     * Extract images from data.
-     *
-     * @param array $data Data from which we remove images
+     * @param array $rawProductData
+     * @param array $existingRetailers
      * 
-     * @return array|null
-     */
-    private function extractImages(array &$data): ?array
-    {
-        $images = $data['images'] ?? [];
-        $imageUrls = isset($data['image_urls']) ? json_decode($data['image_urls'], true) : [];
-
-        unset($data['images'], $data['image_urls']);
-
-        return array_merge($images, $imageUrls);
-    }
-
-    /**
-     * Success response formatting.
-     *
-     * @param Product $product
-     *
      * @return array
      */
-    private function successResponse(Product $product): array
+    private function prepareRelatedDataToUpdate(array $rawProductData, array $existingRetailers): array
     {
-        return [
-            'success' => true,
-            'product' => new ProductResource($product)
-        ];
-    }
+        $productImages = [];
+        $productRetailers = [];
 
-    /**
-     * Error response formatting.
-     *
-     * @param string $errorMessage
-     * @param Exception $exception
-     * @return array
-     */
-    private function errorResponse(string $errorMessage, \Exception $exception, int $statusCode = 500): array
-    {
-        Log::error($errorMessage, [
-            'exception' => $exception->getMessage(),
-            'trace' => $exception->getTraceAsString(),
-        ]);
+        foreach ($rawProductData as $data) {
+            $productId = $data['product_id'] ?? null;
 
-        return [
-            'success' => false,
-            'error' => $exception->getMessage(),
-            'status' => $statusCode,
-        ];
+            if ($productId) {
+                if (isset($data['image_urls'])) {
+                    $imageUrls = array_map('trim', explode('|', $data['image_urls']));
+                    foreach ($imageUrls as $imageUrl) {
+                        $productImages[] = [
+                            'product_id' => $productId,
+                            'file_url' => $imageUrl,
+                            'file_name' => $data['file_name'] ?? "{$data['title']} image",
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                }
+
+                $retailerTitle = $data['retailer_title'] ?? null;
+                if ($retailerTitle && isset($existingRetailers[$retailerTitle])) {
+                    $productRetailers[] = [
+                        'product_id' => $productId,
+                        'retailer_id' => $existingRetailers[$retailerTitle],
+                        'product_url' => $data['product_url'] ?? null,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+            }
+        }
+
+        return [$productImages, $productRetailers];
     }
 }
