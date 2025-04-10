@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class DatabaseConnectionTest extends TestCase
 {
-    public function test_database_is_shop_scrape_test()
+    public function test_connected_to_database_shop_scrape_test()
     {
         $currentConnection = DB::connection()->getDatabaseName();
         

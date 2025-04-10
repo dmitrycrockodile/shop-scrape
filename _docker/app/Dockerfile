@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
       docker-php-ext-install pdo_mysql bcmath zip && \
       docker-php-ext-configure gd --with-jpeg && \
       docker-php-ext-install -j$(nproc) gd && \
+      pecl install xdebug && \
+      docker-php-ext-enable xdebug && \
       apt-get clean && \
       rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
