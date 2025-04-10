@@ -6,31 +6,9 @@ use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Exceptions\CsvImportException;
-
-function extractResourceName(Request $request): string {
-    $segments = $request->segments();
-    
-    if (!empty($segments)) {
-        $resource = Str::singular(str_replace('-', ' ', $segments[1]));
-        return $resource;
-    }
-
-    return 'resource';
-}
-
-function determineAction(string $method): string {
-    return match ($method) {
-        'GET'    => 'index',
-        'POST'   => 'store',
-        'PUT', 'PATCH' => 'update',
-        'DELETE' => 'destroy',
-        default  => 'operation'
-    };
-}
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(

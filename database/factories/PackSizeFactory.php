@@ -17,10 +17,10 @@ class PackSizeFactory extends Factory
     public function definition(): array
     {
         $packSizes = [
-            ['name' => 'Small', 'weight' => '250g', 'amount' => 50],
-            ['name' => 'Medium', 'weight' => '500g', 'amount' => 30],
-            ['name' => 'Large', 'weight' => '1kg', 'amount' => 20],
-            ['name' => 'Extra Large', 'weight' => '2kg', 'amount' => 10],
+            ['name' => 'Small', 'weight' => '250', 'weight_unit' => 'g', 'amount' => 50],
+            ['name' => 'Medium', 'weight' => '500', 'weight_unit' => 'g', 'amount' => 30],
+            ['name' => 'Large', 'weight' => '1', 'weight_unit' => 'kg', 'amount' => 20],
+            ['name' => 'Extra Large', 'weight' => '2', 'weight_unit' => 'l', 'amount' => 10],
         ];
 
         $packSize = $this->faker->unique()->randomElement($packSizes);
