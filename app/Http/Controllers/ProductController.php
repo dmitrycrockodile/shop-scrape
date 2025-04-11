@@ -294,12 +294,12 @@ class ProductController extends BaseController
         $path = $file->store('uploads');
         $fullPath = storage_path("app/{$path}");
 
-        $result = $this->importService->importProducts($fullPath);
+        $this->importService->importProducts($fullPath);
 
         Storage::delete($path);
 
         return $this->successResponse(
-            $result,
+            [],
             'messages.import.success',
             ['attribute' => self::ENTITY_KEY . 's'],
             Response::HTTP_OK

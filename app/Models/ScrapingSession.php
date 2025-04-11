@@ -15,7 +15,8 @@ class ScrapingSession extends Model
     protected $fillable = [
         'retailer_id',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'status'
     ];
 
     public function scrapedData(): HasMany

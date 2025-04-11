@@ -10,6 +10,7 @@ use App\Models\ProductRetailer;
 use App\Models\Retailer;
 use App\Service\CsvImporter;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class ImportService
@@ -19,9 +20,9 @@ class ImportService
      * 
      * @param string $filepath
      * 
-     * @return array With statistics data and message
+     * @return void
      */   
-    public function importProducts(string $filepath): array
+    public function importProducts(string $filepath): void
     {
         DB::beginTransaction();
 
@@ -60,14 +61,13 @@ class ImportService
             $memoryUsed = memory_get_usage() - $initialMemoryUsage;
             $memoryUsedInMB = $memoryUsed / 1048576;
 
-            return [
-                'message' => 'CSV processed successfully!',
+            Log::info('CSV Import Performance:', [
                 'created' => $createdProductsCount,
                 'updated' => $updatedProductsCount,
                 'execution_time' => $executionTime * 1000 . ' ms',
                 'memory_used' => $memoryUsedInMB . ' MB',
                 'row_count' => $numberOfRows,
-            ];
+            ]);
         } catch (Throwable $e) {
             CsvImportExceptionHandler::handleImportException($e);
         }

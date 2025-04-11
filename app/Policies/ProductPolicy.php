@@ -15,11 +15,6 @@ class ProductPolicy
         //
     }
 
-    public function delete(User $user)
-    {
-        return $user->isSuperUser();
-    }
-
     public function update(User $user, Product $product)
     {
         if ($user->isSuperUser()) {
@@ -32,5 +27,10 @@ class ProductPolicy
         }
 
         return false;
+    }
+
+    public function delete(User $user)
+    {
+        return $user->isSuperUser();
     }
 }

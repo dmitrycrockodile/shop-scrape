@@ -3,9 +3,9 @@
 namespace App\Exceptions;
 
 use App\Models\PackSize;
-use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CsvImportExceptionHandler
 {
@@ -45,9 +45,10 @@ class CsvImportExceptionHandler
     {
         DB::rollBack();
 
+        
         if (self::isDuplicateProductError($e)) {
             $duplicateDetails = self::extractDuplicateProductDetails($e);
-
+            
             if ($duplicateDetails) {
                 throw new CsvImportException(
                     "Duplicate product found: A product with $duplicateDetails already exists.",
@@ -56,7 +57,15 @@ class CsvImportExceptionHandler
             }
         }
 
-        throw new CsvImportException("Error processing CSV: " . $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        Log::warning('Handling import exception', [
+            'message' => $e->getMessage(),
+            'statusCode' => $e->getCode(),
+        ]);
+    
+        throw new CsvImportException(
+            "Error processing CSV: " . $e->getMessage(), 
+            Response::HTTP_BAD_REQUEST
+        );
     }
 
     /**
