@@ -31,16 +31,6 @@ class ScrapedData extends Model
         return $this->belongsTo(ProductRetailer::class, 'product_retailer_id', 'id');
     }
 
-    public function product(): BelongsTo
-    {
-        return $this->productRetailer->product;
-    }
-
-    public function retailer(): BelongsTo
-    {
-        return $this->productRetailer->retailer;
-    }
-
     public function ratings(): HasMany
     {
         return $this->hasMany(Rating::class, 'scraped_data_id', 'id');

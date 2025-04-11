@@ -37,7 +37,7 @@ class Retailer extends Model
 
     public function scrapedData(): HasMany
     {
-        return $this->hasMany(ScrapedData::class, 'retailer_id', 'id');
+        return $this->hasMany(ScrapedData::class, 'product_retailer_id', 'id');
     }
 
     public function currency(): BelongsTo

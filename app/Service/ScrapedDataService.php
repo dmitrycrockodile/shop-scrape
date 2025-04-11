@@ -66,8 +66,8 @@ class ScrapedDataService
      */
     public function getFilteredScrapedData(Carbon $startDate, Carbon $endDate, array $filters): Collection
     {
-        $filteredRetailerIds = $this->filterAccessibleRetailerIds($filters['retailer_ids'] ?? []);
-        $filteredProductIds = $this->filterAccessibleProductIds($filters['product_ids'] ?? []);
+        $filteredRetailerIds = $this->filterAccessibleRetailerIds($filters['retailer_ids']);
+        $filteredProductIds = $this->filterAccessibleProductIds($filters['product_ids']);
 
         return ScrapedData::query()
             ->join('product_retailers', 'scraped_data.product_retailer_id', '=', 'product_retailers.id')
@@ -88,7 +88,7 @@ class ScrapedDataService
      */
     private function filterAccessibleProductIds(array $requestedIds = []): array
     {
-        $accessible = auth()->user()->retailers()
+        $accessible = auth()->user()->accessibleRetailers()
             ->join('product_retailers', 'retailers.id', '=', 'product_retailers.retailer_id')
             ->pluck('product_retailers.product_id')
             ->unique()
@@ -108,7 +108,7 @@ class ScrapedDataService
      */
     private function filterAccessibleRetailerIds(array $requestedIds = []): array
     {
-        $accessible = auth()->user()->retailers()->pluck('retailers.id')->toArray();
+        $accessible = auth()->user()->accessibleRetailers()->pluck('retailers.id')->toArray();
 
         return empty($requestedIds)
             ? $accessible

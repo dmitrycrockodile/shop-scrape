@@ -29,7 +29,7 @@ class Product extends Model
 
     public function scrapedData(): HasMany
     {
-        return $this->hasMany(ScrapedData::class, 'product_id', 'id');
+        return $this->hasMany(ScrapedData::class, 'product_retailer_id', 'id');
     }
 
     public function retailers(): BelongsToMany

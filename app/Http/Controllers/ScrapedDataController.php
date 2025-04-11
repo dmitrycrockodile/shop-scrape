@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\ScrapedData\ExportRequest;
 use App\Http\Requests\ScrapedData\StoreRequest;
 use App\Models\ScrapedData;
 use App\Service\CsvExporter;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\PathItem(path="/api/scraped-data")
@@ -92,21 +94,22 @@ class ScrapedDataController extends BaseController
      * 
      * @return StreamedResponse|JsonResponse A streamed CSV file or a JSON response in case of errors.
      */
-    public function exportCSV(Request $request)
+    public function exportCSV(ExportRequest $request)
     {
+        $data = $request->validated();
         $latestAvailableDate = ScrapedData::query()->max('created_at');
 
-        $startDate = $request->input('startDate')
-            ? Carbon::parse($request->input('startDate'))->startOfDay()
+        $startDate = $data['startDate']
+            ? Carbon::parse($data['startDate'])->startOfDay()
             : Carbon::parse($latestAvailableDate)->startOfDay();
 
-        $endDate = $request->input('endDate')
-            ? Carbon::parse($request->input('endDate'))->endOfDay()
+        $endDate = $data['endDate']
+            ? Carbon::parse($data['endDate'])->endOfDay()
             : Carbon::parse($latestAvailableDate)->endOfDay();
 
         $filters = [
-            'retailer_ids' => $request->input('retailer_ids', []),
-            'product_ids' => $request->input('product_ids', []),
+            'retailer_ids' => $data['retailer_ids'] ?? [],
+            'product_ids' => $data['product_ids'] ?? [],
         ];
 
         $scrapedData = $this->scrapedDataService->getFilteredScrapedData($startDate, $endDate, $filters);

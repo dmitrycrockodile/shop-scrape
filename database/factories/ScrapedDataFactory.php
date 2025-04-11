@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\ProductRetailer;
+use App\Models\ScrapingSession;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +20,7 @@ class ScrapedDataFactory extends Factory
     {
         return [
             'product_retailer_id' => ProductRetailer::factory(),
+            'scraping_session_id' => ScrapingSession::factory(),
             'title' => $this->faker->words(3, true),
             'description' => $this->faker->paragraph(),
             'price' => $this->faker->randomFloat(2, 1, 10000),
