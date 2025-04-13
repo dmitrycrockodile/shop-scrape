@@ -2,29 +2,25 @@
 
 namespace Tests\Unit\Resources;
 
-use App\Http\Resources\Currency\CurrencyResource;
 use App\Models\Currency;
-use Illuminate\Http\Request;
+use App\Http\Resources\Currency\CurrencyResource;
 use Tests\TestCase;
 
 class CurrencyResourceTest extends TestCase
 {
-    public function test_it_returns_correct_currency_resource_structure()
+    public function test_currency_resource_returns_expected_structure(): void
     {
-        $currency = Currency::factory()->make([
-            'id' => 1,
+        $currency = Currency::factory()->create([
             'code' => 'USD',
             'name' => 'US Dollar',
             'symbol' => '$',
         ]);
 
-        $resource = (new CurrencyResource($currency))->toArray(Request::create('/'));
+        $resource = (new CurrencyResource($currency))->toArray(request());
 
-        $this->assertEquals([
-            'id' => 1,
-            'code' => 'USD',
-            'name' => 'US Dollar',
-            'symbol' => '$',
-        ], $resource);
+        $this->assertSame($currency->id, $resource['id']);
+        $this->assertSame('USD', $resource['code']);
+        $this->assertSame('US Dollar', $resource['name']);
+        $this->assertSame('$', $resource['symbol']);
     }
 }

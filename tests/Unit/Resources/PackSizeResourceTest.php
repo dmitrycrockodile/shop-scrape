@@ -2,31 +2,27 @@
 
 namespace Tests\Unit\Resources;
 
-use App\Http\Resources\PackSize\PackSizeResource;
 use App\Models\PackSize;
-use Illuminate\Http\Request;
+use App\Http\Resources\PackSize\PackSizeResource;
 use Tests\TestCase;
 
 class PackSizeResourceTest extends TestCase
 {
-    public function test_it_returns_correct_currency_resource_structure()
+    public function test_pack_size_resource_returns_expected_structure(): void
     {
-        $currency = PackSize::factory()->make([
-            'id' => 1,
-            'name' => 'Small',
-            'weight' => 500,
+        $packSize = PackSize::factory()->create([
+            'name' => 'Medium',
+            'weight' => '750',
             'weight_unit' => 'g',
-            'amount' => 10,
+            'amount' => 20,
         ]);
 
-        $resource = (new PackSizeResource($currency))->toArray(Request::create('/'));
+        $resource = (new PackSizeResource($packSize))->toArray(request());
 
-        $this->assertEquals([
-            'id' => 1,
-            'name' => 'Small',
-            'weight' => 500,
-            'weight_unit' => 'g',
-            'amount' => 10,
-        ], $resource);
+        $this->assertSame($packSize->id, $resource['id']);
+        $this->assertSame('Medium', $resource['name']);
+        $this->assertSame('750', $resource['weight']);
+        $this->assertSame('g', $resource['weight_unit']);
+        $this->assertSame(20, $resource['amount']);
     }
 }

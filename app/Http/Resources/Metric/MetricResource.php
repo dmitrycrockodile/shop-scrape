@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Metric;
 
 use App\Models\ScrapedData;
-use App\Models\Retailer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
@@ -44,6 +43,11 @@ class MetricResource extends JsonResource
     private function getDateRange($request)
     {
         $latestAvailableDate = ScrapedData::query()->max('created_at');
+
+        if (!$latestAvailableDate) {
+            return null;
+        }
+
         $startDate = $request->has('start_date') ? Carbon::parse($request->input('start_date'))->copy()->startOfDay() : Carbon::parse($latestAvailableDate)->copy()->startOfDay();
         $endDate = $request->has('end_date') ? Carbon::parse($request->input('end_date'))->copy()->endOfDay() : null;
 
@@ -54,7 +58,5 @@ class MetricResource extends JsonResource
         if ($startDate) {
             return Carbon::parse($startDate)->toDateString();
         }
-
-        return null;
     }
 }
