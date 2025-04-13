@@ -22,7 +22,7 @@ class CsvImporter
         $csvContent = $this->removeBom($csvContent);
 
         $lines = $this->splitLines($csvContent);
-        if (empty($lines)) {
+        if (empty($lines) || $lines[0] === "") {
             throw new Exception('CSV file is empty.', Response::HTTP_BAD_REQUEST);
         }
 

@@ -19,4 +19,16 @@ abstract class TestCase extends BaseTestCase
         DB::reconnect();
         $this->artisan('migrate:fresh --database=shop_scrape_test')->run();
     }
+
+    /**
+     * Helper method to invoke private methods
+     */
+    protected function invokePrivateMethod($object, $method, array $params = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $params);
+    }
 }

@@ -7,7 +7,9 @@ use App\Exceptions\CsvImportExceptionHandler;
 use App\Models\PackSize;
 use Tests\TestCase;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Exception;
+
 
 class CsvImportExceptionHandlerTest extends TestCase
 {
@@ -64,8 +66,14 @@ class CsvImportExceptionHandlerTest extends TestCase
 
     public function test_handle_import_exception_throws_generic_csv_exception()
     {
+        Log::shouldReceive('warning')
+            ->once()
+            ->withArgs(function ($message) {
+                return strpos($message, 'Handling import exception') !== false;
+            });
+        
         $exception = new CsvImportException("Some error");
-
+        
         try {
             CsvImportExceptionHandler::handleImportException($exception);
         } catch (CsvImportException $e) {
@@ -73,7 +81,7 @@ class CsvImportExceptionHandlerTest extends TestCase
             $this->assertEquals('Error processing CSV: Some error', $e->getMessage());
             return;
         }
-    
+
         $this->fail("Expected CsvImportException was not thrown.");
     }
 

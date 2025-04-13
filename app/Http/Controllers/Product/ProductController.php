@@ -1,23 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Product;
 
-use App\Exceptions\CsvImportExceptionHandler;
 use App\Http\Controllers\BaseController;
-use App\Http\Requests\Product\ExportRequest;
 use App\Http\Requests\Product\IndexRequest;
 use App\Http\Requests\Product\ProductRequest;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Retailer\RetailerResource;
 use App\Models\Product;
-use App\Service\CsvExporter;
-use App\Service\Product\ImportService;
 use App\Service\Product\ProductService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @OA\PathItem(path="/api/products")
@@ -25,16 +18,12 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends BaseController
 {
     protected ProductService $productService;
-    protected ImportService $importService;
-    protected CsvExporter $csvExporter;
 
     private const ENTITY_KEY = 'product';
 
-    public function __construct(ProductService $productService, ImportService $importService, CsvExporter $csvExporter)
+    public function __construct(ProductService $productService)
     {
         $this->productService = $productService;
-        $this->importService = $importService;
-        $this->csvExporter = $csvExporter;
     }
 
     /**
@@ -282,50 +271,6 @@ class ProductController extends BaseController
             'messages.update.success',
             ['attribute' => self::ENTITY_KEY]
         );
-    }
-
-    public function uploadCSV(Request $request): JsonResponse
-    {
-        $file = $request->file('file');
-        if (!$file) {
-            CsvImportExceptionHandler::handleEmptyCsvException();
-        }
-
-        $path = $file->store('uploads');
-        $fullPath = storage_path("app/{$path}");
-
-        $this->importService->importProducts($fullPath);
-
-        Storage::delete($path);
-
-        return $this->successResponse(
-            [],
-            'messages.import.success',
-            ['attribute' => self::ENTITY_KEY . 's'],
-            Response::HTTP_OK
-        );
-    }
-
-    /**
-     * Exports the CSV file based on filters (date, retailers).
-     * 
-     * @param ExportRequest $request The request with start/end dates, retailer ids 
-     * 
-     * @return StreamedResponse|JsonResponse A streamed CSV file or a JSON response in case of errors.
-     */
-    public function export(ExportRequest $request) 
-    {
-        $data = $request->validated();
-        $startDate = $data['startDate'] ? Carbon::parse($data['startDate'])->copy()->startOfDay() : null;
-        $endDate = $data['endDate'] ? Carbon::parse($data['endDate'])->copy()->endOfDay() : Carbon::today()->endOfDay();
-        
-        ($startDate && $endDate)
-        ? $fileName = "products_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv"
-        : $fileName = "products.csv";
-        
-        $products = $this->productService->getByDataRangeAndRetailers($startDate, $endDate, $data['retailers']);
-
-        return $this->csvExporter->export($products, $fileName);
     }
 
     /**

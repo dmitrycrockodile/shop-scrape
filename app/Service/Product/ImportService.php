@@ -32,9 +32,6 @@ class ImportService
 
             $importer = new CsvImporter();
             $records = $importer->import($filepath);
-            if (empty($records)) {
-                CsvImportExceptionHandler::handleInvalidCsvException();
-            }
 
             $numberOfRows = count($records);
 
@@ -119,8 +116,10 @@ class ImportService
         ProductRetailer::whereIn('product_id', $productIds)->delete();
         ProductRetailer::insert($productRetailers);
 
+        
         foreach ($products as $product) {
             if (!empty($product['id'])) {
+                // dd($products);
                 Product::where('id', $product['id'])->update($product);
             }
         }
@@ -320,6 +319,8 @@ class ImportService
             $packSizeId = $data['pack_size_id'] ?? null;
             $productKey = $mpn . '-' . $packSizeId;
             $productId = $productMap[$productKey];
+
+            $fileName = $data['file_name'] ?? 'default_image_name';
 
             if (isset($data['image_urls'])) {
                 $imageUrls = array_map('trim', explode('|', $data['image_urls']));

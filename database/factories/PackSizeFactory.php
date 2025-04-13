@@ -28,6 +28,7 @@ class PackSizeFactory extends Factory
         return [
             'name' => $packSize['name'],
             'weight' => $packSize['weight'],
+            'weight_unit' => $packSize['weight_unit'],
             'amount' => $packSize['amount']
         ];
     }

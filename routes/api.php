@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\PackSizeController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\MetricsController;
+use App\Http\Controllers\Product\ProductExportController;
+use App\Http\Controllers\Product\ProductImportController;
 use App\Http\Controllers\ScrapedDataController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -29,8 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/products/{product}/retailers', [ProductController::class, 'getRetailers'])->name('products.retailers');
     Route::post('/products', [ProductController::class, 'index'])->name('products.index');
     Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
-    Route::post('/products/upload-csv', [ProductController::class, 'uploadCSV'])->name('products.file.upload');
-    Route::post('/products/export', [ProductController::class, 'export'])->name('products.file.export');
+    Route::post('/products/upload-csv', [ProductImportController::class, 'uploadCSV'])->name('products.file.upload');
+    Route::post('/products/export', [ProductExportController::class, 'export'])->name('products.file.export');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 

@@ -64,10 +64,13 @@ class ScrapedDataService
      * 
      * @return Collection A collection of scraped data entries.
      */
-    public function getFilteredScrapedData(Carbon $startDate, Carbon $endDate, array $filters): Collection
+    public function getFilteredScrapedData(Carbon $startDate, Carbon $endDate, array $filters = []): Collection
     {
-        $filteredRetailerIds = $this->filterAccessibleRetailerIds($filters['retailer_ids']);
-        $filteredProductIds = $this->filterAccessibleProductIds($filters['product_ids']);
+        $retailerIds = $filters['retailer_ids'] ?? [];
+        $productIds = $filters['product_ids'] ?? [];
+
+        $filteredRetailerIds = $this->filterAccessibleRetailerIds($retailerIds);
+        $filteredProductIds = $this->filterAccessibleProductIds($productIds);
 
         return ScrapedData::query()
             ->join('product_retailers', 'scraped_data.product_retailer_id', '=', 'product_retailers.id')
