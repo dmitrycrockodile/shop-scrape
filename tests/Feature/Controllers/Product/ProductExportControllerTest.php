@@ -31,11 +31,11 @@ class ProductExportControllerTest extends TestCase
         ]);
         $product1 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
         $product2 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
 
         ProductRetailer::factory()->create([
@@ -48,8 +48,8 @@ class ProductExportControllerTest extends TestCase
         ]);
 
         $payload = [
-            'startDate' => '2024-04-01',
-            'endDate'   => '2024-04-10',
+            'startDate' => '2025-04-01',
+            'endDate'   => '2025-04-10',
             'retailers' => []
         ];
 
@@ -59,7 +59,7 @@ class ProductExportControllerTest extends TestCase
         $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
 
         $contentDisposition = $response->headers->get('Content-Disposition');
-        $this->assertStringContainsString("products_2024-04-01_to_2024-04-10.csv", $contentDisposition);
+        $this->assertStringContainsString("products_2025-04-01_to_2025-04-10.csv", $contentDisposition);
 
         ob_start();
         $response->sendContent();
@@ -84,11 +84,11 @@ class ProductExportControllerTest extends TestCase
         ]);
         $product1 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
         $product2 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
 
         ProductRetailer::factory()->create([
@@ -135,11 +135,11 @@ class ProductExportControllerTest extends TestCase
         ]);
         $product1 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
         $product2 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
 
         ProductRetailer::factory()->create([
@@ -152,8 +152,8 @@ class ProductExportControllerTest extends TestCase
         ]);
 
         $payload = [
-            'startDate' => '2024-04-01',
-            'endDate'   => '2024-04-10',
+            'startDate' => '2025-04-01',
+            'endDate'   => '2025-04-10',
             'retailers' => [$retailer->id]
         ];
 
@@ -163,7 +163,7 @@ class ProductExportControllerTest extends TestCase
         $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
 
         $contentDisposition = $response->headers->get('Content-Disposition');
-        $this->assertStringContainsString("products_2024-04-01_to_2024-04-10.csv", $contentDisposition);
+        $this->assertStringContainsString("products_2025-04-01_to_2025-04-10.csv", $contentDisposition);
 
         ob_start();
         $response->sendContent();
@@ -188,11 +188,11 @@ class ProductExportControllerTest extends TestCase
         ]);
         $product1 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
         $product2 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
 
         ProductRetailer::factory()->create([
@@ -219,8 +219,8 @@ class ProductExportControllerTest extends TestCase
         ]);
 
         $payload = [
-            'startDate' => '2024-04-01',
-            'endDate'   => '2024-04-10',
+            'startDate' => '2025-04-01',
+            'endDate'   => '2025-04-10',
             'retailers' => []
         ];
 
@@ -230,7 +230,7 @@ class ProductExportControllerTest extends TestCase
         $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
 
         $contentDisposition = $response->headers->get('Content-Disposition');
-        $this->assertStringContainsString("products_2024-04-01_to_2024-04-10.csv", $contentDisposition);
+        $this->assertStringContainsString("products_2025-04-01_to_2025-04-10.csv", $contentDisposition);
 
         ob_start();
         $response->sendContent();
@@ -255,11 +255,11 @@ class ProductExportControllerTest extends TestCase
         ]);
         $product1 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
         $product2 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
 
         ProductRetailer::factory()->create([
@@ -320,11 +320,11 @@ class ProductExportControllerTest extends TestCase
         ]);
         $product1 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
         $product2 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
 
         ProductRetailer::factory()->create([
@@ -351,8 +351,8 @@ class ProductExportControllerTest extends TestCase
         ]);
 
         $payload = [
-            'startDate' => '2024-04-01',
-            'endDate'   => '2024-04-10',
+            'startDate' => '2025-04-01',
+            'endDate'   => '2025-04-10',
             'retailers' => [$retailer->id]
         ];
 
@@ -362,7 +362,7 @@ class ProductExportControllerTest extends TestCase
         $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
 
         $contentDisposition = $response->headers->get('Content-Disposition');
-        $this->assertStringContainsString("products_2024-04-01_to_2024-04-10.csv", $contentDisposition);
+        $this->assertStringContainsString("products_2025-04-01_to_2025-04-10.csv", $contentDisposition);
 
         ob_start();
         $response->sendContent();
@@ -387,11 +387,11 @@ class ProductExportControllerTest extends TestCase
         ]);
         $product1 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
         $product2 = Product::factory()->create([
             'pack_size_id' => $packSize->id,
-            'created_at' => Carbon::parse('2024-04-05'),
+            'created_at' => Carbon::parse('2025-04-05'),
         ]);
 
         ProductRetailer::factory()->create([
@@ -413,8 +413,8 @@ class ProductExportControllerTest extends TestCase
         ]);
 
         $payload = [
-            'startDate' => '2024-04-01',
-            'endDate'   => '2024-04-10',
+            'startDate' => '2025-04-01',
+            'endDate'   => '2025-04-10',
             'retailers' => [$retailer->id]
         ];
 
@@ -424,7 +424,7 @@ class ProductExportControllerTest extends TestCase
         $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
 
         $contentDisposition = $response->headers->get('Content-Disposition');
-        $this->assertStringContainsString("products_2024-04-01_to_2024-04-10.csv", $contentDisposition);
+        $this->assertStringContainsString("products_2025-04-01_to_2025-04-10.csv", $contentDisposition);
 
         ob_start();
         $response->sendContent();
@@ -436,8 +436,8 @@ class ProductExportControllerTest extends TestCase
     public function test_export_csv_returns_error_when_unauthorized()
     {
         $payload = [
-            'startDate' => '2024-04-01',
-            'endDate'   => '2024-04-10',
+            'startDate' => '2025-04-01',
+            'endDate'   => '2025-04-10',
             'retailers' => []
         ];
 

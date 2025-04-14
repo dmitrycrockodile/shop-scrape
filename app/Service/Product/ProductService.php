@@ -91,8 +91,9 @@ class ProductService
      */
     public function getByDataRangeAndRetailers(?Carbon $startDate, ?Carbon $endDate, array $retailerIds): Collection
     {
-        $accessibleRetailerIds = auth()->user()->accessibleRetailers()->pluck('retailers.id');
-        
+        $user = auth()->user();
+        $accessibleRetailerIds = $user->accessibleRetailers()->pluck('retailers.id');
+
         $query = Product::join('product_retailers', 'products.id', '=', 'product_retailers.product_id')
         ->join('pack_sizes', 'products.pack_size_id', '=', 'pack_sizes.id')
         ->join('retailers', 'product_retailers.retailer_id', '=', 'retailers.id')

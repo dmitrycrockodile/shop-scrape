@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\PathItem(path="/api/scraped-data")
@@ -97,15 +96,14 @@ class ScrapedDataController extends BaseController
     public function exportCSV(ExportRequest $request)
     {
         $data = $request->validated();
-        $latestAvailableDate = ScrapedData::query()->max('created_at');
 
-        $startDate = $data['startDate']
+        $startDate = isset($data['startDate'])
             ? Carbon::parse($data['startDate'])->startOfDay()
-            : Carbon::parse($latestAvailableDate)->startOfDay();
+            : null;
 
-        $endDate = $data['endDate']
+        $endDate = isset($data['endDate'])
             ? Carbon::parse($data['endDate'])->endOfDay()
-            : Carbon::parse($latestAvailableDate)->endOfDay();
+            : null;
 
         $filters = [
             'retailer_ids' => $data['retailer_ids'] ?? [],
@@ -114,8 +112,18 @@ class ScrapedDataController extends BaseController
 
         $scrapedData = $this->scrapedDataService->getFilteredScrapedData($startDate, $endDate, $filters);
 
-        $fileName = "scraped_data_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv";
+        (isset($data['startDate']) && isset($data['endDate']))
+            ? $fileName = "scraped_data_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv"
+            : $fileName = "scraped_data.csv";
 
-        return $this->csvExporter->export($scrapedData, $fileName);
+        return response()->streamDownload(function () use ($scrapedData) {
+            $output = fopen('php://output', 'w');
+            $this->csvExporter->export($output, $scrapedData);
+            fclose($output);
+        }, $fileName, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            'Access-Control-Expose-Headers' => 'Content-Disposition',
+        ]);
     }
 }

@@ -237,7 +237,7 @@ class PackSizeController extends BaseController
      */
     public function destroy(PackSize $packSize): JsonResponse
     {
-        $this->authorize('delete', PackSize::class);
+        $this->authorize('delete', $packSize);
         $packSize->delete();
 
         return $this->successResponse(

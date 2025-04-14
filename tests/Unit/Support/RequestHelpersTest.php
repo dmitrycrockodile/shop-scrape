@@ -21,6 +21,13 @@ class RequestHelpersTest extends TestCase
         $this->assertEquals('resource', extractResourceName($request));
     }
 
+    public function test_extract_resource_name_falls_back_to_first_segment()
+    {
+        $request = Request::create('/products', 'GET');
+
+        $this->assertEquals('product', extractResourceName($request));
+    }
+
     public function test_determine_action_from_http_method()
     {
         $this->assertEquals('index', determineAction('GET'));

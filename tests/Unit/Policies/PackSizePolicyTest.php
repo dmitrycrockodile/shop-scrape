@@ -47,14 +47,27 @@ class PackSizePolicyTest extends TestCase
     public function test_super_user_can_delete_pack_size()
     {
         $user = User::factory()->create(['role' => 'super_user']);
+        $packSize = PackSize::factory()->create();
     
-        $this->assertTrue($this->policy->delete($user));
+        $this->assertTrue($this->policy->delete($user, $packSize));
     }
 
-    public function test_regular_user_cannot_delete_pack_size()
+    public function test_regular_user_cannot_delete_other_users_pack_size()
+    {
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $packSize = PackSize::factory()->create();
+        $user1->packSizes()->attach($packSize);
+    
+        $this->assertFalse($this->policy->delete($user2, $packSize));
+    }
+
+    public function test_regular_user_can_delete_his_pack_size()
     {
         $user = User::factory()->create();
+        $packSize = PackSize::factory()->create();
+        $user->packSizes()->attach($packSize);
     
-        $this->assertFalse($this->policy->delete($user));
+        $this->assertTrue($this->policy->delete($user, $packSize));
     }
 }

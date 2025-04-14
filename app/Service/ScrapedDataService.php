@@ -64,7 +64,7 @@ class ScrapedDataService
      * 
      * @return Collection A collection of scraped data entries.
      */
-    public function getFilteredScrapedData(Carbon $startDate, Carbon $endDate, array $filters = []): Collection
+    public function getFilteredScrapedData(?Carbon $startDate, ?Carbon $endDate, array $filters = []): Collection
     {
         $retailerIds = $filters['retailer_ids'] ?? [];
         $productIds = $filters['product_ids'] ?? [];
@@ -72,14 +72,27 @@ class ScrapedDataService
         $filteredRetailerIds = $this->filterAccessibleRetailerIds($retailerIds);
         $filteredProductIds = $this->filterAccessibleProductIds($productIds);
 
-        return ScrapedData::query()
+        $query =  ScrapedData::query()
             ->join('product_retailers', 'scraped_data.product_retailer_id', '=', 'product_retailers.id')
             ->join('products', 'product_retailers.product_id', '=', 'products.id')
-            ->whereBetween('scraped_data.created_at', [$startDate, $endDate])
             ->whereIn('product_retailers.retailer_id', $filteredRetailerIds)
             ->when(!empty($filteredProductIds), fn($q) => $q->whereIn('product_retailers.product_id', $filteredProductIds))
-            ->select('scraped_data.*')
-            ->get();
+            ->select('scraped_data.*');
+
+        if ($startDate && $endDate) {
+            $startDate = $startDate->startOfDay();
+            $endDate = $endDate->endOfDay();
+    
+            $query->whereBetween('scraped_data.created_at', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $startDate = $startDate->startOfDay();
+            $query->where('scraped_data.created_at', '>=', $startDate);
+        } elseif ($endDate) {
+            $endDate = $endDate->endOfDay();
+            $query->where('scraped_data.created_at', '<=', $endDate);
+        }
+
+        return $query->get();
     }
 
     /**

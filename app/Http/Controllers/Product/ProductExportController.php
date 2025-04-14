@@ -33,8 +33,8 @@ class ProductExportController extends BaseController
         $endDate = $data['endDate'] ? Carbon::parse($data['endDate'])->copy()->endOfDay() : Carbon::today()->endOfDay();
         
         ($startDate && $endDate)
-        ? $fileName = "products_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv"
-        : $fileName = "products.csv";
+            ? $fileName = "products_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv"
+            : $fileName = "products.csv";
         
         $products = $this->productService->getByDataRangeAndRetailers($startDate, $endDate, $data['retailers']);
 
@@ -44,6 +44,7 @@ class ProductExportController extends BaseController
             fclose($output);
         }, $fileName, [
             'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
             'Access-Control-Expose-Headers' => 'Content-Disposition',
         ]);
     }

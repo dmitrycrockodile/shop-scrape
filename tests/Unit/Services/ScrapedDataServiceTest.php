@@ -11,14 +11,11 @@ use App\Models\ScrapedData;
 use App\Models\ScrapingSession;
 use App\Models\User;
 use App\Service\ScrapedDataService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class ScrapedDataServiceTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected ScrapedDataService $scrapedDataService;
 
     protected function setUp(): void
@@ -189,6 +186,44 @@ class ScrapedDataServiceTest extends TestCase
         $result = $this->scrapedDataService->getFilteredScrapedData(
             Carbon::now()->subDays(2),
             Carbon::now()->addDay(),
+            []
+        );
+
+        $this->assertCount(1, $result);
+        $this->assertEquals($scraped->id, $result->first()->id);
+    }
+
+    public function test_get_filtered_scraped_data_with_only_end_date()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $packSize = PackSize::factory()->create();
+        $currency = Currency::factory()->create();
+        $scrapingSession = ScrapingSession::factory()->create();
+
+        $product = Product::factory()->create([
+            'pack_size_id' => $packSize->id
+        ]);
+        $retailer = Retailer::factory()->create([
+            'currency_id' => $currency->id
+        ]);
+        $productRetailer = ProductRetailer::factory()->create([
+            'product_id' => $product->id,
+            'retailer_id' => $retailer->id
+        ]);
+
+        $user->retailers()->attach($retailer);
+
+        $scraped = ScrapedData::factory()->create([
+            'product_retailer_id' => $productRetailer->id,
+            'scraping_session_id' => $scrapingSession->id,
+            'created_at' => now()->subDays(1),
+        ]);
+
+        $result = $this->scrapedDataService->getFilteredScrapedData(
+            null,
+            Carbon::today(),
             []
         );
 

@@ -29,8 +29,17 @@ class PackSizePolicy
         return false;
     }
 
-    public function delete(User $user)
+    public function delete(User $user, PackSize $packSize)
     {
-        return $user->isSuperUser();
+        if ($user->isSuperUser()) {
+            return true;
+        }
+
+        $userPackSizes = $user->packSizes;
+        if ($userPackSizes->contains($packSize)) {
+            return true;
+        }
+
+        return false;
     }
 }
