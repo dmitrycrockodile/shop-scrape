@@ -28,4 +28,7 @@
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
     </php>
+    <coverage>
+        <directory suffix="Test.php">./tests</directory>
+    </coverage>
 </phpunit>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /var/www/app</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="_css/bootstrap.min.css?v=11.0.9" rel="stylesheet" type="text/css">
+  <link href="_css/nv.d3.min.css?v=11.0.9" rel="stylesheet" type="text/css">
+  <link href="_css/style.css?v=11.0.9" rel="stylesheet" type="text/css">
+  <link href="_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="index.html">/var/www/app</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Http/Controllers/PackSizeController.php.html#17">App\Http\Controllers\PackSizeController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/RetailerController.php.html#19">App\Http\Controllers\RetailerController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/ScrapedDataController.php.html#21">App\Http\Controllers\ScrapedDataController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#19">App\Http\Controllers\UserController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Metrics/ExportRequest.php.html#7">App\Http\Requests\Metrics\ExportRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/PackSize/StoreRequest.php.html#8">App\Http\Requests\PackSize\StoreRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Retailer/AddProductsRequest.php.html#8">App\Http\Requests\Retailer\AddProductsRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Retailer/RetailerRequest.php.html#8">App\Http\Requests\Retailer\RetailerRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/ScrapedData/ExportRequest.php.html#7">App\Http\Requests\ScrapedData\ExportRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/ScrapedData/StoreRequest.php.html#7">App\Http\Requests\ScrapedData\StoreRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/ManageRetailersRequest.php.html#7">App\Http\Requests\User\ManageRetailersRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/StoreRequest.php.html#8">App\Http\Requests\User\StoreRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/UpdateRequest.php.html#9">App\Http\Requests\User\UpdateRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/MetricsController.php.html#22">App\Http\Controllers\MetricsController</a></td><td class="text-right">39%</td></tr>
+       <tr><td><a href="Http/Controllers/Auth/LogoutController.php.html#9">App\Http\Controllers\Auth\LogoutController</a></td><td class="text-right">80%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Http/Controllers/MetricsController.php.html#22">App\Http\Controllers\MetricsController</a></td><td class="text-right">97</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#19">App\Http\Controllers\UserController</a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="Http/Controllers/PackSizeController.php.html#17">App\Http\Controllers\PackSizeController</a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Http/Controllers/ScrapedDataController.php.html#21">App\Http\Controllers\ScrapedDataController</a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Http/Controllers/Auth/LogoutController.php.html#9">App\Http\Controllers\Auth\LogoutController</a></td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Http/Controllers/MetricsController.php.html#156"><abbr title="App\Http\Controllers\MetricsController::exportRetailerMetrics">exportRetailerMetrics</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/MetricsController.php.html#191"><abbr title="App\Http\Controllers\MetricsController::getAvgRatingForLastWeek">getAvgRatingForLastWeek</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/MetricsController.php.html#242"><abbr title="App\Http\Controllers\MetricsController::getAvgPriceForLastWeek">getAvgPriceForLastWeek</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/MetricsController.php.html#303"><abbr title="App\Http\Controllers\MetricsController::buildExportMetricsQuery">buildExportMetricsQuery</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/PackSizeController.php.html#23"><abbr title="App\Http\Controllers\PackSizeController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/PackSizeController.php.html#76"><abbr title="App\Http\Controllers\PackSizeController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/PackSizeController.php.html#136"><abbr title="App\Http\Controllers\PackSizeController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/PackSizeController.php.html#189"><abbr title="App\Http\Controllers\PackSizeController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/PackSizeController.php.html#238"><abbr title="App\Http\Controllers\PackSizeController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/RetailerController.php.html#24"><abbr title="App\Http\Controllers\RetailerController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/RetailerController.php.html#53"><abbr title="App\Http\Controllers\RetailerController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/RetailerController.php.html#100"><abbr title="App\Http\Controllers\RetailerController::getProducts">getProducts</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/RetailerController.php.html#172"><abbr title="App\Http\Controllers\RetailerController::addProducts">addProducts</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/RetailerController.php.html#219"><abbr title="App\Http\Controllers\RetailerController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/RetailerController.php.html#275"><abbr title="App\Http\Controllers\RetailerController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/RetailerController.php.html#324"><abbr title="App\Http\Controllers\RetailerController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/ScrapedDataController.php.html#28"><abbr title="App\Http\Controllers\ScrapedDataController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/ScrapedDataController.php.html#69"><abbr title="App\Http\Controllers\ScrapedDataController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/ScrapedDataController.php.html#97"><abbr title="App\Http\Controllers\ScrapedDataController::exportCSV">exportCSV</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#47"><abbr title="App\Http\Controllers\UserController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#95"><abbr title="App\Http\Controllers\UserController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#153"><abbr title="App\Http\Controllers\UserController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#220"><abbr title="App\Http\Controllers\UserController::assignRetailers">assignRetailers</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#291"><abbr title="App\Http\Controllers\UserController::revokeRetailers">revokeRetailers</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#351"><abbr title="App\Http\Controllers\UserController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Metrics/ExportRequest.php.html#12"><abbr title="App\Http\Requests\Metrics\ExportRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Metrics/ExportRequest.php.html#22"><abbr title="App\Http\Requests\Metrics\ExportRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Metrics/ExportRequest.php.html#32"><abbr title="App\Http\Requests\Metrics\ExportRequest::messages">messages</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/PackSize/StoreRequest.php.html#13"><abbr title="App\Http\Requests\PackSize\StoreRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/PackSize/StoreRequest.php.html#23"><abbr title="App\Http\Requests\PackSize\StoreRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/PackSize/StoreRequest.php.html#41"><abbr title="App\Http\Requests\PackSize\StoreRequest::messages">messages</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Retailer/AddProductsRequest.php.html#13"><abbr title="App\Http\Requests\Retailer\AddProductsRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Retailer/AddProductsRequest.php.html#23"><abbr title="App\Http\Requests\Retailer\AddProductsRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Retailer/AddProductsRequest.php.html#41"><abbr title="App\Http\Requests\Retailer\AddProductsRequest::messages">messages</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Retailer/RetailerRequest.php.html#13"><abbr title="App\Http\Requests\Retailer\RetailerRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Retailer/RetailerRequest.php.html#23"><abbr title="App\Http\Requests\Retailer\RetailerRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/Retailer/RetailerRequest.php.html#38"><abbr title="App\Http\Requests\Retailer\RetailerRequest::messages">messages</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/ScrapedData/ExportRequest.php.html#12"><abbr title="App\Http\Requests\ScrapedData\ExportRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/ScrapedData/ExportRequest.php.html#22"><abbr title="App\Http\Requests\ScrapedData\ExportRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/ScrapedData/ExportRequest.php.html#34"><abbr title="App\Http\Requests\ScrapedData\ExportRequest::messages">messages</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/ScrapedData/StoreRequest.php.html#12"><abbr title="App\Http\Requests\ScrapedData\StoreRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/ScrapedData/StoreRequest.php.html#22"><abbr title="App\Http\Requests\ScrapedData\StoreRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/ScrapedData/StoreRequest.php.html#46"><abbr title="App\Http\Requests\ScrapedData\StoreRequest::messages">messages</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/ManageRetailersRequest.php.html#12"><abbr title="App\Http\Requests\User\ManageRetailersRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/ManageRetailersRequest.php.html#22"><abbr title="App\Http\Requests\User\ManageRetailersRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/ManageRetailersRequest.php.html#30"><abbr title="App\Http\Requests\User\ManageRetailersRequest::messages">messages</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/StoreRequest.php.html#13"><abbr title="App\Http\Requests\User\StoreRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/StoreRequest.php.html#23"><abbr title="App\Http\Requests\User\StoreRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/StoreRequest.php.html#41"><abbr title="App\Http\Requests\User\StoreRequest::messages">messages</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/UpdateRequest.php.html#14"><abbr title="App\Http\Requests\User\UpdateRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/UpdateRequest.php.html#24"><abbr title="App\Http\Requests\User\UpdateRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Requests/User/UpdateRequest.php.html#46"><abbr title="App\Http\Requests\User\UpdateRequest::messages">messages</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Http/Controllers/Auth/LogoutController.php.html#43"><abbr title="App\Http\Controllers\Auth\LogoutController::logout">logout</abbr></a></td><td class="text-right">80%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Http/Controllers/MetricsController.php.html#156"><abbr title="App\Http\Controllers\MetricsController::exportRetailerMetrics">exportRetailerMetrics</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Http/Controllers/MetricsController.php.html#191"><abbr title="App\Http\Controllers\MetricsController::getAvgRatingForLastWeek">getAvgRatingForLastWeek</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Http/Controllers/MetricsController.php.html#242"><abbr title="App\Http\Controllers\MetricsController::getAvgPriceForLastWeek">getAvgPriceForLastWeek</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Http/Controllers/ScrapedDataController.php.html#97"><abbr title="App\Http\Controllers\ScrapedDataController::exportCSV">exportCSV</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Http/Controllers/PackSizeController.php.html#76"><abbr title="App\Http\Controllers\PackSizeController::index">index</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Http/Controllers/ScrapedDataController.php.html#69"><abbr title="App\Http\Controllers\ScrapedDataController::store">store</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#153"><abbr title="App\Http\Controllers\UserController::update">update</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#220"><abbr title="App\Http\Controllers\UserController::assignRetailers">assignRetailers</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Http/Controllers/UserController.php.html#291"><abbr title="App\Http\Controllers\UserController::revokeRetailers">revokeRetailers</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Http/Controllers/Auth/LogoutController.php.html#43"><abbr title="App\Http\Controllers\Auth\LogoutController::logout">logout</abbr></a></td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 11.0.9</a> using <a href="https://www.php.net/" target="_top">PHP 8.2.28</a> and <a href="https://phpunit.de/">PHPUnit 11.5.12</a> at Mon Apr 14 0:26:01 UTC 2025.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="_js/jquery.min.js?v=11.0.9" type="text/javascript"></script>
+  <script src="_js/d3.min.js?v=11.0.9" type="text/javascript"></script>
+  <script src="_js/nv.d3.min.js?v=11.0.9" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([13,0,0,0,1,0,0,0,0,1,0,52], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([52,0,0,0,0,0,0,0,0,1,1,143], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[100,1,"<a href=\"Console\/Commands\/SeedScrapedData.php.html#8\">App\\Console\\Commands\\SeedScrapedData<\/a>"],[100,2,"<a href=\"Exceptions\/CsvImportException.php.html#8\">App\\Exceptions\\CsvImportException<\/a>"],[100,10,"<a href=\"Exceptions\/CsvImportExceptionHandler.php.html#10\">App\\Exceptions\\CsvImportExceptionHandler<\/a>"],[100,2,"<a href=\"Http\/Controllers\/Auth\/LoginController.php.html#17\">App\\Http\\Controllers\\Auth\\LoginController<\/a>"],[80,2,"<a href=\"Http\/Controllers\/Auth\/LogoutController.php.html#9\">App\\Http\\Controllers\\Auth\\LogoutController<\/a>"],[100,3,"<a href=\"Http\/Controllers\/BaseController.php.html#21\">App\\Http\\Controllers\\BaseController<\/a>"],[100,1,"<a href=\"Http\/Controllers\/CurrencyController.php.html#15\">App\\Http\\Controllers\\CurrencyController<\/a>"],[39.77272727272727,19,"<a href=\"Http\/Controllers\/MetricsController.php.html#22\">App\\Http\\Controllers\\MetricsController<\/a>"],[0,6,"<a href=\"Http\/Controllers\/PackSizeController.php.html#17\">App\\Http\\Controllers\\PackSizeController<\/a>"],[100,9,"<a href=\"Http\/Controllers\/Product\/ProductController.php.html#18\">App\\Http\\Controllers\\Product\\ProductController<\/a>"],[100,6,"<a href=\"Http\/Controllers\/Product\/ProductExportController.php.html#11\">App\\Http\\Controllers\\Product\\ProductExportController<\/a>"],[100,3,"<a href=\"Http\/Controllers\/Product\/ProductImportController.php.html#13\">App\\Http\\Controllers\\Product\\ProductImportController<\/a>"],[0,7,"<a href=\"Http\/Controllers\/RetailerController.php.html#19\">App\\Http\\Controllers\\RetailerController<\/a>"],[0,6,"<a href=\"Http\/Controllers\/ScrapedDataController.php.html#21\">App\\Http\\Controllers\\ScrapedDataController<\/a>"],[0,9,"<a href=\"Http\/Controllers\/UserController.php.html#19\">App\\Http\\Controllers\\UserController<\/a>"],[100,3,"<a href=\"Http\/Requests\/Auth\/LoginRequest.php.html#7\">App\\Http\\Requests\\Auth\\LoginRequest<\/a>"],[0,3,"<a href=\"Http\/Requests\/Metrics\/ExportRequest.php.html#7\">App\\Http\\Requests\\Metrics\\ExportRequest<\/a>"],[100,3,"<a href=\"Http\/Requests\/Metrics\/RetailerMetricsRequest.php.html#7\">App\\Http\\Requests\\Metrics\\RetailerMetricsRequest<\/a>"],[0,3,"<a href=\"Http\/Requests\/PackSize\/StoreRequest.php.html#8\">App\\Http\\Requests\\PackSize\\StoreRequest<\/a>"],[100,3,"<a href=\"Http\/Requests\/Product\/ExportRequest.php.html#7\">App\\Http\\Requests\\Product\\ExportRequest<\/a>"],[100,3,"<a href=\"Http\/Requests\/Product\/IndexRequest.php.html#7\">App\\Http\\Requests\\Product\\IndexRequest<\/a>"],[100,3,"<a href=\"Http\/Requests\/Product\/ProductRequest.php.html#7\">App\\Http\\Requests\\Product\\ProductRequest<\/a>"],[0,3,"<a href=\"Http\/Requests\/Retailer\/AddProductsRequest.php.html#8\">App\\Http\\Requests\\Retailer\\AddProductsRequest<\/a>"],[0,3,"<a href=\"Http\/Requests\/Retailer\/RetailerRequest.php.html#8\">App\\Http\\Requests\\Retailer\\RetailerRequest<\/a>"],[0,3,"<a href=\"Http\/Requests\/ScrapedData\/ExportRequest.php.html#7\">App\\Http\\Requests\\ScrapedData\\ExportRequest<\/a>"],[0,3,"<a href=\"Http\/Requests\/ScrapedData\/StoreRequest.php.html#7\">App\\Http\\Requests\\ScrapedData\\StoreRequest<\/a>"],[0,3,"<a href=\"Http\/Requests\/User\/ManageRetailersRequest.php.html#7\">App\\Http\\Requests\\User\\ManageRetailersRequest<\/a>"],[0,3,"<a href=\"Http\/Requests\/User\/StoreRequest.php.html#8\">App\\Http\\Requests\\User\\StoreRequest<\/a>"],[0,3,"<a href=\"Http\/Requests\/User\/UpdateRequest.php.html#9\">App\\Http\\Requests\\User\\UpdateRequest<\/a>"],[100,1,"<a href=\"Http\/Resources\/Currency\/CurrencyResource.php.html#8\">App\\Http\\Resources\\Currency\\CurrencyResource<\/a>"],[100,8,"<a href=\"Http\/Resources\/Metric\/MetricResource.php.html#10\">App\\Http\\Resources\\Metric\\MetricResource<\/a>"],[100,1,"<a href=\"Http\/Resources\/PackSize\/PackSizeResource.php.html#8\">App\\Http\\Resources\\PackSize\\PackSizeResource<\/a>"],[100,1,"<a href=\"Http\/Resources\/Product\/ProductResource.php.html#10\">App\\Http\\Resources\\Product\\ProductResource<\/a>"],[100,1,"<a href=\"Http\/Resources\/ProductImage\/ProductImageResource.php.html#8\">App\\Http\\Resources\\ProductImage\\ProductImageResource<\/a>"],[100,1,"<a href=\"Http\/Resources\/Rating\/RatingResource.php.html#8\">App\\Http\\Resources\\Rating\\RatingResource<\/a>"],[100,1,"<a href=\"Http\/Resources\/Retailer\/RetailerResource.php.html#9\">App\\Http\\Resources\\Retailer\\RetailerResource<\/a>"],[100,1,"<a href=\"Http\/Resources\/ScrapedData\/ScrapedDataResource.php.html#10\">App\\Http\\Resources\\ScrapedData\\ScrapedDataResource<\/a>"],[100,1,"<a href=\"Http\/Resources\/ScrapedDataImage\/ScrapedDataImageResource.php.html#8\">App\\Http\\Resources\\ScrapedDataImage\\ScrapedDataImageResource<\/a>"],[100,1,"<a href=\"Http\/Resources\/User\/UserResource.php.html#9\">App\\Http\\Resources\\User\\UserResource<\/a>"],[100,1,"<a href=\"Models\/Currency.php.html#9\">App\\Models\\Currency<\/a>"],[100,1,"<a href=\"Models\/PackSize.php.html#9\">App\\Models\\PackSize<\/a>"],[100,4,"<a href=\"Models\/Product.php.html#11\">App\\Models\\Product<\/a>"],[100,3,"<a href=\"Models\/ProductImage.php.html#8\">App\\Models\\ProductImage<\/a>"],[100,3,"<a href=\"Models\/ProductRetailer.php.html#10\">App\\Models\\ProductRetailer<\/a>"],[100,1,"<a href=\"Models\/Rating.php.html#10\">App\\Models\\Rating<\/a>"],[100,6,"<a href=\"Models\/Retailer.php.html#13\">App\\Models\\Retailer<\/a>"],[100,4,"<a href=\"Models\/ScrapedData.php.html#12\">App\\Models\\ScrapedData<\/a>"],[100,1,"<a href=\"Models\/ScrapedDataImage.php.html#9\">App\\Models\\ScrapedDataImage<\/a>"],[100,2,"<a href=\"Models\/ScrapingSession.php.html#10\">App\\Models\\ScrapingSession<\/a>"],[100,8,"<a href=\"Models\/User.php.html#12\">App\\Models\\User<\/a>"],[100,0,"<a href=\"Models\/UserPackSize.php.html#8\">App\\Models\\UserPackSize<\/a>"],[100,0,"<a href=\"Models\/UserProduct.php.html#8\">App\\Models\\UserProduct<\/a>"],[100,0,"<a href=\"Models\/UserRetailer.php.html#8\">App\\Models\\UserRetailer<\/a>"],[100,5,"<a href=\"Policies\/PackSizePolicy.php.html#8\">App\\Policies\\PackSizePolicy<\/a>"],[100,5,"<a href=\"Policies\/ProductPolicy.php.html#8\">App\\Policies\\ProductPolicy<\/a>"],[100,12,"<a href=\"Policies\/RetailerPolicy.php.html#9\">App\\Policies\\RetailerPolicy<\/a>"],[100,1,"<a href=\"Policies\/UserPolicy.php.html#7\">App\\Policies\\UserPolicy<\/a>"],[100,2,"<a href=\"Providers\/AppServiceProvider.php.html#7\">App\\Providers\\AppServiceProvider<\/a>"],[100,1,"<a href=\"Providers\/AuthServiceProvider.php.html#16\">App\\Providers\\AuthServiceProvider<\/a>"],[100,12,"<a href=\"Service\/CsvExporter.php.html#8\">App\\Service\\CsvExporter<\/a>"],[100,11,"<a href=\"Service\/CsvImporter.php.html#9\">App\\Service\\CsvImporter<\/a>"],[100,2,"<a href=\"Service\/PackSizeService.php.html#10\">App\\Service\\PackSizeService<\/a>"],[100,46,"<a href=\"Service\/Product\/ImportService.php.html#16\">App\\Service\\Product\\ImportService<\/a>"],[100,18,"<a href=\"Service\/Product\/ProductService.php.html#19\">App\\Service\\Product\\ProductService<\/a>"],[100,11,"<a href=\"Service\/RetailerService.php.html#9\">App\\Service\\RetailerService<\/a>"],[100,16,"<a href=\"Service\/ScrapedDataService.php.html#18\">App\\Service\\ScrapedDataService<\/a>"],[100,3,"<a href=\"Enums\/UserRole.php.html#5\">App\\Enums\\UserRole<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[100,1,"<a href=\"Console\/Commands\/SeedScrapedData.php.html#27\">App\\Console\\Commands\\SeedScrapedData::handle<\/a>"],[100,1,"<a href=\"Exceptions\/CsvImportException.php.html#12\">App\\Exceptions\\CsvImportException::__construct<\/a>"],[100,1,"<a href=\"Exceptions\/CsvImportException.php.html#18\">App\\Exceptions\\CsvImportException::render<\/a>"],[100,1,"<a href=\"Exceptions\/CsvImportExceptionHandler.php.html#15\">App\\Exceptions\\CsvImportExceptionHandler::isDuplicateProductError<\/a>"],[100,3,"<a href=\"Exceptions\/CsvImportExceptionHandler.php.html#23\">App\\Exceptions\\CsvImportExceptionHandler::extractDuplicateProductDetails<\/a>"],[100,3,"<a href=\"Exceptions\/CsvImportExceptionHandler.php.html#44\">App\\Exceptions\\CsvImportExceptionHandler::handleImportException<\/a>"],[100,1,"<a href=\"Exceptions\/CsvImportExceptionHandler.php.html#76\">App\\Exceptions\\CsvImportExceptionHandler::handleMissingRetailersException<\/a>"],[100,1,"<a href=\"Exceptions\/CsvImportExceptionHandler.php.html#87\">App\\Exceptions\\CsvImportExceptionHandler::handleInvalidCsvException<\/a>"],[100,1,"<a href=\"Exceptions\/CsvImportExceptionHandler.php.html#95\">App\\Exceptions\\CsvImportExceptionHandler::handleEmptyCsvException<\/a>"],[100,2,"<a href=\"Http\/Controllers\/Auth\/LoginController.php.html#56\">App\\Http\\Controllers\\Auth\\LoginController::login<\/a>"],[80,2,"<a href=\"Http\/Controllers\/Auth\/LogoutController.php.html#43\">App\\Http\\Controllers\\Auth\\LogoutController::logout<\/a>"],[100,2,"<a href=\"Http\/Controllers\/BaseController.php.html#35\">App\\Http\\Controllers\\BaseController::successResponse<\/a>"],[100,1,"<a href=\"Http\/Controllers\/BaseController.php.html#65\">App\\Http\\Controllers\\BaseController::errorResponse<\/a>"],[100,1,"<a href=\"Http\/Controllers\/CurrencyController.php.html#24\">App\\Http\\Controllers\\CurrencyController::index<\/a>"],[100,1,"<a href=\"Http\/Controllers\/MetricsController.php.html#28\">App\\Http\\Controllers\\MetricsController::__construct<\/a>"],[100,3,"<a href=\"Http\/Controllers\/MetricsController.php.html#97\">App\\Http\\Controllers\\MetricsController::getRetailerMetrics<\/a>"],[0,5,"<a href=\"Http\/Controllers\/MetricsController.php.html#156\">App\\Http\\Controllers\\MetricsController::exportRetailerMetrics<\/a>"],[0,3,"<a href=\"Http\/Controllers\/MetricsController.php.html#191\">App\\Http\\Controllers\\MetricsController::getAvgRatingForLastWeek<\/a>"],[0,3,"<a href=\"Http\/Controllers\/MetricsController.php.html#242\">App\\Http\\Controllers\\MetricsController::getAvgPriceForLastWeek<\/a>"],[100,2,"<a href=\"Http\/Controllers\/MetricsController.php.html#295\">App\\Http\\Controllers\\MetricsController::getAccessibleRetailers<\/a>"],[0,1,"<a href=\"Http\/Controllers\/MetricsController.php.html#303\">App\\Http\\Controllers\\MetricsController::buildExportMetricsQuery<\/a>"],[95.45454545454545,1,"<a href=\"Http\/Controllers\/MetricsController.php.html#346\">App\\Http\\Controllers\\MetricsController::buildMetricsQuery<\/a>"],[0,1,"<a href=\"Http\/Controllers\/PackSizeController.php.html#23\">App\\Http\\Controllers\\PackSizeController::__construct<\/a>"],[0,2,"<a href=\"Http\/Controllers\/PackSizeController.php.html#76\">App\\Http\\Controllers\\PackSizeController::index<\/a>"],[0,1,"<a href=\"Http\/Controllers\/PackSizeController.php.html#136\">App\\Http\\Controllers\\PackSizeController::store<\/a>"],[0,1,"<a href=\"Http\/Controllers\/PackSizeController.php.html#189\">App\\Http\\Controllers\\PackSizeController::update<\/a>"],[0,1,"<a href=\"Http\/Controllers\/PackSizeController.php.html#238\">App\\Http\\Controllers\\PackSizeController::destroy<\/a>"],[100,1,"<a href=\"Http\/Controllers\/Product\/ProductController.php.html#24\">App\\Http\\Controllers\\Product\\ProductController::__construct<\/a>"],[100,2,"<a href=\"Http\/Controllers\/Product\/ProductController.php.html#78\">App\\Http\\Controllers\\Product\\ProductController::index<\/a>"],[100,2,"<a href=\"Http\/Controllers\/Product\/ProductController.php.html#150\">App\\Http\\Controllers\\Product\\ProductController::getRetailers<\/a>"],[100,2,"<a href=\"Http\/Controllers\/Product\/ProductController.php.html#201\">App\\Http\\Controllers\\Product\\ProductController::store<\/a>"],[100,1,"<a href=\"Http\/Controllers\/Product\/ProductController.php.html#262\">App\\Http\\Controllers\\Product\\ProductController::update<\/a>"],[100,1,"<a href=\"Http\/Controllers\/Product\/ProductController.php.html#311\">App\\Http\\Controllers\\Product\\ProductController::destroy<\/a>"],[100,1,"<a href=\"Http\/Controllers\/Product\/ProductExportController.php.html#16\">App\\Http\\Controllers\\Product\\ProductExportController::__construct<\/a>"],[100,5,"<a href=\"Http\/Controllers\/Product\/ProductExportController.php.html#29\">App\\Http\\Controllers\\Product\\ProductExportController::export<\/a>"],[100,1,"<a href=\"Http\/Controllers\/Product\/ProductImportController.php.html#18\">App\\Http\\Controllers\\Product\\ProductImportController::__construct<\/a>"],[100,2,"<a href=\"Http\/Controllers\/Product\/ProductImportController.php.html#30\">App\\Http\\Controllers\\Product\\ProductImportController::uploadCSV<\/a>"],[0,1,"<a href=\"Http\/Controllers\/RetailerController.php.html#24\">App\\Http\\Controllers\\RetailerController::__construct<\/a>"],[0,1,"<a href=\"Http\/Controllers\/RetailerController.php.html#53\">App\\Http\\Controllers\\RetailerController::index<\/a>"],[0,1,"<a href=\"Http\/Controllers\/RetailerController.php.html#100\">App\\Http\\Controllers\\RetailerController::getProducts<\/a>"],[0,1,"<a href=\"Http\/Controllers\/RetailerController.php.html#172\">App\\Http\\Controllers\\RetailerController::addProducts<\/a>"],[0,1,"<a href=\"Http\/Controllers\/RetailerController.php.html#219\">App\\Http\\Controllers\\RetailerController::store<\/a>"],[0,1,"<a href=\"Http\/Controllers\/RetailerController.php.html#275\">App\\Http\\Controllers\\RetailerController::update<\/a>"],[0,1,"<a href=\"Http\/Controllers\/RetailerController.php.html#324\">App\\Http\\Controllers\\RetailerController::destroy<\/a>"],[0,1,"<a href=\"Http\/Controllers\/ScrapedDataController.php.html#28\">App\\Http\\Controllers\\ScrapedDataController::__construct<\/a>"],[0,2,"<a href=\"Http\/Controllers\/ScrapedDataController.php.html#69\">App\\Http\\Controllers\\ScrapedDataController::store<\/a>"],[0,3,"<a href=\"Http\/Controllers\/ScrapedDataController.php.html#97\">App\\Http\\Controllers\\ScrapedDataController::exportCSV<\/a>"],[0,1,"<a href=\"Http\/Controllers\/UserController.php.html#47\">App\\Http\\Controllers\\UserController::index<\/a>"],[0,1,"<a href=\"Http\/Controllers\/UserController.php.html#95\">App\\Http\\Controllers\\UserController::store<\/a>"],[0,2,"<a href=\"Http\/Controllers\/UserController.php.html#153\">App\\Http\\Controllers\\UserController::update<\/a>"],[0,2,"<a href=\"Http\/Controllers\/UserController.php.html#220\">App\\Http\\Controllers\\UserController::assignRetailers<\/a>"],[0,2,"<a href=\"Http\/Controllers\/UserController.php.html#291\">App\\Http\\Controllers\\UserController::revokeRetailers<\/a>"],[0,1,"<a href=\"Http\/Controllers\/UserController.php.html#351\">App\\Http\\Controllers\\UserController::destroy<\/a>"],[100,1,"<a href=\"Http\/Requests\/Auth\/LoginRequest.php.html#12\">App\\Http\\Requests\\Auth\\LoginRequest::authorize<\/a>"],[100,1,"<a href=\"Http\/Requests\/Auth\/LoginRequest.php.html#22\">App\\Http\\Requests\\Auth\\LoginRequest::rules<\/a>"],[100,1,"<a href=\"Http\/Requests\/Auth\/LoginRequest.php.html#30\">App\\Http\\Requests\\Auth\\LoginRequest::messages<\/a>"],[0,1,"<a href=\"Http\/Requests\/Metrics\/ExportRequest.php.html#12\">App\\Http\\Requests\\Metrics\\ExportRequest::authorize<\/a>"],[0,1,"<a href=\"Http\/Requests\/Metrics\/ExportRequest.php.html#22\">App\\Http\\Requests\\Metrics\\ExportRequest::rules<\/a>"],[0,1,"<a href=\"Http\/Requests\/Metrics\/ExportRequest.php.html#32\">App\\Http\\Requests\\Metrics\\ExportRequest::messages<\/a>"],[100,1,"<a href=\"Http\/Requests\/Metrics\/RetailerMetricsRequest.php.html#12\">App\\Http\\Requests\\Metrics\\RetailerMetricsRequest::authorize<\/a>"],[100,1,"<a href=\"Http\/Requests\/Metrics\/RetailerMetricsRequest.php.html#22\">App\\Http\\Requests\\Metrics\\RetailerMetricsRequest::rules<\/a>"],[100,1,"<a href=\"Http\/Requests\/Metrics\/RetailerMetricsRequest.php.html#38\">App\\Http\\Requests\\Metrics\\RetailerMetricsRequest::messages<\/a>"],[0,1,"<a href=\"Http\/Requests\/PackSize\/StoreRequest.php.html#13\">App\\Http\\Requests\\PackSize\\StoreRequest::authorize<\/a>"],[0,1,"<a href=\"Http\/Requests\/PackSize\/StoreRequest.php.html#23\">App\\Http\\Requests\\PackSize\\StoreRequest::rules<\/a>"],[0,1,"<a href=\"Http\/Requests\/PackSize\/StoreRequest.php.html#41\">App\\Http\\Requests\\PackSize\\StoreRequest::messages<\/a>"],[100,1,"<a href=\"Http\/Requests\/Product\/ExportRequest.php.html#12\">App\\Http\\Requests\\Product\\ExportRequest::authorize<\/a>"],[100,1,"<a href=\"Http\/Requests\/Product\/ExportRequest.php.html#22\">App\\Http\\Requests\\Product\\ExportRequest::rules<\/a>"],[100,1,"<a href=\"Http\/Requests\/Product\/ExportRequest.php.html#32\">App\\Http\\Requests\\Product\\ExportRequest::messages<\/a>"],[100,1,"<a href=\"Http\/Requests\/Product\/IndexRequest.php.html#12\">App\\Http\\Requests\\Product\\IndexRequest::authorize<\/a>"],[100,1,"<a href=\"Http\/Requests\/Product\/IndexRequest.php.html#22\">App\\Http\\Requests\\Product\\IndexRequest::rules<\/a>"],[100,1,"<a href=\"Http\/Requests\/Product\/IndexRequest.php.html#30\">App\\Http\\Requests\\Product\\IndexRequest::messages<\/a>"],[100,1,"<a href=\"Http\/Requests\/Product\/ProductRequest.php.html#12\">App\\Http\\Requests\\Product\\ProductRequest::authorize<\/a>"],[100,1,"<a href=\"Http\/Requests\/Product\/ProductRequest.php.html#22\">App\\Http\\Requests\\Product\\ProductRequest::rules<\/a>"],[100,1,"<a href=\"Http\/Requests\/Product\/ProductRequest.php.html#35\">App\\Http\\Requests\\Product\\ProductRequest::messages<\/a>"],[0,1,"<a href=\"Http\/Requests\/Retailer\/AddProductsRequest.php.html#13\">App\\Http\\Requests\\Retailer\\AddProductsRequest::authorize<\/a>"],[0,1,"<a href=\"Http\/Requests\/Retailer\/AddProductsRequest.php.html#23\">App\\Http\\Requests\\Retailer\\AddProductsRequest::rules<\/a>"],[0,1,"<a href=\"Http\/Requests\/Retailer\/AddProductsRequest.php.html#41\">App\\Http\\Requests\\Retailer\\AddProductsRequest::messages<\/a>"],[0,1,"<a href=\"Http\/Requests\/Retailer\/RetailerRequest.php.html#13\">App\\Http\\Requests\\Retailer\\RetailerRequest::authorize<\/a>"],[0,1,"<a href=\"Http\/Requests\/Retailer\/RetailerRequest.php.html#23\">App\\Http\\Requests\\Retailer\\RetailerRequest::rules<\/a>"],[0,1,"<a href=\"Http\/Requests\/Retailer\/RetailerRequest.php.html#38\">App\\Http\\Requests\\Retailer\\RetailerRequest::messages<\/a>"],[0,1,"<a href=\"Http\/Requests\/ScrapedData\/ExportRequest.php.html#12\">App\\Http\\Requests\\ScrapedData\\ExportRequest::authorize<\/a>"],[0,1,"<a href=\"Http\/Requests\/ScrapedData\/ExportRequest.php.html#22\">App\\Http\\Requests\\ScrapedData\\ExportRequest::rules<\/a>"],[0,1,"<a href=\"Http\/Requests\/ScrapedData\/ExportRequest.php.html#34\">App\\Http\\Requests\\ScrapedData\\ExportRequest::messages<\/a>"],[0,1,"<a href=\"Http\/Requests\/ScrapedData\/StoreRequest.php.html#12\">App\\Http\\Requests\\ScrapedData\\StoreRequest::authorize<\/a>"],[0,1,"<a href=\"Http\/Requests\/ScrapedData\/StoreRequest.php.html#22\">App\\Http\\Requests\\ScrapedData\\StoreRequest::rules<\/a>"],[0,1,"<a href=\"Http\/Requests\/ScrapedData\/StoreRequest.php.html#46\">App\\Http\\Requests\\ScrapedData\\StoreRequest::messages<\/a>"],[0,1,"<a href=\"Http\/Requests\/User\/ManageRetailersRequest.php.html#12\">App\\Http\\Requests\\User\\ManageRetailersRequest::authorize<\/a>"],[0,1,"<a href=\"Http\/Requests\/User\/ManageRetailersRequest.php.html#22\">App\\Http\\Requests\\User\\ManageRetailersRequest::rules<\/a>"],[0,1,"<a href=\"Http\/Requests\/User\/ManageRetailersRequest.php.html#30\">App\\Http\\Requests\\User\\ManageRetailersRequest::messages<\/a>"],[0,1,"<a href=\"Http\/Requests\/User\/StoreRequest.php.html#13\">App\\Http\\Requests\\User\\StoreRequest::authorize<\/a>"],[0,1,"<a href=\"Http\/Requests\/User\/StoreRequest.php.html#23\">App\\Http\\Requests\\User\\StoreRequest::rules<\/a>"],[0,1,"<a href=\"Http\/Requests\/User\/StoreRequest.php.html#41\">App\\Http\\Requests\\User\\StoreRequest::messages<\/a>"],[0,1,"<a href=\"Http\/Requests\/User\/UpdateRequest.php.html#14\">App\\Http\\Requests\\User\\UpdateRequest::authorize<\/a>"],[0,1,"<a href=\"Http\/Requests\/User\/UpdateRequest.php.html#24\">App\\Http\\Requests\\User\\UpdateRequest::rules<\/a>"],[0,1,"<a href=\"Http\/Requests\/User\/UpdateRequest.php.html#46\">App\\Http\\Requests\\User\\UpdateRequest::messages<\/a>"],[100,1,"<a href=\"Http\/Resources\/Currency\/CurrencyResource.php.html#26\">App\\Http\\Resources\\Currency\\CurrencyResource::toArray<\/a>"],[100,1,"<a href=\"Http\/Resources\/Metric\/MetricResource.php.html#29\">App\\Http\\Resources\\Metric\\MetricResource::toArray<\/a>"],[100,7,"<a href=\"Http\/Resources\/Metric\/MetricResource.php.html#43\">App\\Http\\Resources\\Metric\\MetricResource::getDateRange<\/a>"],[100,1,"<a href=\"Http\/Resources\/PackSize\/PackSizeResource.php.html#26\">App\\Http\\Resources\\PackSize\\PackSizeResource::toArray<\/a>"],[100,1,"<a href=\"Http\/Resources\/Product\/ProductResource.php.html#39\">App\\Http\\Resources\\Product\\ProductResource::toArray<\/a>"],[100,1,"<a href=\"Http\/Resources\/ProductImage\/ProductImageResource.php.html#25\">App\\Http\\Resources\\ProductImage\\ProductImageResource::toArray<\/a>"],[100,1,"<a href=\"Http\/Resources\/Rating\/RatingResource.php.html#27\">App\\Http\\Resources\\Rating\\RatingResource::toArray<\/a>"],[100,1,"<a href=\"Http\/Resources\/Retailer\/RetailerResource.php.html#32\">App\\Http\\Resources\\Retailer\\RetailerResource::toArray<\/a>"],[100,1,"<a href=\"Http\/Resources\/ScrapedData\/ScrapedDataResource.php.html#43\">App\\Http\\Resources\\ScrapedData\\ScrapedDataResource::toArray<\/a>"],[100,1,"<a href=\"Http\/Resources\/ScrapedDataImage\/ScrapedDataImageResource.php.html#26\">App\\Http\\Resources\\ScrapedDataImage\\ScrapedDataImageResource::toArray<\/a>"],[100,1,"<a href=\"Http\/Resources\/User\/UserResource.php.html#35\">App\\Http\\Resources\\User\\UserResource::toArray<\/a>"],[100,1,"<a href=\"Models\/Currency.php.html#20\">App\\Models\\Currency::retailers<\/a>"],[100,1,"<a href=\"Models\/PackSize.php.html#21\">App\\Models\\PackSize::products<\/a>"],[100,1,"<a href=\"Models\/Product.php.html#25\">App\\Models\\Product::images<\/a>"],[100,1,"<a href=\"Models\/Product.php.html#30\">App\\Models\\Product::scrapedData<\/a>"],[100,1,"<a href=\"Models\/Product.php.html#35\">App\\Models\\Product::retailers<\/a>"],[100,1,"<a href=\"Models\/Product.php.html#41\">App\\Models\\Product::packSize<\/a>"],[100,3,"<a href=\"Models\/ProductImage.php.html#19\">App\\Models\\ProductImage::getImageUrlAttribute<\/a>"],[100,1,"<a href=\"Models\/ProductRetailer.php.html#23\">App\\Models\\ProductRetailer::product<\/a>"],[100,1,"<a href=\"Models\/ProductRetailer.php.html#28\">App\\Models\\ProductRetailer::retailer<\/a>"],[100,1,"<a href=\"Models\/ProductRetailer.php.html#33\">App\\Models\\ProductRetailer::scrapedData<\/a>"],[100,1,"<a href=\"Models\/Rating.php.html#26\">App\\Models\\Rating::scrapedData<\/a>"],[100,1,"<a href=\"Models\/Retailer.php.html#27\">App\\Models\\Retailer::products<\/a>"],[100,1,"<a href=\"Models\/Retailer.php.html#33\">App\\Models\\Retailer::users<\/a>"],[100,1,"<a href=\"Models\/Retailer.php.html#38\">App\\Models\\Retailer::scrapedData<\/a>"],[100,1,"<a href=\"Models\/Retailer.php.html#43\">App\\Models\\Retailer::currency<\/a>"],[100,2,"<a href=\"Models\/Retailer.php.html#48\">App\\Models\\Retailer::getLogoUrlAttribute<\/a>"],[100,1,"<a href=\"Models\/ScrapedData.php.html#29\">App\\Models\\ScrapedData::productRetailer<\/a>"],[100,1,"<a href=\"Models\/ScrapedData.php.html#34\">App\\Models\\ScrapedData::ratings<\/a>"],[100,1,"<a href=\"Models\/ScrapedData.php.html#39\">App\\Models\\ScrapedData::images<\/a>"],[100,1,"<a href=\"Models\/ScrapedData.php.html#44\">App\\Models\\ScrapedData::scrapingSession<\/a>"],[100,1,"<a href=\"Models\/ScrapedDataImage.php.html#21\">App\\Models\\ScrapedDataImage::scrapedData<\/a>"],[100,1,"<a href=\"Models\/ScrapingSession.php.html#22\">App\\Models\\ScrapingSession::scrapedData<\/a>"],[100,1,"<a href=\"Models\/ScrapingSession.php.html#27\">App\\Models\\ScrapingSession::retailer<\/a>"],[100,1,"<a href=\"Models\/User.php.html#49\">App\\Models\\User::casts<\/a>"],[100,1,"<a href=\"Models\/User.php.html#58\">App\\Models\\User::isSuperUser<\/a>"],[100,1,"<a href=\"Models\/User.php.html#63\">App\\Models\\User::isRegularUser<\/a>"],[100,1,"<a href=\"Models\/User.php.html#68\">App\\Models\\User::retailers<\/a>"],[100,1,"<a href=\"Models\/User.php.html#73\">App\\Models\\User::products<\/a>"],[100,1,"<a href=\"Models\/User.php.html#78\">App\\Models\\User::packSizes<\/a>"],[100,2,"<a href=\"Models\/User.php.html#83\">App\\Models\\User::scopeAccessibleRetailers<\/a>"],[100,1,"<a href=\"Policies\/PackSizePolicy.php.html#13\">App\\Policies\\PackSizePolicy::__construct<\/a>"],[100,3,"<a href=\"Policies\/PackSizePolicy.php.html#18\">App\\Policies\\PackSizePolicy::update<\/a>"],[100,1,"<a href=\"Policies\/PackSizePolicy.php.html#32\">App\\Policies\\PackSizePolicy::delete<\/a>"],[100,1,"<a href=\"Policies\/ProductPolicy.php.html#13\">App\\Policies\\ProductPolicy::__construct<\/a>"],[100,3,"<a href=\"Policies\/ProductPolicy.php.html#18\">App\\Policies\\ProductPolicy::update<\/a>"],[100,1,"<a href=\"Policies\/ProductPolicy.php.html#32\">App\\Policies\\ProductPolicy::delete<\/a>"],[100,1,"<a href=\"Policies\/RetailerPolicy.php.html#14\">App\\Policies\\RetailerPolicy::__construct<\/a>"],[100,3,"<a href=\"Policies\/RetailerPolicy.php.html#26\">App\\Policies\\RetailerPolicy::getMetrics<\/a>"],[100,1,"<a href=\"Policies\/RetailerPolicy.php.html#41\">App\\Policies\\RetailerPolicy::seeAll<\/a>"],[100,1,"<a href=\"Policies\/RetailerPolicy.php.html#46\">App\\Policies\\RetailerPolicy::store<\/a>"],[100,1,"<a href=\"Policies\/RetailerPolicy.php.html#51\">App\\Policies\\RetailerPolicy::update<\/a>"],[100,1,"<a href=\"Policies\/RetailerPolicy.php.html#56\">App\\Policies\\RetailerPolicy::delete<\/a>"],[100,2,"<a href=\"Policies\/RetailerPolicy.php.html#61\">App\\Policies\\RetailerPolicy::seeProducts<\/a>"],[100,2,"<a href=\"Policies\/RetailerPolicy.php.html#73\">App\\Policies\\RetailerPolicy::addProducts<\/a>"],[100,1,"<a href=\"Policies\/UserPolicy.php.html#9\">App\\Policies\\UserPolicy::manageUsers<\/a>"],[100,1,"<a href=\"Providers\/AppServiceProvider.php.html#12\">App\\Providers\\AppServiceProvider::register<\/a>"],[100,1,"<a href=\"Providers\/AppServiceProvider.php.html#20\">App\\Providers\\AppServiceProvider::boot<\/a>"],[100,1,"<a href=\"Providers\/AuthServiceProvider.php.html#25\">App\\Providers\\AuthServiceProvider::boot<\/a>"],[100,9,"<a href=\"Service\/CsvExporter.php.html#17\">App\\Service\\CsvExporter::export<\/a>"],[100,2,"<a href=\"Service\/CsvExporter.php.html#58\">App\\Service\\CsvExporter::formatRow<\/a>"],[100,1,"<a href=\"Service\/CsvExporter.php.html#74\">App\\Service\\CsvExporter::logPerformance<\/a>"],[100,4,"<a href=\"Service\/CsvImporter.php.html#19\">App\\Service\\CsvImporter::import<\/a>"],[100,2,"<a href=\"Service\/CsvImporter.php.html#55\">App\\Service\\CsvImporter::removeBom<\/a>"],[100,1,"<a href=\"Service\/CsvImporter.php.html#67\">App\\Service\\CsvImporter::splitLines<\/a>"],[100,4,"<a href=\"Service\/CsvImporter.php.html#79\">App\\Service\\CsvImporter::fixDuplicateHeaders<\/a>"],[100,1,"<a href=\"Service\/PackSizeService.php.html#19\">App\\Service\\PackSizeService::store<\/a>"],[100,1,"<a href=\"Service\/PackSizeService.php.html#39\">App\\Service\\PackSizeService::successResponse<\/a>"],[100,2,"<a href=\"Service\/Product\/ImportService.php.html#25\">App\\Service\\Product\\ImportService::importProducts<\/a>"],[100,3,"<a href=\"Service\/Product\/ImportService.php.html#82\">App\\Service\\Product\\ImportService::bulkStore<\/a>"],[100,3,"<a href=\"Service\/Product\/ImportService.php.html#108\">App\\Service\\Product\\ImportService::bulkUpdate<\/a>"],[100,5,"<a href=\"Service\/Product\/ImportService.php.html#139\">App\\Service\\Product\\ImportService::checkIfRetailersExist<\/a>"],[100,10,"<a href=\"Service\/Product\/ImportService.php.html#163\">App\\Service\\Product\\ImportService::findAndInsertMissingPackSizes<\/a>"],[100,7,"<a href=\"Service\/Product\/ImportService.php.html#221\">App\\Service\\Product\\ImportService::prepareProductData<\/a>"],[100,2,"<a href=\"Service\/Product\/ImportService.php.html#277\">App\\Service\\Product\\ImportService::buildProductLookupMap<\/a>"],[100,1,"<a href=\"Service\/Product\/ImportService.php.html#298\">App\\Service\\Product\\ImportService::getExistingPackSizes<\/a>"],[100,6,"<a href=\"Service\/Product\/ImportService.php.html#312\">App\\Service\\Product\\ImportService::prepareRelatedData<\/a>"],[100,7,"<a href=\"Service\/Product\/ImportService.php.html#361\">App\\Service\\Product\\ImportService::prepareRelatedDataToUpdate<\/a>"],[100,3,"<a href=\"Service\/Product\/ProductService.php.html#28\">App\\Service\\Product\\ProductService::store<\/a>"],[100,2,"<a href=\"Service\/Product\/ProductService.php.html#67\">App\\Service\\Product\\ProductService::update<\/a>"],[100,6,"<a href=\"Service\/Product\/ProductService.php.html#92\">App\\Service\\Product\\ProductService::getByDataRangeAndRetailers<\/a>"],[100,3,"<a href=\"Service\/Product\/ProductService.php.html#143\">App\\Service\\Product\\ProductService::storeProductImages<\/a>"],[100,2,"<a href=\"Service\/Product\/ProductService.php.html#167\">App\\Service\\Product\\ProductService::extractImages<\/a>"],[100,1,"<a href=\"Service\/Product\/ProductService.php.html#184\">App\\Service\\Product\\ProductService::successResponse<\/a>"],[100,1,"<a href=\"Service\/Product\/ProductService.php.html#199\">App\\Service\\Product\\ProductService::errorResponse<\/a>"],[100,1,"<a href=\"Service\/RetailerService.php.html#18\">App\\Service\\RetailerService::store<\/a>"],[100,1,"<a href=\"Service\/RetailerService.php.html#34\">App\\Service\\RetailerService::update<\/a>"],[100,3,"<a href=\"Service\/RetailerService.php.html#50\">App\\Service\\RetailerService::syncOrAttachProducts<\/a>"],[100,2,"<a href=\"Service\/RetailerService.php.html#78\">App\\Service\\RetailerService::checkAndStoreLogo<\/a>"],[100,3,"<a href=\"Service\/RetailerService.php.html#93\">App\\Service\\RetailerService::prepareProductData<\/a>"],[100,1,"<a href=\"Service\/RetailerService.php.html#123\">App\\Service\\RetailerService::successResponse<\/a>"],[100,4,"<a href=\"Service\/ScrapedDataService.php.html#27\">App\\Service\\ScrapedDataService::store<\/a>"],[100,1,"<a href=\"Service\/ScrapedDataService.php.html#67\">App\\Service\\ScrapedDataService::getFilteredScrapedData<\/a>"],[100,2,"<a href=\"Service\/ScrapedDataService.php.html#92\">App\\Service\\ScrapedDataService::filterAccessibleProductIds<\/a>"],[100,2,"<a href=\"Service\/ScrapedDataService.php.html#112\">App\\Service\\ScrapedDataService::filterAccessibleRetailerIds<\/a>"],[100,2,"<a href=\"Service\/ScrapedDataService.php.html#129\">App\\Service\\ScrapedDataService::storeScrapedDataImages<\/a>"],[100,1,"<a href=\"Service\/ScrapedDataService.php.html#151\">App\\Service\\ScrapedDataService::storeScrapedDataRatings<\/a>"],[100,1,"<a href=\"Service\/ScrapedDataService.php.html#170\">App\\Service\\ScrapedDataService::extractImages<\/a>"],[100,1,"<a href=\"Service\/ScrapedDataService.php.html#185\">App\\Service\\ScrapedDataService::extractRatings<\/a>"],[100,1,"<a href=\"Service\/ScrapedDataService.php.html#201\">App\\Service\\ScrapedDataService::successResponse<\/a>"],[100,1,"<a href=\"Service\/ScrapedDataService.php.html#217\">App\\Service\\ScrapedDataService::errorResponse<\/a>"],[100,3,"<a href=\"Enums\/UserRole.php.html#10\">App\\Enums\\UserRole::text<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

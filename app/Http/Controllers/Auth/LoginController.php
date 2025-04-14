@@ -58,15 +58,6 @@ class LoginController extends BaseController
         $validated = $request->validated();
         $user = User::whereEmail($validated['email'])->first();
 
-        if (!$user) {
-            return $this->errorResponse(
-                'auth.login.not_found',
-                ['attribute' => self::ENTITY_KEY],
-                'No user record found.',
-                Response::HTTP_NOT_FOUND
-            );
-        }
-
         if (Hash::check($validated['password'], $user->password)) {
             $user->tokens()->delete();
             $token = $user->createToken('auth_token')->plainTextToken;

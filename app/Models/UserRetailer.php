@@ -9,7 +9,7 @@ class UserRetailer extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_retatilers';
+    protected $table = 'user_retailers';
     protected $fillable = [
         'retailer_id',
         'created_at',

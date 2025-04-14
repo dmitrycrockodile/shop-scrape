@@ -7,8 +7,12 @@ if (!function_exists('extractResourceName')) {
     function extractResourceName(Request $request): string {
         $segments = $request->segments();
 
-        if (!empty($segments)) {
+        if (isset($segments[1])) {
             return Str::singular(str_replace('-', ' ', $segments[1]));
+        }
+
+        if (isset($segments[0])) {
+            return Str::singular(str_replace('-', ' ', $segments[0]));
         }
 
         return 'resource';
