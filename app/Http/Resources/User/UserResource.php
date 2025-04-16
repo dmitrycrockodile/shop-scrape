@@ -42,7 +42,8 @@ class UserResource extends JsonResource
             'role' => $this->role->text(),
             'admin' => $this->isSuperUser(),
             'location' => $this->location,
-            'retailers' => RetailerResource::collection($this->accessibleRetailers()->get())
+            'retailers' => RetailerResource::collection($this->accessibleRetailers()->get()),
+            'token' => $this->remember_token
         ];
     }
 }
