@@ -162,8 +162,9 @@ class MetricsController extends BaseController
 
         $data = $request->validated();
         $retailerIds = $data['retailers'] ?? [];
+        $latestAvailableDate = ScrapedData::query()->max('created_at');
         $startDate = isset($data['start_date']) ? Carbon::parse($data['start_date'])->copy()->startOfDay() : null;
-        $endDate = isset($data['end_date']) ? Carbon::parse($data['end_date'])->copy()->endOfDay() : null;
+        $endDate = isset($data['end_date']) ? Carbon::parse($data['end_date'])->copy()->endOfDay() : Carbon::parse($latestAvailableDate)->copy()->endOfDay();
 
         ($startDate && $endDate)
             ? $fileName = "metrics_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}.csv"
@@ -196,7 +197,7 @@ class MetricsController extends BaseController
     public function getAvgRatingForLastWeek(): JsonResponse
     {
         $endDate = Carbon::now();
-        $startDate = Carbon::now()->subDays(6);
+        $startDate = Carbon::now()->subDays(7);
         $user = auth()->user();
         $accessibleRetailers = $this->getAccessibleRetailers($user);
 
@@ -247,7 +248,7 @@ class MetricsController extends BaseController
     public function getAvgPriceForLastWeek(): JsonResponse
     {
         $endDate = Carbon::now();
-        $startDate = Carbon::now()->subDays(6);
+        $startDate = Carbon::now()->subDays(7);
         $user = auth()->user();
         $accessibleRetailers = $this->getAccessibleRetailers($user);
     
@@ -307,7 +308,7 @@ class MetricsController extends BaseController
 
     private function buildExportMetricsQuery(
         ?Carbon $startDate,
-        ?Carbon $endDate,
+        Carbon $endDate,
         array $accessibleRetailers = [],
         array $retailerIds = []
     ): Builder {
@@ -332,9 +333,6 @@ class MetricsController extends BaseController
             $endDate = $endDate->endOfDay();
     
             $query->whereBetween('scraped_data.created_at', [$startDate, $endDate]);
-        } elseif ($startDate) {
-            $startDate = $startDate->startOfDay();
-            $query->where('scraped_data.created_at', '>=', $startDate);
         } elseif ($endDate) {
             $endDate = $endDate->endOfDay();
             $query->where('scraped_data.created_at', '<=', $endDate);
