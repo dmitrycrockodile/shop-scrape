@@ -7,6 +7,7 @@ return [
         'http://localhost:8080',
         'https://bermas.dmytro.ui.quest.groupbwt.dev',
     ],
+    'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
     'max_age' => 0,

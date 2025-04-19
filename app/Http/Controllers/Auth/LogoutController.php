@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LogoutController extends BaseController
 {
@@ -42,10 +43,8 @@ class LogoutController extends BaseController
      */
     public function logout(Request $request): JsonResponse
     {
-        $user = $request->user();
-
-        $user->tokens()->delete();
-
+        Auth::guard('web')->logout();
+    
         if ($request->hasSession()) {
             $request->session()->invalidate();
             $request->session()->regenerateToken();
