@@ -76,6 +76,157 @@
                 ]
             }
         },
+        "/api/pack-sizes": {
+            "get": {
+                "tags": [
+                    "Pack Sizes"
+                ],
+                "summary": "Store a pack size",
+                "description": "Creates a new pack size.",
+                "operationId": "991f21d957c1e9f5afd459ede43bb691",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the pack size",
+                                        "type": "string",
+                                        "example": "Small"
+                                    },
+                                    "description": {
+                                        "description": "Description of the pack size",
+                                        "type": "string",
+                                        "example": "Small sized package"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pack size created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PackSizeResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pack Sizes"
+                ],
+                "summary": "Retrieve pack sizes",
+                "description": "Fetches a list of pack sizes with optional pagination. Includes metadata such as current page, total items, and items per page.",
+                "operationId": "a71003c272c1c9e5b1de18ca5a083dc7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "dataPerPage": {
+                                        "description": "Number of items per page",
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "page": {
+                                        "description": "Page number for pagination",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data retrieved successfully."
+                                        },
+                                        "meta": {
+                                            "description": "Pagination metadata",
+                                            "properties": {
+                                                "current_page": {
+                                                    "description": "Current page number",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "per_page": {
+                                                    "description": "Number of items per page",
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "last_page": {
+                                                    "description": "Total number of pages",
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "total": {
+                                                    "description": "Total number of records",
+                                                    "type": "integer",
+                                                    "example": 50
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "description": "Retrieved pack sizes",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/PackSizeResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/retailers/metrics": {
             "post": {
                 "tags": [
@@ -271,100 +422,6 @@
                 ]
             }
         },
-        "/api/pack-sizes": {
-            "get": {
-                "tags": [
-                    "Pack Sizes"
-                ],
-                "summary": "Retrieve pack sizes",
-                "description": "Fetches a list of pack sizes with optional pagination. Includes metadata such as current page, total items, and items per page.",
-                "operationId": "ac8440f2568c298043e845273a9cf1e4",
-                "parameters": [
-                    {
-                        "name": "dataPerPage",
-                        "in": "query",
-                        "description": "Number of items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "example": 10
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number for pagination",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Data retrieved successfully."
-                                        },
-                                        "meta": {
-                                            "description": "Pagination metadata",
-                                            "properties": {
-                                                "current_page": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "per_page": {
-                                                    "type": "integer",
-                                                    "example": 10
-                                                },
-                                                "last_page": {
-                                                    "type": "integer",
-                                                    "example": 5
-                                                },
-                                                "total": {
-                                                    "type": "integer",
-                                                    "example": 50
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "data": {
-                                            "description": "Retrieved pack sizes",
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/PackSizeResource"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "422": {
-                        "description": "Validation error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/products": {
             "post": {
                 "tags": [
@@ -372,7 +429,7 @@
                 ],
                 "summary": "Retrieve products",
                 "description": "Fetches a list of products with optional pagination. Includes metadata such as current page, total items, and items per page.",
-                "operationId": "48cf0348a9cb2ad566b7a4db9c71f0c6",
+                "operationId": "e8e227b174a211a803483c33640cd7c2",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -770,61 +827,6 @@
                 ]
             }
         },
-        "/api/pack-sizes/store": {
-            "post": {
-                "tags": [
-                    "Pack Sizes"
-                ],
-                "summary": "Store a pack size",
-                "description": "Creates a new pack size.",
-                "operationId": "e0042a376b94a2309dcd3764cc919d1f",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "name": {
-                                        "description": "Name of the pack size",
-                                        "type": "string",
-                                        "example": "Small"
-                                    },
-                                    "description": {
-                                        "description": "Description of the pack size",
-                                        "type": "string",
-                                        "example": "Small sized package"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Pack size created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/PackSizeResource"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "422": {
-                        "description": "Validation error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/pack-sizes/{packSize}": {
             "put": {
                 "tags": [
@@ -965,7 +967,7 @@
                 ],
                 "summary": "Retrieve retailers for a product",
                 "description": "Fetches the retailers associated with a specific product.",
-                "operationId": "8f478988c4bb945d58825cdb7f4324c1",
+                "operationId": "7854936f64fd101d2b284177b158e473",
                 "parameters": [
                     {
                         "name": "product",
@@ -1016,7 +1018,7 @@
                 ],
                 "summary": "Create a new product",
                 "description": "Stores a new product in the database.",
-                "operationId": "90841008e6d2f8cb3655547d2377fb01",
+                "operationId": "78f8b3f0de4d17190409e1afd3fcc29c",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1081,7 +1083,7 @@
                 ],
                 "summary": "Update a product",
                 "description": "Updates an existing product by its ID.",
-                "operationId": "1ccf5e8c248bb93dc515c3b3c28af2a4",
+                "operationId": "2163b35459b0135a6ee8bbfb4ee1ea5f",
                 "parameters": [
                     {
                         "name": "product",
@@ -1154,7 +1156,7 @@
                 ],
                 "summary": "Delete a product",
                 "description": "Deletes a product by its ID.",
-                "operationId": "1a0a353d0842ff4f9347bb66ec53e3ea",
+                "operationId": "d4e628783f0dfe473ad750c1909e67b1",
                 "parameters": [
                     {
                         "name": "product",

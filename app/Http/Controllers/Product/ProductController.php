@@ -310,7 +310,7 @@ class ProductController extends BaseController
      */
     public function destroy(Product $product): JsonResponse
     {
-        $this->authorize('delete', Product::class);
+        $this->authorize('delete', $product);
 
         $product->delete();
         return $this->successResponse(

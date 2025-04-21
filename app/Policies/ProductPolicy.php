@@ -29,8 +29,17 @@ class ProductPolicy
         return false;
     }
 
-    public function delete(User $user)
+    public function delete(User $user, Product $product)
     {
-        return $user->isSuperUser();
+        if ($user->isSuperUser()) {
+            return true;
+        }
+
+        $userProducts = $user->products;
+        if ($userProducts->contains($product)) {
+            return true;
+        }
+
+        return false;
     }
 }
